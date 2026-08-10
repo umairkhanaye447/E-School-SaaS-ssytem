@@ -7,7 +7,7 @@
 
 
     <application
-        android:label="eSchool Saas"
+        android:label="VsLearn"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true"

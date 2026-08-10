@@ -27,6 +27,7 @@ import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/paymentGatewayService.dart';
 import 'package:eschool/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -386,13 +387,13 @@ class _ChildFeeDetailsScreenState extends State<ChildFeeDetailsScreen> {
                   width: boxConstraints.maxWidth * (0.5),
                   child: Text(
                     Utils.getTranslatedLabel(feeDetailsKey),
-                    style: TextStyle(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      fontSize: Utils.screenTitleFontSize,
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
               ),
+              SegmentedTrack(boxConstraints: boxConstraints),
               AnimatedAlign(
                 curve: Utils.tabBackgroundContainerAnimationCurve,
                 duration: Utils.tabBackgroundContainerAnimationDuration,
@@ -450,19 +451,11 @@ class _ChildFeeDetailsScreenState extends State<ChildFeeDetailsScreen> {
   Widget _buildPaymentInfoBackgroundContainer({required Widget child}) {
     return Container(
       width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          boxShadow: [
-            BoxShadow(
-                blurRadius: 2.0,
-                color: Colors.black.withValues(alpha: 0.08),
-                spreadRadius: 0.0,
-                offset: const Offset(0, -2))
-          ],
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(16.0),
-            topRight: Radius.circular(16.0),
-          )),
+      decoration: const BoxDecoration(
+        color: AppColors.surface,
+        boxShadow: AppShadows.raised,
+        borderRadius: AppRadius.sheetTop,
+      ),
       padding: const EdgeInsets.all(16.0),
       child: child,
     );
@@ -711,7 +704,7 @@ class _ChildFeeDetailsScreenState extends State<ChildFeeDetailsScreen> {
             ? Padding(
                 padding: const EdgeInsets.only(top: 6.0),
                 child: Text(
-                  "${Utils.getTranslatedLabel(nextInstallmentPaymentStartsFromKey)} ${currentInstallment.dueDate}",
+                  "${Utils.getTranslatedLabel(nextInstallmentPaymentStartsFromKey)} ${Utils.formatApiDate(currentInstallment.dueDate ?? '')}",
                   style: getPaidOnTextStyle(),
                 ),
               )

@@ -9,10 +9,12 @@ import 'package:eschool/utils/animationConfiguration.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/systemModules.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
+import 'package:eschool/ui/styles/appResponsive.dart';
+import 'package:eschool/ui/widgets/dashboard/featureTile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:eschool/data/repositories/transportRepository.dart';
 import 'package:eschool/ui/screens/parentTransportEnroll/transportHome/transportRequestDetailsScreen.dart';
@@ -152,13 +154,13 @@ class ChildDetailMenuScreenState extends State<ChildDetailMenuScreen> {
   ({Color bg, Color fg}) _getStatusColor(String? status) {
     switch (status?.toLowerCase()) {
       case 'pending':
-        return (bg: const Color(0xFFFFF2E8), fg: const Color(0xFFFF8C00));
+        return (bg: AppAccent.orange.tint, fg: AppColors.warning);
       case 'approved':
-        return (bg: const Color(0xFFDFF6E2), fg: const Color(0xFF37C748));
+        return (bg: AppAccent.green.tint, fg: AppColors.success);
       case 'rejected':
-        return (bg: const Color(0xFFFFE8E8), fg: const Color(0xFFE53935));
+        return (bg: AppAccent.red.tint, fg: AppColors.danger);
       default:
-        return (bg: const Color(0xFFFFF2E8), fg: const Color(0xFFFF8C00));
+        return (bg: AppAccent.orange.tint, fg: AppColors.warning);
     }
   }
 
@@ -172,28 +174,28 @@ class ChildDetailMenuScreenState extends State<ChildDetailMenuScreen> {
           "childId": widget.student.id,
           "subjects": widget.subjectsForFilter,
         },
-        iconPath: Utils.getImagePath("assignment_icon_parent.svg"),
+        iconPath: Utils.getImagePath("dashboard/assignment.svg"),
         title: Utils.getTranslatedLabel(assignmentsKey),
       ),
       MenuContainerDetails(
         moduleId: defaultModuleId.toString(),
         route: Routes.childTeachers,
         arguments: widget.student.userId,
-        iconPath: Utils.getImagePath("teachers_icon.svg"),
+        iconPath: Utils.getImagePath("dashboard/teachers.svg"),
         title: Utils.getTranslatedLabel(teachersKey),
       ),
       MenuContainerDetails(
         moduleId: attendanceManagementModuleId.toString(),
         route: Routes.childAttendance,
         arguments: widget.student.id,
-        iconPath: Utils.getImagePath("attendance_icon.svg"),
+        iconPath: Utils.getImagePath("dashboard/attendance.svg"),
         title: Utils.getTranslatedLabel(attendanceKey),
       ),
       MenuContainerDetails(
         moduleId: transportationManagementModuleId.toString(),
         route: '', // Route will be determined dynamically
         arguments: widget.student.userId ?? widget.student.id,
-        iconPath: Utils.getImagePath("transportation.svg"),
+        iconPath: Utils.getImagePath("dashboard/transportation.svg"),
         title: Utils.getTranslatedLabel(transportationKey),
         isTransportation: true, // Flag to identify transportation menu
       ),
@@ -201,14 +203,14 @@ class ChildDetailMenuScreenState extends State<ChildDetailMenuScreen> {
         moduleId: timetableManagementModuleId.toString(),
         route: Routes.childTimeTable,
         arguments: widget.student.id,
-        iconPath: Utils.getImagePath("timetable_icon.svg"),
+        iconPath: Utils.getImagePath("dashboard/timetable.svg"),
         title: Utils.getTranslatedLabel(timeTableKey),
       ),
       MenuContainerDetails(
         moduleId: holidayManagementModuleId.toString(),
         route: Routes.holidays,
         arguments: widget.student.id,
-        iconPath: Utils.getImagePath("holiday_icon.svg"),
+        iconPath: Utils.getImagePath("dashboard/holidays.svg"),
         title: Utils.getTranslatedLabel(holidaysKey),
       ),
       MenuContainerDetails(
@@ -218,7 +220,7 @@ class ChildDetailMenuScreenState extends State<ChildDetailMenuScreen> {
           "childId": widget.student.id,
           "subjects": widget.subjectsForFilter,
         },
-        iconPath: Utils.getImagePath("exam_icon.svg"),
+        iconPath: Utils.getImagePath("dashboard/exams.svg"),
         title: Utils.getTranslatedLabel(examsKey),
       ),
       MenuContainerDetails(
@@ -228,7 +230,7 @@ class ChildDetailMenuScreenState extends State<ChildDetailMenuScreen> {
           "childId": widget.student.id,
           "subjects": widget.subjectsForFilter,
         },
-        iconPath: Utils.getImagePath("result_icon.svg"),
+        iconPath: Utils.getImagePath("dashboard/results.svg"),
         title: Utils.getTranslatedLabel(resultKey),
       ),
       MenuContainerDetails(
@@ -239,28 +241,28 @@ class ChildDetailMenuScreenState extends State<ChildDetailMenuScreen> {
           "childId": widget.student.id,
           "subjects": widget.subjectsForFilter,
         },
-        iconPath: Utils.getImagePath("reports_icon.svg"),
+        iconPath: Utils.getImagePath("dashboard/reports.svg"),
         title: Utils.getTranslatedLabel(reportsKey),
       ),
       MenuContainerDetails(
         moduleId: feesManagementModuleId.toString(),
         route: Routes.childFees,
         arguments: widget.student,
-        iconPath: Utils.getImagePath("fees_icon.svg"),
+        iconPath: Utils.getImagePath("dashboard/fees.svg"),
         title: Utils.getTranslatedLabel(feesKey),
       ),
       MenuContainerDetails(
         moduleId: galleryManagementModuleId.toString(),
         route: Routes.schoolGallery,
         arguments: widget.student,
-        iconPath: Utils.getImagePath("gallery.svg"),
+        iconPath: Utils.getImagePath("dashboard/gallery.svg"),
         title: Utils.getTranslatedLabel(galleryKey),
       ),
       MenuContainerDetails(
         moduleId: certificateManagementModuleId.toString(),
         route: Routes.certificate,
         arguments: widget.student.userId,
-        iconPath: Utils.getImagePath("Certificate.svg"),
+        iconPath: Utils.getImagePath("dashboard/certificate.svg"),
         title: Utils.getTranslatedLabel(certificateKey),
       ),
       MenuContainerDetails(
@@ -270,7 +272,7 @@ class ChildDetailMenuScreenState extends State<ChildDetailMenuScreen> {
           "studentId": widget.student.userId,
           "id": widget.student.id
         },
-        iconPath: Utils.getImagePath("diary.svg"),
+        iconPath: Utils.getImagePath("dashboard/diary.svg"),
         title: Utils.getTranslatedLabel(studentDiaryKey),
       ),
     ];
@@ -292,8 +294,9 @@ class ChildDetailMenuScreenState extends State<ChildDetailMenuScreen> {
             child: Text(
               Utils.getTranslatedLabel(menuKey),
               style: TextStyle(
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: AppColors.textPrimary,
                 fontSize: Utils.screenTitleFontSize,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
@@ -323,108 +326,56 @@ class ChildDetailMenuScreenState extends State<ChildDetailMenuScreen> {
             appBarHeightPercentage: Utils.appBarMediumtHeightPercentage,
           ),
         ),
-        child: Column(
-          children: List.generate(
-            _menuItems.length,
-            (index) => _buildMenuContainer(itemIndex: index),
-          ),
-        ),
+        child: _buildMenuGrid(),
       ),
     );
   }
 
-  Widget _buildMenuContainer({required int itemIndex}) {
-    final menuItem = _menuItems[itemIndex];
-    return Utils.isModuleEnabled(context: context, moduleId: menuItem.moduleId)
-        ? Animate(
-            effects: listItemAppearanceEffects(
-              itemIndex: itemIndex,
-              totalLoadedItems: _menuItems.length,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 15),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(20),
-                onTap: () async {
-                  // Handle transportation navigation differently
-                  if (menuItem.isTransportation) {
-                    await handleTransportNavigation();
-                  } else {
-                    debugPrint(_menuItems[itemIndex].arguments.toString());
-                    Get.toNamed(
-                      _menuItems[itemIndex].route,
-                      arguments: _menuItems[itemIndex].arguments,
-                    );
-                  }
-                },
-                child: Container(
-                  height: 80,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: Theme.of(
-                        context,
-                      ).colorScheme.secondary.withValues(alpha: 0.25),
-                    ),
-                  ),
-                  child: LayoutBuilder(
-                    builder: (context, boxConstraints) {
-                      return Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(14),
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 10.0,
-                            ),
-                            height: 60,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSecondary
-                                  .withValues(alpha: 0.225),
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            width: boxConstraints.maxWidth * (0.225),
-                            child: SvgPicture.asset(
-                              _menuItems[itemIndex].iconPath,
-                            ),
-                          ),
-                          SizedBox(width: boxConstraints.maxWidth * (0.025)),
-                          SizedBox(
-                            width: boxConstraints.maxWidth * (0.475),
-                            child: Text(
-                              _menuItems[itemIndex].title,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                          const Spacer(),
-                          CircleAvatar(
-                            backgroundColor: Theme.of(
-                              context,
-                            ).colorScheme.secondary,
-                            radius: 17.5,
-                            child: Icon(
-                              Icons.arrow_forward,
-                              size: 22.5,
-                              color: Theme.of(context).scaffoldBackgroundColor,
-                            ),
-                          ),
-                          SizedBox(width: boxConstraints.maxWidth * (0.035)),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ),
-          )
-        : const SizedBox();
+  /// Module tiles, identical in geometry and styling to the student
+  /// dashboard's Menu grid. Same entries, same module gating, same
+  /// destinations — only the presentation changed from outlined rows.
+  Widget _buildMenuGrid() {
+    final visible = _menuItems
+        .where((m) => Utils.isModuleEnabled(
+              context: context,
+              moduleId: m.moduleId,
+            ))
+        .toList();
+
+    return GridView.builder(
+      padding: EdgeInsets.zero,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: visible.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: AppResponsive.gridColumns(context),
+        crossAxisSpacing: AppTileCard.gridSpacing,
+        mainAxisSpacing: AppTileCard.gridSpacing,
+        childAspectRatio: AppTileCard.aspectRatio,
+      ),
+      itemBuilder: (context, index) {
+        final menuItem = visible[index];
+        return Animate(
+          effects: gridItemAppearanceEffects(
+            itemIndex: index,
+            totalLoadedItems: visible.length,
+          ),
+          child: FeatureTile(
+            iconAssetPath: menuItem.iconPath,
+            label: menuItem.title,
+            accent: accentForIcon(menuItem.iconPath),
+            onTap: () async {
+              // Transportation resolves its destination at tap time.
+              if (menuItem.isTransportation) {
+                await handleTransportNavigation();
+              } else {
+                Get.toNamed(menuItem.route, arguments: menuItem.arguments);
+              }
+            },
+          ),
+        );
+      },
+    );
   }
 
   @override

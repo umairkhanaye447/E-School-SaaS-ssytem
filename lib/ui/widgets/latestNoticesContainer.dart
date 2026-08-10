@@ -64,7 +64,7 @@ class LatestNoticiesContainer extends StatelessWidget {
                             Utils.getTranslatedLabel(viewAllKey),
                             style: TextStyle(
                               color: Utils.getColorScheme(context).onSurface,
-                              fontSize: 13.0,
+                              fontSize: 12,
                             ),
                             textAlign: TextAlign.start,
                           ),

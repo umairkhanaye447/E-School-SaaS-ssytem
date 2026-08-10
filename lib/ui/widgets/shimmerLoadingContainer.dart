@@ -1,4 +1,4 @@
-import 'package:eschool/ui/styles/colors.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -10,8 +10,8 @@ class ShimmerLoadingContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: shimmerBaseColor,
-      highlightColor: shimmerhighlightColor,
+      baseColor: AppColors.shimmerBase,
+      highlightColor: AppColors.shimmerHighlight,
       child: child,
     );
   }

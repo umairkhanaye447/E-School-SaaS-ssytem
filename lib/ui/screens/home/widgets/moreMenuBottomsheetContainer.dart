@@ -1,13 +1,15 @@
 import 'dart:math';
 import 'package:eschool/app/routes.dart';
 import 'package:eschool/cubits/studentProfileCubit.dart';
+import 'package:eschool/ui/styles/appResponsive.dart';
+import 'package:eschool/ui/widgets/dashboard/featureTile.dart';
 import 'package:eschool/ui/widgets/customUserProfileImageWidget.dart';
 import 'package:eschool/utils/homeBottomsheetMenu.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class MoreMenuBottomsheetContainer extends StatelessWidget {
@@ -19,60 +21,41 @@ class MoreMenuBottomsheetContainer extends StatelessWidget {
     required this.closeBottomMenu,
   }) : super(key: key);
 
-  Widget _buildMoreMenuContainer(
-      {required BuildContext context,
-      required BoxConstraints boxConstraints,
-      required Menu menu}) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: GestureDetector(
-        onTap: () {
-          onTapMoreMenuItemContainer(
-            homeBottomSheetMenu
-                .indexWhere((element) => element.title == menu.title),
-          );
-        },
-        child: Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .onSurface
-                      .withValues(alpha: 0.5),
-                ),
-                color: Theme.of(context)
-                    .colorScheme
-                    .onSecondary
-                    .withValues(alpha: 0.2),
-                borderRadius: BorderRadius.circular(15.0),
-              ),
-              margin: EdgeInsets.symmetric(
-                horizontal: boxConstraints.maxWidth * (0.065),
-              ),
-              width: boxConstraints.maxWidth * (0.2),
-              height: boxConstraints.maxWidth * (0.2),
-              padding: const EdgeInsets.all(12.5),
-              child: SvgPicture.asset(menu.iconUrl),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: boxConstraints.maxWidth * (0.3),
-              child: Text(
-                Utils.getTranslatedLabel(menu.title),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
-                  fontSize: 14.0,
-                ),
-              ),
-            )
-          ],
-        ),
+  /// Same menu entries, same module filtering and the same tap index as
+  /// before — only the tile presentation changed.
+  Widget _buildMenuGrid(BuildContext context) {
+    final visible = homeBottomSheetMenu
+        .where((menu) => Utils.isModuleEnabled(
+              context: context,
+              moduleId: menu.menuModuleId,
+            ))
+        .toList();
+
+    return GridView.builder(
+      padding: EdgeInsets.zero,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: visible.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: AppResponsive.gridColumns(context),
+        crossAxisSpacing: AppTileCard.gridSpacing,
+        mainAxisSpacing: AppTileCard.gridSpacing,
+        childAspectRatio: AppTileCard.aspectRatio,
       ),
+      itemBuilder: (context, index) {
+        final menu = visible[index];
+        return FeatureTile(
+          iconAssetPath: menu.iconUrl,
+          label: Utils.getTranslatedLabel(menu.title),
+          accent: accentForMenu(menu.title),
+          onTap: () {
+            onTapMoreMenuItemContainer(
+              homeBottomSheetMenu
+                  .indexWhere((element) => element.title == menu.title),
+            );
+          },
+        );
+      },
     );
   }
 
@@ -84,7 +67,7 @@ class MoreMenuBottomsheetContainer extends StatelessWidget {
       padding: const EdgeInsets.only(top: 25.0, right: 25.0, left: 25.0),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: AppColors.surface,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(25),
           topRight: Radius.circular(25),
@@ -204,20 +187,7 @@ class MoreMenuBottomsheetContainer extends StatelessWidget {
               ),
               Expanded(
                 child: SingleChildScrollView(
-                  child: Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.start,
-                    children: homeBottomSheetMenu
-                        .map(
-                          (e) => Utils.isModuleEnabled(
-                                  context: context, moduleId: e.menuModuleId)
-                              ? _buildMoreMenuContainer(
-                                  context: context,
-                                  boxConstraints: boxConstraints,
-                                  menu: e)
-                              : const SizedBox(),
-                        )
-                        .toList(),
-                  ),
+                  child: _buildMenuGrid(context),
                 ),
               ),
               SizedBox(

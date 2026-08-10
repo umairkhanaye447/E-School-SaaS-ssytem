@@ -1,6 +1,7 @@
 import 'package:eschool/data/models/answerOption.dart';
 import 'package:eschool/data/models/question.dart';
 
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tex/flutter_tex.dart';
 
@@ -124,7 +125,7 @@ class _OptionContainerState extends State<OptionContainer>
         height: widget.constraints.maxHeight * heightPercentage,
         width: optionWidth,
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(15.0),
+          borderRadius: BorderRadius.circular(AppRadius.card),
           child: Stack(
             alignment: Alignment.center,
             children: [
@@ -137,7 +138,7 @@ class _OptionContainerState extends State<OptionContainer>
                   border: Border.all(
                     color: Theme.of(context).colorScheme.onSecondary,
                   ),
-                  borderRadius: BorderRadius.circular(15),
+                  borderRadius: BorderRadius.circular(AppRadius.card),
                   color: _buildOptionBackgroundColor(),
                 ),
                 alignment: AlignmentDirectional.centerStart,

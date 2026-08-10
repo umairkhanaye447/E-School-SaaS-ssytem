@@ -13,6 +13,7 @@ import 'package:eschool/utils/constants.dart';
 import 'package:eschool/utils/htmlPrintMixin.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -282,13 +283,7 @@ class _TransportPlanDetailsScreenState extends State<TransportPlanDetailsScreen>
         padding: EdgeInsets.all(appContentHorizontalPadding),
         decoration: BoxDecoration(
           color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.06),
-              blurRadius: 8,
-              offset: const Offset(0, -2),
-            ),
-          ],
+          boxShadow: AppShadows.cardStrong,
         ),
         child: Row(
           children: [

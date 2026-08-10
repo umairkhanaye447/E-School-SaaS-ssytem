@@ -10,6 +10,7 @@ import 'package:eschool/ui/widgets/noDataContainer.dart';
 import 'package:eschool/ui/widgets/shimmerLoadingContainer.dart';
 import 'package:eschool/utils/animationConfiguration.dart';
 import 'package:eschool/utils/labelKeys.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:eschool/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -88,42 +89,38 @@ class _ChildTeachersScreenState extends State<ChildTeachersScreen> {
     final primary = Theme.of(context).colorScheme.primary;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      width: MediaQuery.of(context).size.width * 0.90,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            offset: const Offset(2.5, 2.5),
-            blurRadius: 10,
-            color:
-                Theme.of(context).colorScheme.secondary.withValues(alpha: 0.15),
-          )
-        ],
-        color: Theme.of(context).scaffoldBackgroundColor,
-        borderRadius: BorderRadius.circular(16),
+      margin: const EdgeInsets.only(
+        left: AppSpacing.screenH,
+        right: AppSpacing.screenH,
+        bottom: AppSpacing.sm,
+      ),
+      decoration: const BoxDecoration(
+        boxShadow: AppShadows.card,
+        color: AppColors.surface,
+        borderRadius: AppRadius.cardAll,
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        padding: const EdgeInsets.all(AppSpacing.sm),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // ── Avatar ──
             Container(
-              width: 56,
-              height: 56,
+              width: 48,
+              height: 48,
               decoration: BoxDecoration(
                 color: primary,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: AppRadius.iconTileAll,
               ),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: AppRadius.iconTileAll,
                 child: CustomUserProfileImageWidget(
                   profileUrl: teacher?.image ?? "",
-                  radius: BorderRadius.circular(12),
+                  radius: AppRadius.iconTileAll,
                 ),
               ),
             ),
-            const SizedBox(width: 12),
+            const SizedBox(width: AppSpacing.sm),
 
             // ── Name + subjects + phone ──
             Expanded(
@@ -136,11 +133,10 @@ class _ChildTeachersScreenState extends State<ChildTeachersScreen> {
                     teacher?.fullName ?? "",
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 0.1,
-                    ),
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
                   ),
                   const SizedBox(height: 6),
 
@@ -216,7 +212,7 @@ class _ChildTeachersScreenState extends State<ChildTeachersScreen> {
                   borderRadius: 12,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppSpacing.sm),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -271,7 +267,17 @@ class _ChildTeachersScreenState extends State<ChildTeachersScreen> {
                 width: MediaQuery.of(context).size.width,
                 child: Column(
                   children: groups.isEmpty
-                      ? [const NoDataContainer(titleKey: noTeachersFoundKey)]
+                      ? [
+                          CenteredNoDataContainer(
+                            titleKey: noTeachersFoundKey,
+                            occupiedHeight: Utils.getScrollViewTopPadding(
+                                  context: context,
+                                  appBarHeightPercentage:
+                                      Utils.appBarSmallerHeightPercentage,
+                                ) +
+                                20,
+                          )
+                        ]
                       : List.generate(
                           groups.length,
                           (index) => Animate(
@@ -419,7 +425,7 @@ class _MoreButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         decoration: BoxDecoration(
           color: primary.withValues(alpha: 0.10),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(AppRadius.hero),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -457,7 +463,6 @@ class _SubjectsBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primary = Theme.of(context).colorScheme.primary;
-    final bg = Theme.of(context).scaffoldBackgroundColor;
 
     return DraggableScrollableSheet(
       initialChildSize: 0.5,
@@ -466,16 +471,10 @@ class _SubjectsBottomSheet extends StatelessWidget {
       expand: false,
       builder: (_, controller) {
         return Container(
-          decoration: BoxDecoration(
-            color: bg,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.10),
-                blurRadius: 20,
-                offset: const Offset(0, -4),
-              )
-            ],
+          decoration: const BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: AppRadius.sheetTop,
+            boxShadow: AppShadows.raised,
           ),
           child: Column(
             children: [
@@ -485,7 +484,7 @@ class _SubjectsBottomSheet extends StatelessWidget {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
+                  color: AppColors.divider,
                   borderRadius: BorderRadius.circular(4),
                 ),
               ),
@@ -557,18 +556,18 @@ class _SubjectsBottomSheet extends StatelessWidget {
                             child: Text(
                               "${index + 1}",
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w700,
                                 color: primary,
                               ),
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: AppSpacing.sm),
                           Expanded(
                             child: Text(
                               subjects[index],
                               style: const TextStyle(
-                                fontSize: 13,
+                                fontSize: 12,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),

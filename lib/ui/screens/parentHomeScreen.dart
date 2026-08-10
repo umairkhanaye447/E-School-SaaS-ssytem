@@ -13,15 +13,16 @@ import 'package:eschool/ui/widgets/customRoundedButton.dart';
 import 'package:eschool/ui/widgets/errorContainer.dart';
 import 'package:eschool/ui/widgets/forceUpdateDialogContainer.dart';
 import 'package:eschool/ui/widgets/customShimmerContainer.dart';
-import 'package:eschool/ui/widgets/screenTopBackgroundContainer.dart';
 import 'package:eschool/ui/widgets/noDataContainer.dart';
 import 'package:eschool/ui/widgets/shimmerLoadingContainer.dart';
-import 'package:eschool/ui/widgets/svgButton.dart';
 import 'package:eschool/utils/animationConfiguration.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/notificationUtility.dart';
 import 'package:eschool/utils/systemModules.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
+import 'package:eschool/ui/widgets/dashboard/sectionHeader.dart';
+import 'package:eschool/ui/widgets/dashboard/infoChip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -90,278 +91,165 @@ class _ParentHomeScreenState extends State<ParentHomeScreen>
         .fetchSchoolConfiguration(useParentApi: true, childId: firstChildId);
   }
 
+  /// Parent header, matching the student dashboard header: ringed avatar,
+  /// name on the display ramp, an info chip for the account, and the same
+  /// circular action buttons.
   Widget _buildAppBar() {
     return Align(
       alignment: Alignment.topCenter,
-      child: ScreenTopBackgroundContainer(
-        padding: EdgeInsets.zero,
-        heightPercentage: Utils.appBarMediumtHeightPercentage,
-        child: LayoutBuilder(
-          builder: (context, boxConstraints) {
-            return Stack(
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        decoration: const BoxDecoration(
+          color: AppColors.pageBackground,
+          border: Border(bottom: BorderSide(color: AppColors.divider)),
+        ),
+        child: SafeArea(
+          bottom: false,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.screenH,
+              AppSpacing.xs,
+              AppSpacing.screenH,
+              AppSpacing.md,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                //Bordered circles
-                PositionedDirectional(
-                  top: MediaQuery.of(context).size.width * (-0.2),
-                  start: MediaQuery.of(context).size.width * (-0.225),
-                  child: Container(
-                    padding: const EdgeInsetsDirectional.only(
-                        end: 20.0, bottom: 20.0),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Theme.of(context)
-                            .scaffoldBackgroundColor
-                            .withValues(alpha: 0.1),
+                BorderedProfilePictureContainer(
+                  heightAndWidth: 58,
+                  onTap: () => Get.toNamed(Routes.parentProfile),
+                  imageUrl:
+                      context.read<AuthCubit>().getParentDetails().image ?? "",
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        context.read<AuthCubit>().getParentDetails()
+                            .getFullName(),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.headlineMedium,
                       ),
-                      shape: BoxShape.circle,
-                    ),
-                    width: MediaQuery.of(context).size.width * (0.6),
-                    height: MediaQuery.of(context).size.width * (0.6),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Theme.of(context)
-                              .scaffoldBackgroundColor
-                              .withValues(alpha: 0.1),
-                        ),
-                        shape: BoxShape.circle,
+                      const SizedBox(height: AppSpacing.xs),
+                      InfoChip(
+                        icon: Icons.mail_outline_rounded,
+                        label: context
+                                .read<AuthCubit>()
+                                .getParentDetails()
+                                .email ??
+                            "",
+                        accent: AppAccent.blue,
                       ),
-                    ),
+                    ],
                   ),
                 ),
-
-                //bottom fill circle
-                PositionedDirectional(
-                  bottom: MediaQuery.of(context).size.width * (-0.15),
-                  end: MediaQuery.of(context).size.width * (-0.15),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context)
-                          .scaffoldBackgroundColor
-                          .withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    width: MediaQuery.of(context).size.width * (0.4),
-                    height: MediaQuery.of(context).size.width * (0.4),
-                  ),
+                const SizedBox(width: AppSpacing.xs),
+                BlocBuilder<AppConfigurationCubit, AppConfigurationState>(
+                  builder: (context, state) {
+                    return Utils.isModuleEnabled(
+                      context: context,
+                      moduleId: chatModuleId.toString(),
+                    )
+                        ? _HeaderActionButton(
+                            icon: Icons.chat_bubble_rounded,
+                            onTap: () => Get.toNamed(Routes.chatContacts),
+                          )
+                        : const SizedBox();
+                  },
                 ),
-
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    margin: EdgeInsetsDirectional.only(
-                      end: boxConstraints.maxWidth * (0.02),
-                      start: boxConstraints.maxWidth * (0.056),
-                      bottom: boxConstraints.maxHeight * (0.21),
-                    ),
-                    child: Row(
-                      children: [
-                        BorderedProfilePictureContainer(
-                          heightAndWidth: 65,
-                          onTap: () {
-                            Get.toNamed(Routes.parentProfile);
-                          },
-                          imageUrl: context
-                                  .read<AuthCubit>()
-                                  .getParentDetails()
-                                  .image ??
-                              "",
-                        ),
-                        SizedBox(
-                          width: boxConstraints.maxWidth * (0.04),
-                        ),
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: boxConstraints.maxWidth * (0.5),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    context
-                                        .read<AuthCubit>()
-                                        .getParentDetails()
-                                        .getFullName(),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.w500,
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                    ),
-                                  ),
-                                  Text(
-                                    context
-                                            .read<AuthCubit>()
-                                            .getParentDetails()
-                                            .email ??
-                                        "",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 12.0,
-                                      fontWeight: FontWeight.w400,
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                        const Spacer(),
-                        BlocBuilder<AppConfigurationCubit,
-                            AppConfigurationState>(
-                          builder: (context, state) {
-                            return Utils.isModuleEnabled(
-                                    context: context,
-                                    moduleId: chatModuleId.toString())
-                                ? SvgButton(
-                                    onTap: () {
-                                      Get.toNamed(Routes.chatContacts);
-                                    },
-                                    svgIconUrl:
-                                        Utils.getImagePath("chat_icon.svg"),
-                                  )
-                                : const SizedBox();
-                          },
-                        ),
-                        IconButton(
-                          iconSize: 24,
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          onPressed: () {
-                            Get.toNamed(Routes.settings);
-                          },
-                          icon: const Icon(Icons.settings),
-                        )
-                      ],
-                    ),
-                  ),
+                const SizedBox(width: AppSpacing.xs),
+                _HeaderActionButton(
+                  icon: Icons.settings_rounded,
+                  onTap: () => Get.toNamed(Routes.settings),
                 ),
               ],
-            );
-          },
+            ),
+          ),
         ),
       ),
     );
   }
 
+  /// Child tile, in the app's card language: white surface, avatar in a
+  /// tinted ring, name and class stacked, chevron on the trailing edge.
+  ///
+  /// Was a solid blue block with a white circle arrow overhanging the bottom
+  /// edge, which clipped against neighbouring tiles and matched nothing else.
   Widget _buildChildDetailsContainer({
     required double width,
     required Student student,
   }) {
     return Animate(
       effects: customItemZoomAppearanceEffects(),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(20),
-        onTap: () {
-          Get.toNamed(Routes.parentChildDetails, arguments: student);
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          width: width,
-          height: 150, //200
-          child: LayoutBuilder(
-            builder: (context, boxConstraints) {
-              return Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: boxConstraints.maxHeight * (0.125),
-                          ),
-                          BorderedProfilePictureContainer(
-                            onTap: () {
-                              Get.toNamed(
-                                Routes.parentChildDetails,
-                                arguments: student,
-                              );
-                            },
-                            heightAndWidth: 50,
-                            imageUrl: student.childUserDetails?.image ?? "",
-                          ),
-                          SizedBox(
-                            height: boxConstraints.maxHeight * (0.075),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 7.5),
-                            child: Text(
-                              student.getFullName(),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 14.0,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: boxConstraints.maxHeight * (0.025),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 7.5),
-                            child: Text(
-                              "${Utils.getTranslatedLabel(classKey)} - ${student.classSection?.fullName}",
-                              style: TextStyle(
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 10,
-                              ),
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+      child: Material(
+        color: AppColors.surface,
+        borderRadius: AppRadius.cardAll,
+        child: InkWell(
+          borderRadius: AppRadius.cardAll,
+          onTap: () {
+            Get.toNamed(Routes.parentChildDetails, arguments: student);
+          },
+          child: Ink(
+            width: width,
+            decoration: const BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: AppRadius.cardAll,
+              boxShadow: AppShadows.card,
+            ),
+            padding: const EdgeInsets.all(AppSpacing.sm),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(2.5),
+                  decoration: const BoxDecoration(
+                    color: AppColors.surface,
+                    shape: BoxShape.circle,
+                    boxShadow: AppShadows.card,
                   ),
-                  PositionedDirectional(
-                    bottom: -15,
-                    start: (boxConstraints.maxWidth * 0.5) - 15,
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .secondary
-                                .withValues(alpha: 0.3),
-                            offset: const Offset(0, 5),
-                            blurRadius: 20,
-                          )
-                        ],
-                        shape: BoxShape.circle,
-                        color: Theme.of(context).scaffoldBackgroundColor,
+                  child: BorderedProfilePictureContainer(
+                    onTap: () {
+                      Get.toNamed(
+                        Routes.parentChildDetails,
+                        arguments: student,
+                      );
+                    },
+                    heightAndWidth: 48,
+                    imageUrl: student.childUserDetails?.image ?? "",
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        student.getFullName(),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
-                      child: Icon(
-                        Icons.arrow_forward_ios,
-                        color: Theme.of(context).colorScheme.primary,
-                        size: 18,
+                      const SizedBox(height: 2),
+                      Text(
+                        "${Utils.getTranslatedLabel(classKey)} - ${student.classSection?.fullName ?? ''}",
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodySmall,
                       ),
-                    ),
-                  )
-                ],
-              );
-            },
+                    ],
+                  ),
+                ),
+                const Icon(
+                  Icons.chevron_right_rounded,
+                  size: 22,
+                  color: AppColors.textTertiary,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -377,31 +265,22 @@ class _ParentHomeScreenState extends State<ParentHomeScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Align(
-            alignment: AlignmentDirectional.centerStart,
-            child: Text(
-              Utils.getTranslatedLabel(myChildrenKey),
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                color: Theme.of(context).colorScheme.secondary,
-                fontSize: 16,
-              ),
-            ),
+          SectionHeader(
+            title: Utils.getTranslatedLabel(myChildrenKey),
+            icon: Icons.groups_rounded,
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: AppSpacing.sm),
           LayoutBuilder(
             builder: (context, boxConstraints) {
               return Wrap(
-                spacing: boxConstraints.maxWidth * (0.05),
-                runSpacing: 32.5,
+                spacing: AppSpacing.sm,
+                runSpacing: AppSpacing.sm,
                 children:
                     (context.read<AuthCubit>().getParentDetails().children ??
                             [])
                         .map(
                           (student) => _buildChildDetailsContainer(
-                            width: boxConstraints.maxWidth * (0.45),
+                            width: boxConstraints.maxWidth,
                             student: student,
                           ),
                         )
@@ -570,26 +449,22 @@ class _ParentHomeScreenState extends State<ParentHomeScreen>
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       edgeOffset: MediaQuery.of(context).size.height *
           Utils.appBarMediumtHeightPercentage,
-      child: Stack(
+      child: Column(
         children: [
-          SingleChildScrollView(
+          _buildAppBar(),
+          Expanded(
+            child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
-            padding: EdgeInsets.only(
-              top: Utils.getScrollViewTopPadding(
-                context: context,
-                appBarHeightPercentage: Utils.appBarMediumtHeightPercentage,
-              ),
+            padding: const EdgeInsets.only(top: AppSpacing.md),
+            child: CenteredNoDataContainer(
+              titleKey: noChildrenFoundKey,
+              //The app bar above the scroll area plus the scroll top padding.
+              occupiedHeight: MediaQuery.sizeOf(context).height *
+                      Utils.appBarMediumtHeightPercentage +
+                  AppSpacing.md,
             ),
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.6,
-              child: Center(
-                child: NoDataContainer(
-                  titleKey: noChildrenFoundKey,
-                ),
-              ),
             ),
           ),
-          _buildAppBar(),
         ],
       ),
     );
@@ -643,20 +518,16 @@ class _ParentHomeScreenState extends State<ParentHomeScreen>
                               Theme.of(context).scaffoldBackgroundColor,
                           edgeOffset: MediaQuery.of(context).size.height *
                               Utils.appBarMediumtHeightPercentage,
-                          child: Stack(
+                          child: Column(
                             children: [
-                              Align(
-                                alignment: Alignment.topCenter,
+                              _buildAppBar(),
+                              Expanded(
                                 child: SingleChildScrollView(
                                   physics:
                                       const AlwaysScrollableScrollPhysics(),
-                                  padding: EdgeInsets.only(
+                                  padding: const EdgeInsets.only(
+                                    top: AppSpacing.md,
                                     bottom: 50,
-                                    top: Utils.getScrollViewTopPadding(
-                                      context: context,
-                                      appBarHeightPercentage:
-                                          Utils.appBarMediumtHeightPercentage,
-                                    ),
                                   ),
                                   child: Column(
                                     children: [
@@ -665,7 +536,6 @@ class _ParentHomeScreenState extends State<ParentHomeScreen>
                                   ),
                                 ),
                               ),
-                              _buildAppBar(),
                               //Check force update here
                               context
                                       .read<AppConfigurationCubit>()
@@ -726,6 +596,34 @@ class _ParentHomeScreenState extends State<ParentHomeScreen>
                       return _buildShimmerLoading();
                     },
                   ),
+      ),
+    );
+  }
+}
+
+class _HeaderActionButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+
+  const _HeaderActionButton({required this.icon, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 44,
+        width: 44,
+        decoration: const BoxDecoration(
+          color: AppColors.surface,
+          shape: BoxShape.circle,
+          boxShadow: AppShadows.card,
+        ),
+        child: Icon(
+          icon,
+          size: 20,
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
     );
   }

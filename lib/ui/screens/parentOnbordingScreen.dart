@@ -3,9 +3,9 @@ import 'package:eschool/app/routes.dart';
 import 'package:eschool/cubits/schoolDetailsCubit.dart';
 import 'package:eschool/utils/hiveBoxKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:eschool/ui/widgets/networkImageHandler.dart';
@@ -59,9 +59,9 @@ class _ParentOnbordingScreenState extends State<ParentOnbordingScreen> {
                     height: context.height * 0.17,
                     width: context.width * 0.4,
                     fit: BoxFit.fill,
-                    errorWidget: SvgPicture.asset(
-                      Utils.getImagePath("appLogo.svg"),
-                      fit: BoxFit.fill,
+                    errorWidget: Image.asset(
+                      Utils.getImagePath("appLogoForeground.png"),
+                      fit: BoxFit.contain,
                     ),
                   ),
                   SizedBox(height: context.height * 0.03),
@@ -70,7 +70,7 @@ class _ParentOnbordingScreenState extends State<ParentOnbordingScreen> {
                     style: TextStyle(
                       fontSize: Utils.screenOnbordingTitleFontSize,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xff22577a),
+                      color: AppColors.brandPrimary,
                     ),
                   ),
                   GridView.builder(
@@ -92,7 +92,7 @@ class _ParentOnbordingScreenState extends State<ParentOnbordingScreen> {
                           : '';
 
                       return ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(AppRadius.field),
                         child: imageUrl.isNotEmpty
                             ? NetworkImageHandler(
                                 imageUrl: imageUrl,
@@ -101,14 +101,14 @@ class _ParentOnbordingScreenState extends State<ParentOnbordingScreen> {
                                 placeholder: Center(
                                   child: CircularProgressIndicator(),
                                 ),
-                                errorWidget: SvgPicture.asset(
-                                  Utils.getImagePath("appLogo.svg"),
-                                  fit: BoxFit.fill,
+                                errorWidget: Image.asset(
+                                  Utils.getImagePath("appLogoForeground.png"),
+                                  fit: BoxFit.contain,
                                 ),
                               )
-                            : SvgPicture.asset(
-                                Utils.getImagePath("appLogo.svg"),
-                                fit: BoxFit.fill,
+                            : Image.asset(
+                                Utils.getImagePath("appLogoForeground.png"),
+                                fit: BoxFit.contain,
                               ),
                       );
                     },
@@ -119,7 +119,7 @@ class _ParentOnbordingScreenState extends State<ParentOnbordingScreen> {
                     style: TextStyle(
                       fontSize: Utils.screenOnbordingTitleFontSize,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xff22577a),
+                      color: AppColors.brandPrimary,
                     ),
                     textAlign: TextAlign.center,
                   ),

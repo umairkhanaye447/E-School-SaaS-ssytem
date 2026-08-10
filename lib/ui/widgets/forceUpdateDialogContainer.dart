@@ -40,7 +40,7 @@ class ForceUpdateDialogContainer extends StatelessWidget {
             : AlertDialog(
                 content: Text(
                   Utils.getTranslatedLabel(newUpdateAvailableKey),
-                  style: TextStyle(fontSize: 17.0),
+                  style: TextStyle(fontSize: 16),
                 ),
                 actions: [_buildUpdateButton(context)],
               ),

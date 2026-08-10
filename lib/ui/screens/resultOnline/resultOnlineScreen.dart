@@ -2,6 +2,7 @@ import 'package:eschool/cubits/authCubit.dart';
 import 'package:eschool/ui/widgets/customShimmerContainer.dart';
 import 'package:eschool/ui/widgets/errorContainer.dart';
 import 'package:eschool/ui/widgets/shimmerLoadingContainer.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -78,7 +79,7 @@ class ResultOnlineScreenState extends State<ResultOnlineScreen> {
                     child: Text(
                       Utils.getTranslatedLabel(examResultKey),
                       style: setTextStyle(
-                        txtColor: Theme.of(context).scaffoldBackgroundColor,
+                        txtColor: AppColors.textPrimary,
                         txtSize: Utils.screenTitleFontSize,
                       ),
                     ),
@@ -94,14 +95,14 @@ class ResultOnlineScreenState extends State<ResultOnlineScreen> {
                       Text(
                         widget.subjectName,
                         style: setTextStyle(
-                          txtColor: Theme.of(context).scaffoldBackgroundColor,
+                          txtColor: AppColors.textPrimary,
                           txtSize: Utils.screenSubTitleFontSize,
                         ),
                       ),
                       Text(
                         widget.examName,
                         style: setTextStyle(
-                          txtColor: Theme.of(context).scaffoldBackgroundColor,
+                          txtColor: AppColors.textPrimary,
                           txtSize: Utils.screenTitleFontSize,
                           fontWeight: FontWeight.bold,
                         ),
@@ -266,7 +267,7 @@ class ResultOnlineScreenState extends State<ResultOnlineScreen> {
         padding: const EdgeInsets.only(top: 15, left: 23, right: 23),
         decoration: BoxDecoration(
           color: Utils.getColorScheme(context).surface,
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(AppRadius.hero),
         ),
         child: child,
       ),
@@ -285,7 +286,7 @@ class ResultOnlineScreenState extends State<ResultOnlineScreen> {
         padding: const EdgeInsets.symmetric(vertical: 15.0),
         decoration: BoxDecoration(
           color: bgColor,
-          borderRadius: BorderRadius.circular(20.0),
+          borderRadius: BorderRadius.circular(AppRadius.hero),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

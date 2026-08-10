@@ -2,6 +2,7 @@ import 'package:eschool/data/models/subject.dart';
 import 'package:eschool/ui/widgets/customBottomsheet.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 /// Tappable dropdown container that shows the selected subject name and a
@@ -43,7 +44,7 @@ class SubjectSelectorDropdown extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           color: Utils.getColorScheme(context).surface,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppRadius.field),
           border: Border.all(
             color:
                 Utils.getColorScheme(context).onSurface.withValues(alpha: 0.12),

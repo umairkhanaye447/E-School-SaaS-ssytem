@@ -7,14 +7,17 @@ import 'package:eschool/ui/screens/reports/widgets/reportLegendItem.dart';
 import 'package:eschool/ui/screens/reports/widgets/reportProgressBarRow.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
-const List<Color> _categoryBarColors = [
-  Color(0xFF22577A), // dark navy
-  Color(0xFFFB7020), // deep orange
-  Color(0xFFF89E1B), // amber / light orange
-  Color(0xFF57CC99), // teal
-  Color(0xFF0495E1), // blue
+//`final` rather than `const`: accent hues are properties on AccentPair, which
+//a const list cannot evaluate.
+final List<Color> _categoryBarColors = [
+  AppColors.brandPrimary, // dark navy
+  AppAccent.orange.icon, // deep orange
+  AppColors.brandAccent, // amber / light orange
+  AppAccent.teal.icon, // teal
+  AppAccent.blue.icon, // blue
 ];
 
 class DiaryReportCard extends StatefulWidget {
@@ -69,7 +72,7 @@ class _DiaryReportCardState extends State<DiaryReportCard> {
                     .withValues(alpha: 0.1),
                 width: 1.5,
               ),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppRadius.field),
             ),
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -142,7 +145,7 @@ class _DiaryReportCardState extends State<DiaryReportCard> {
                     child: Text(
                       Utils.getTranslatedLabel(noDataFoundKey),
                       style: TextStyle(
-                        fontSize: 13,
+                        fontSize: 12,
                         color: Utils.getColorScheme(context)
                             .onSurface
                             .withValues(alpha: 0.5),
@@ -221,7 +224,7 @@ class _CategoryFilterPill extends StatelessWidget {
     return PopupMenuButton<bool>(
       onSelected: onChanged,
       color: Theme.of(context).scaffoldBackgroundColor,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.field)),
       elevation: 4,
       offset: const Offset(0, 36),
       itemBuilder: (_) => [
@@ -277,7 +280,7 @@ class _CategoryFilterPill extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
           color: Utils.getColorScheme(context).surface,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(AppRadius.field),
           border: Border.all(
             color:
                 Utils.getColorScheme(context).onSurface.withValues(alpha: 0.15),
@@ -290,7 +293,7 @@ class _CategoryFilterPill extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
-                fontSize: 13,
+                fontSize: 12,
                 fontWeight: FontWeight.w500,
                 color: Utils.getColorScheme(context).onSurface,
               ),

@@ -11,6 +11,7 @@ import 'package:eschool/ui/widgets/errorContainer.dart';
 import 'package:eschool/ui/widgets/noDataContainer.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -62,8 +63,10 @@ class _SchoolGalleryWithSessionYearFilterContainerState
       width: MediaQuery.of(context).size.width,
       height: 50,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.32)),
+          borderRadius: BorderRadius.circular(AppRadius.field),
+          color: AppColors.surface,
+          border: Border.all(color: AppColors.divider),
+          boxShadow: AppShadows.card),
       child: BlocConsumer<SchoolSessionYearsCubit, SchoolSessionYearsState>(
           listener: (context, state) {
         if (state is SchoolSessionYearsFetchSuccess) {
@@ -146,11 +149,17 @@ class _SchoolGalleryWithSessionYearFilterContainerState
                 builder: (context, state) {
                   if (state is SchoolGalleryFetchSuccess) {
                     if (state.gallery.isEmpty) {
-                      return Center(
-                          child: Center(
-                        child: NoDataContainer(
-                            titleKey: noGalleryDataAvailableForThisSessionKey),
-                      ));
+                      return CenteredNoDataContainer(
+                        titleKey: noGalleryDataAvailableForThisSessionKey,
+                        //Scroll padding plus the session-year dropdown above.
+                        occupiedHeight: Utils.getScrollViewTopPadding(
+                              context: context,
+                              appBarHeightPercentage:
+                                  Utils.appBarSmallerHeightPercentage,
+                            ) +
+                            80 +
+                            90,
+                      );
                     }
 
                     return Column(

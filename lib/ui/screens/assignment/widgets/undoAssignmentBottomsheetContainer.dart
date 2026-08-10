@@ -3,6 +3,7 @@ import 'package:eschool/ui/widgets/bottomsheetTopTitleAndCloseButton.dart';
 import 'package:eschool/ui/widgets/customRoundedButton.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/route_manager.dart';
@@ -29,7 +30,7 @@ class _UndoAssignmentBottomsheetContainerState
         vertical: MediaQuery.of(context).size.height * (0.04),
       ),
       decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: AppColors.surface,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(Utils.bottomSheetTopRadius),
           topRight: Radius.circular(Utils.bottomSheetTopRadius),

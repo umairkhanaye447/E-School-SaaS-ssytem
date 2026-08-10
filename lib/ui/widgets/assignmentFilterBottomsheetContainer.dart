@@ -1,6 +1,7 @@
 import 'package:eschool/ui/widgets/assignmentsContainer.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class AssignmentFilterBottomsheetContainer extends StatefulWidget {
@@ -84,7 +85,7 @@ class _AssignmentFilterBottomsheetContainerState
       ),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: AppColors.surface,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(Utils.bottomSheetTopRadius),
           topRight: Radius.circular(Utils.bottomSheetTopRadius),

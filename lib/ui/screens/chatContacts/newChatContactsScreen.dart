@@ -15,6 +15,7 @@ import 'package:eschool/ui/widgets/screenTopBackgroundContainer.dart';
 import 'package:eschool/ui/widgets/tabBarBackgroundContainer.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -108,7 +109,7 @@ class _NewChatContactsScreenState extends State<NewChatContactsScreen> {
       decoration: BoxDecoration(
         border: Border.all(
             color: Utils.getColorScheme(context).primary, width: 2.0),
-        borderRadius: BorderRadius.circular(12.0),
+        borderRadius: BorderRadius.circular(AppRadius.field),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<Student>(
@@ -162,8 +163,9 @@ class _NewChatContactsScreenState extends State<NewChatContactsScreen> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Theme.of(context).scaffoldBackgroundColor,
+                      color: AppColors.textPrimary,
                       fontSize: Utils.screenTitleFontSize,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
@@ -292,13 +294,13 @@ class _NewChatContactsScreenState extends State<NewChatContactsScreen> {
                                     ),
                                 ],
                               )
-                            : SizedBox(
-                                height: 400,
-                                child: NoDataContainer(
-                                  titleKey: _selectedTabTitle == teachersKey
-                                      ? noTeachersFoundKey
-                                      : noStaffFoundKey,
-                                ),
+                            : CenteredNoDataContainer(
+                                titleKey: _selectedTabTitle == teachersKey
+                                    ? noTeachersFoundKey
+                                    : noStaffFoundKey,
+                                //App bar, search field and tab row above.
+                                occupiedHeight:
+                                    MediaQuery.sizeOf(context).height * 0.38,
                               ),
                         ChatUsersFetchStatus.failure => SizedBox(
                             height: 400,
@@ -347,7 +349,7 @@ class _NewChatContactsScreenState extends State<NewChatContactsScreen> {
         width: double.infinity,
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(AppRadius.field),
           border: Border(
             top: BorderSide.none,
             left: BorderSide.none,
@@ -365,14 +367,14 @@ class _NewChatContactsScreenState extends State<NewChatContactsScreen> {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(AppRadius.field),
                 color: colorScheme.tertiary,
               ),
               padding: EdgeInsets.zero,
               margin: EdgeInsets.zero,
               alignment: Alignment.center,
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(AppRadius.field),
                 child: CachedNetworkImage(
                   imageUrl: chatUser.image,
                   fit: BoxFit.cover,

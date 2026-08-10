@@ -22,9 +22,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart' hide Transition;
 import 'package:get/route_manager.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'package:eschool/app/routes.dart';
@@ -50,7 +49,8 @@ import 'package:eschool/data/repositories/studentRepository.dart';
 import 'package:eschool/data/repositories/systemInfoRepository.dart';
 
 import 'package:eschool/cubits/onlineExamQuestionsCubit.dart';
-import 'package:eschool/ui/styles/colors.dart';
+import 'package:eschool/ui/styles/appTheme.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 
 import 'package:eschool/utils/hiveBoxKeys.dart';
 import 'package:eschool/utils/notificationUtility.dart';
@@ -126,6 +126,11 @@ Future<void> initializeApp() async {
 
   runApp(const MyApp());
 }
+
+/// Widest the UI is allowed to grow. The layouts are phone-designed, so on a
+/// tablet or a desktop-class window the app renders as a centred column at
+/// this width rather than stretching.
+const double _maxContentWidth = 600;
 
 class GlobalScrollBehavior extends ScrollBehavior {
   @override
@@ -241,12 +246,32 @@ class _MyAppState extends State<MyApp> {
         builder: (context) {
           return GetMaterialApp(
             debugShowCheckedModeBanner: false,
+            //One subtle push transition everywhere. GetX otherwise falls back
+            //to a per-platform default, so Android and iOS moved differently.
+            defaultTransition: Transition.cupertino,
+            transitionDuration: const Duration(milliseconds: 260),
             builder: (context, child) {
-              return MediaQuery(
-                data: MediaQuery.of(context).copyWith(
-                  viewPadding: MediaQuery.of(context).viewPadding.copyWith(
-                        top: 0, // Keep status bar transparent
-                      ),
+              final mq = MediaQuery.of(context);
+
+              // Tablet handling.
+              //
+              // These screens size themselves as fractions of screen width in
+              // ~318 places. On a tablet that stretches every card edge to
+              // edge while the text stays phone-sized. Rather than rewrite
+              // each call site, cap the width the app *reports* and centre the
+              // result: every fraction then resolves against the cap, so the
+              // layouts keep the proportions they were designed for.
+              final bool needsCap = mq.size.width > _maxContentWidth;
+              final Size size = needsCap
+                  ? Size(_maxContentWidth, mq.size.height)
+                  : mq.size;
+
+              final Widget content = MediaQuery(
+                data: mq.copyWith(
+                  size: size,
+                  viewPadding: mq.viewPadding.copyWith(
+                    top: 0, // Keep status bar transparent
+                  ),
                 ),
                 child: SafeArea(
                   top: false, // Don't add padding for status bar
@@ -254,22 +279,20 @@ class _MyAppState extends State<MyApp> {
                   child: child ?? Container(),
                 ),
               );
+
+              if (!needsCap) return content;
+
+              return ColoredBox(
+                color: AppColors.pageBackground,
+                child: Center(
+                  child: SizedBox(width: _maxContentWidth, child: content),
+                ),
+              );
             },
-            theme: Theme.of(context).copyWith(
-              textTheme:
-                  GoogleFonts.poppinsTextTheme(Theme.of(context).textTheme),
-              scaffoldBackgroundColor: pageBackgroundColor,
-              colorScheme: Theme.of(context).colorScheme.copyWith(
-                    primary: primaryColor,
-                    onPrimary: onPrimaryColor,
-                    secondary: secondaryColor,
-                    tertiary: tertiaryColor,
-                    surface: backgroundColor,
-                    error: errorColor,
-                    onSecondary: onSecondaryColor,
-                    onSurface: onBackgroundColor,
-                  ),
-            ),
+            // Single source of truth for the redesign. Slot semantics are
+            // preserved from the previous inline scheme — see appTheme.dart.
+            // When the branding layer lands, pass the school's AppBrand here.
+            theme: AppTheme.light(),
             locale: context.read<AppLocalizationCubit>().state.language,
             // Follows defaultLanguageCode as long as that language is bundled,
             // so changing the default also moves the last-resort labels.

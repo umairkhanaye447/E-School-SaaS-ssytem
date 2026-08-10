@@ -1,8 +1,9 @@
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 /// Border colour of the outlined cards used across the fee details screen and
 /// its sub-widgets (Fee Breakdown, Installments, Fee Relief).
-const Color feeCardBorderColor = Color(0xFFDFDFDF);
+const Color feeCardBorderColor = AppColors.divider;
 
 /// Outlined card container (1.5px [feeCardBorderColor] border, 16 radius,
 /// 16 padding) shared by the fee details screen and [FeeReliefContainer].
@@ -23,7 +24,7 @@ class FeeSectionCard extends StatelessWidget {
       padding: padding,
       decoration: BoxDecoration(
         border: Border.all(width: 1.5, color: feeCardBorderColor),
-        borderRadius: BorderRadius.circular(16.0),
+        borderRadius: BorderRadius.circular(AppRadius.card),
       ),
       child: child,
     );

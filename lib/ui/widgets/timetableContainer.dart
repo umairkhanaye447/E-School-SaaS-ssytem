@@ -13,6 +13,7 @@ import 'package:eschool/utils/animationConfiguration.dart';
 import 'package:eschool/utils/constants.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -149,8 +150,9 @@ class _TimeTableContainerState extends State<TimeTableContainer>
             child: Text(
               Utils.getTranslatedLabel(timeTableKey),
               style: TextStyle(
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: AppColors.textPrimary,
                 fontSize: Utils.screenTitleFontSize,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
@@ -161,7 +163,7 @@ class _TimeTableContainerState extends State<TimeTableContainer>
               alignment: Alignment.center,
               height: 50,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(AppRadius.field),
                 boxShadow: [
                   BoxShadow(
                     color: Theme.of(context)
@@ -172,7 +174,7 @@ class _TimeTableContainerState extends State<TimeTableContainer>
                     blurRadius: 5,
                   )
                 ],
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: AppColors.surface,
               ),
               width: MediaQuery.of(context).size.width * (0.85),
               child: Text(
@@ -211,7 +213,7 @@ class _TimeTableContainerState extends State<TimeTableContainer>
         child: Text(
           Utils.getTranslatedLabel(Utils.weekDays[index]),
           style: TextStyle(
-            fontSize: 13.0,
+            fontSize: 12,
             fontWeight: FontWeight.w600,
             color: index == _currentSelectedDayIndex
                 ? Theme.of(context).scaffoldBackgroundColor
@@ -247,9 +249,17 @@ class _TimeTableContainerState extends State<TimeTableContainer>
           return SizedBox(
             width: MediaQuery.of(context).size.width,
             child: timetableSlots.isEmpty
-                ? NoDataContainer(
+                ? CenteredNoDataContainer(
                     key: isApplicationItemAnimationOn ? UniqueKey() : null,
                     titleKey: noLecturesKey,
+                    //Scroll padding plus the day-selector row and its gaps.
+                    occupiedHeight: Utils.getScrollViewTopPadding(
+                          context: context,
+                          appBarHeightPercentage:
+                              Utils.appBarMediumtHeightPercentage,
+                        ) +
+                        Utils.getScrollViewBottomPadding(context) +
+                        MediaQuery.sizeOf(context).height * 0.15,
                   )
                 : Column(
                     children: List.generate(

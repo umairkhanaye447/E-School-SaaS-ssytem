@@ -20,9 +20,9 @@ import 'package:eschool/ui/screens/home/cubits/assignmentsTabSelectionCubit.dart
 import 'package:eschool/ui/screens/home/widgets/bottomNavigationItemContainer.dart';
 import 'package:eschool/ui/screens/home/widgets/examContainer.dart';
 import 'package:eschool/ui/screens/home/widgets/homeContainer.dart';
-import 'package:eschool/ui/screens/home/widgets/homeContainerTopProfileContainer.dart';
+import 'package:eschool/ui/screens/home/widgets/subjectsBottomsheetContainer.dart';
 import 'package:eschool/ui/screens/home/widgets/homeScreenDataLoadingContainer.dart';
-import 'package:eschool/ui/screens/home/widgets/moreMenuBottomsheetContainer.dart';
+import 'package:eschool/ui/widgets/dashboard/dashboardProfileHeader.dart';
 import 'package:eschool/ui/screens/home/widgets/parentProfileContainer.dart';
 import 'package:eschool/ui/screens/reports/reportSubjectsContainer.dart';
 import 'package:eschool/ui/widgets/appUnderMaintenanceContainer.dart';
@@ -36,13 +36,15 @@ import 'package:eschool/ui/widgets/noticeBoardContainer.dart';
 import 'package:eschool/ui/widgets/schoolGalleryWithSessionYearFilterContainer.dart';
 import 'package:eschool/ui/widgets/settingsContainer.dart';
 import 'package:eschool/ui/widgets/timetableContainer.dart';
-import 'package:eschool/utils/constants.dart';
 import 'package:eschool/utils/homeBottomsheetMenu.dart';
+import 'package:eschool/utils/constants.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/notificationUtility.dart';
+import 'package:eschool/ui/screens/chatContacts/chatContactsScreen.dart';
 import 'package:eschool/utils/systemModules.dart';
 import 'package:eschool/utils/utils.dart';
 import 'package:eschool/utils/pendingExamSubmissionHandler.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -119,35 +121,37 @@ class HomeScreenState extends State<HomeScreen>
   late final List<AnimationController> _bottomNavItemTitlesAnimationController =
       [];
 
-  late final AnimationController _moreMenuBottomsheetAnimationController =
+  //Slide-up sheet for the "Subject" tab. Same behaviour the more-menu tab
+  //had: tapping the last nav item toggles it, and closing restores the tab
+  //that was showing underneath.
+  late final AnimationController _subjectsSheetAnimationController =
       AnimationController(
     vsync: this,
     duration: homeMenuBottomSheetAnimationDuration,
   );
 
-  late final Animation<Offset> _moreMenuBottomsheetAnimation =
-      Tween<Offset>(begin: const Offset(0.0, 1.5), end: Offset.zero).animate(
+  late final Animation<Offset> _subjectsSheetAnimation =
+      Tween<Offset>(begin: const Offset(0.0, 1.0), end: Offset.zero).animate(
     CurvedAnimation(
-      parent: _moreMenuBottomsheetAnimationController,
+      parent: _subjectsSheetAnimationController,
       curve: Curves.easeInOut,
     ),
   );
 
-  late final Animation<double> _moreMenuBackgroundContainerColorAnimation =
+  late final Animation<double> _subjectsSheetScrimAnimation =
       Tween<double>(begin: 0.0, end: 1.0).animate(
     CurvedAnimation(
-      parent: _moreMenuBottomsheetAnimationController,
+      parent: _subjectsSheetAnimationController,
       curve: Curves.easeInOut,
     ),
   );
 
+  late bool _isSubjectsSheetOpen = false;
+
   late int _currentSelectedBottomNavIndex = 0;
-  late int _previousSelectedBottmNavIndex = -1;
 
   //index of opened homeBottomsheet menu
   late int _currentlyOpenMenuIndex = -1;
-
-  late bool _isMoreMenuOpen = false;
 
   late List<BottomNavItem> _bottomNavItems = [];
 
@@ -179,39 +183,32 @@ class HomeScreenState extends State<HomeScreen>
   }
 
   void updateBottomNavItems() {
-    _bottomNavItems = context
-            .read<SchoolConfigurationCubit>()
-            .getSchoolConfiguration()
-            .isAssignmentModuleEnabled()
-        ? [
-            BottomNavItem(
-              activeImageUrl: Utils.getImagePath("home_active_icon.svg"),
-              disableImageUrl: Utils.getImagePath("home_icon.svg"),
-              title: homeKey,
-            ),
-            BottomNavItem(
-              activeImageUrl: Utils.getImagePath("assignment_active_icon.svg"),
-              disableImageUrl: Utils.getImagePath("assignment_icon.svg"),
-              title: assignmentsKey,
-            ),
-            BottomNavItem(
-              activeImageUrl: Utils.getImagePath("menu_active_icon.svg"),
-              disableImageUrl: Utils.getImagePath("menu_icon.svg"),
-              title: menuKey,
-            ),
-          ]
-        : [
-            BottomNavItem(
-              activeImageUrl: Utils.getImagePath("home_active_icon.svg"),
-              disableImageUrl: Utils.getImagePath("home_icon.svg"),
-              title: homeKey,
-            ),
-            BottomNavItem(
-              activeImageUrl: Utils.getImagePath("menu_active_icon.svg"),
-              disableImageUrl: Utils.getImagePath("menu_icon.svg"),
-              title: menuKey,
-            ),
-          ];
+    //Settings occupies the last tab; Subjects is reached from the home grid,
+    //where it opens a slide-up sheet. Chat keeps the same module gating the
+    //grid tile used to apply; Assignment moved into the home grid.
+    final bool chatEnabled = Utils.isModuleEnabled(
+      context: context,
+      moduleId: chatModuleId.toString(),
+    );
+
+    _bottomNavItems = [
+      BottomNavItem(
+        activeIcon: Icons.home_rounded,
+        icon: Icons.home_outlined,
+        title: homeKey,
+      ),
+      if (chatEnabled)
+        BottomNavItem(
+          activeIcon: Icons.chat_bubble_rounded,
+          icon: Icons.chat_bubble_outline_rounded,
+          title: chatsKey,
+        ),
+      BottomNavItem(
+        activeIcon: Icons.settings_rounded,
+        icon: Icons.settings_outlined,
+        title: settingsKey,
+      ),
+    ];
 
     //Update the animaitons controller based on assignment module enable
     initAnimations();
@@ -245,10 +242,10 @@ class HomeScreenState extends State<HomeScreen>
     }
     WidgetsBinding.instance.removeObserver(this);
     _animationController.dispose();
+    _subjectsSheetAnimationController.dispose();
     for (var animationController in _bottomNavItemTitlesAnimationController) {
       animationController.dispose();
     }
-    _moreMenuBottomsheetAnimationController.dispose();
     super.dispose();
   }
 
@@ -269,85 +266,48 @@ class HomeScreenState extends State<HomeScreen>
     }
   }
 
-  bool canPopScreen() {
-    if (_isMoreMenuOpen) {
-      return false;
-    }
-    if (_currentSelectedBottomNavIndex != 0) {
-      return false;
-    }
-    return true;
-  }
-
   Future<void> changeBottomNavItem(int index) async {
-    if (_moreMenuBottomsheetAnimationController.isAnimating) {
+    if (_subjectsSheetAnimationController.isAnimating) {
       return;
     }
+
     _bottomNavItemTitlesAnimationController[_currentSelectedBottomNavIndex]
         .forward();
 
-    //need to assign previous selected bottom index only if menu is close
-    if (!_isMoreMenuOpen && _currentlyOpenMenuIndex == -1) {
-      _previousSelectedBottmNavIndex = _currentSelectedBottomNavIndex;
-    }
-
-    //change current selected bottom index
     setState(() {
       _currentSelectedBottomNavIndex = index;
-
-      //if user taps on non-last bottom nav item then change _currentlyOpenMenuIndex
-      if (_currentSelectedBottomNavIndex != _bottomNavItems.length - 1) {
-        _currentlyOpenMenuIndex = -1;
-      }
+      //Switching tabs leaves any inline menu screen that was open.
+      _currentlyOpenMenuIndex = -1;
     });
 
     _bottomNavItemTitlesAnimationController[_currentSelectedBottomNavIndex]
         .reverse();
 
-    //if bottom index is last means open/close the bottom sheet
-    if (index == _bottomNavItems.length - 1) {
-      if (_moreMenuBottomsheetAnimationController.isCompleted) {
-        //close the menu
-        await _moreMenuBottomsheetAnimationController.reverse();
-
-        setState(() {
-          _isMoreMenuOpen = !_isMoreMenuOpen;
-        });
-
-        //change bottom nav to previous selected index
-        //only if there is not any opened menu item container
-        if (_currentlyOpenMenuIndex == -1) {
-          changeBottomNavItem(_previousSelectedBottmNavIndex);
-        }
-      } else {
-        //open menu
-        await _moreMenuBottomsheetAnimationController.forward();
-        setState(() {
-          _isMoreMenuOpen = !_isMoreMenuOpen;
-        });
-      }
-    } else {
-      //if current selected index is not last index(bottom nav item)
-      //and menu is open then close the menu
-      if (_moreMenuBottomsheetAnimationController.isCompleted) {
-        await _moreMenuBottomsheetAnimationController.reverse();
-        setState(() {
-          _isMoreMenuOpen = !_isMoreMenuOpen;
-        });
-      }
+    //A tab change always dismisses the subjects sheet.
+    if (_subjectsSheetAnimationController.isCompleted) {
+      await _closeSubjectsSheet();
     }
   }
 
-  Future<void> _closeBottomMenu() async {
-    if (_currentlyOpenMenuIndex == -1) {
-      //close the menu and change bottom sheet
-      changeBottomNavItem(_previousSelectedBottmNavIndex);
-    } else {
-      await _moreMenuBottomsheetAnimationController.reverse();
-      setState(() {
-        _isMoreMenuOpen = !_isMoreMenuOpen;
-      });
-    }
+  Future<void> _openSubjectsSheet() async {
+    await _subjectsSheetAnimationController.forward();
+    if (!mounted) return;
+    setState(() {
+      _isSubjectsSheetOpen = true;
+    });
+  }
+
+  Future<void> _closeSubjectsSheet() async {
+    await _subjectsSheetAnimationController.reverse();
+    if (!mounted) return;
+    setState(() {
+      _isSubjectsSheetOpen = false;
+    });
+  }
+
+  ///Dismisses the sheet, leaving the tab underneath as it was.
+  Future<void> _dismissSubjectsSheet() async {
+    await _closeSubjectsSheet();
   }
 
   Future<void> _handleTransportNavigation() async {
@@ -391,108 +351,49 @@ class HomeScreenState extends State<HomeScreen>
     }
   }
 
+  /// Handles a tap on the home screen's module grid. Destinations are
+  /// unchanged from the old more-menu sheet: four items push a route, the
+  /// rest render inline over the home tab via [_currentlyOpenMenuIndex].
   Future<void> _onTapMoreMenuItemContainer(int index) async {
-    // Check if the tapped menu item is student diary
-    if (homeBottomSheetMenu[index].title == myDiaryKey) {
-      // Close the menu first
-      await _moreMenuBottomsheetAnimationController.reverse();
-      setState(() {
-        _isMoreMenuOpen = false;
-      });
+    final String title = homeBottomSheetMenu[index].title;
 
-      // Reset bottom nav to previous selected index before navigation
-      if (_previousSelectedBottmNavIndex != -1) {
-        _currentSelectedBottomNavIndex = _previousSelectedBottmNavIndex;
-        _bottomNavItemTitlesAnimationController[_currentSelectedBottomNavIndex]
-            .reverse();
-      }
-
-      // Navigate to student diary screen
+    if (title == myDiaryKey) {
       final student =
           context.read<StudentProfileCubit>().getCurrentStudentProfile();
       await Get.toNamed(Routes.studentDiaryScreen,
           arguments: {'studentId': student.id ?? 0, 'id': student.id ?? 0});
-
-      // Ensure state is properly set after returning from navigation
-      setState(() {});
+      if (mounted) setState(() {});
       return;
     }
 
-    // Check if the tapped menu item is transportation
-    if (homeBottomSheetMenu[index].title == transportationKey) {
-      // Close the menu first
-      await _moreMenuBottomsheetAnimationController.reverse();
-      setState(() {
-        _isMoreMenuOpen = false;
-      });
-
-      // Reset bottom nav to previous selected index before navigation
-      if (_previousSelectedBottmNavIndex != -1) {
-        _currentSelectedBottomNavIndex = _previousSelectedBottmNavIndex;
-        _bottomNavItemTitlesAnimationController[_currentSelectedBottomNavIndex]
-            .reverse();
-      }
-
-      // Handle transport navigation
+    if (title == transportationKey) {
       await _handleTransportNavigation();
-
-      // Ensure state is properly set after returning from navigation
-      setState(() {});
+      if (mounted) setState(() {});
       return;
     }
 
-    // Check if the tapped menu item is teachers
-    if (homeBottomSheetMenu[index].title == teachersKey) {
-      // Close the menu first
-      await _moreMenuBottomsheetAnimationController.reverse();
-      setState(() {
-        _isMoreMenuOpen = false;
-      });
-
-      // Reset bottom nav to previous selected index before navigation
-      if (_previousSelectedBottmNavIndex != -1) {
-        _currentSelectedBottomNavIndex = _previousSelectedBottmNavIndex;
-        _bottomNavItemTitlesAnimationController[_currentSelectedBottomNavIndex]
-            .reverse();
-      }
-
-      // Navigate to teachers screen
+    if (title == teachersKey) {
       final student =
           context.read<StudentProfileCubit>().getCurrentStudentProfile();
       await Get.toNamed(Routes.childTeachers, arguments: student.id ?? 0);
-
-      // Ensure state is properly set after returning from navigation
-      setState(() {});
+      if (mounted) setState(() {});
       return;
     }
 
-    // Check if the tapped menu item is certificate
-    if (homeBottomSheetMenu[index].title == certificateKey) {
-      // Close the menu first
-      await _moreMenuBottomsheetAnimationController.reverse();
-      setState(() {
-        _isMoreMenuOpen = false;
-      });
+    if (title == mySubjectsKey) {
+      await _openSubjectsSheet();
+      return;
+    }
 
-      // Reset bottom nav to previous selected index before navigation
-      if (_previousSelectedBottmNavIndex != -1) {
-        _currentSelectedBottomNavIndex = _previousSelectedBottmNavIndex;
-        _bottomNavItemTitlesAnimationController[_currentSelectedBottomNavIndex]
-            .reverse();
-      }
-
-      // Navigate to certificate screen
+    if (title == certificateKey) {
       await Get.toNamed(Routes.certificate);
-
-      // Ensure state is properly set after returning from navigation
-      setState(() {});
+      if (mounted) setState(() {});
       return;
     }
 
-    await _moreMenuBottomsheetAnimationController.reverse();
-    _currentlyOpenMenuIndex = index;
-    _isMoreMenuOpen = !_isMoreMenuOpen;
-    setState(() {});
+    setState(() {
+      _currentlyOpenMenuIndex = index;
+    });
   }
 
   Widget _buildBottomNavigationContainer() {
@@ -517,8 +418,8 @@ class HomeScreenState extends State<HomeScreen>
                 blurRadius: 20,
               )
             ],
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: BorderRadius.circular(10.0),
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(AppRadius.field),
           ),
           width: MediaQuery.of(context).size.width * (0.85),
           height: MediaQuery.of(context).size.height *
@@ -551,22 +452,12 @@ class HomeScreenState extends State<HomeScreen>
     );
   }
 
-  Widget _buildMoreMenuBackgroundContainer() {
-    return GestureDetector(
-      onTap: () async {
-        _closeBottomMenu();
-      },
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.75),
-      ),
-    );
-  }
-
   //To load the selected menu item
   //it _currentlyOpenMenuIndex is 0 then load the container based on homeBottomSheetMenu[_currentlyOpenMenuIndex]
   Widget _buildMenuItemContainer() {
+    if (homeBottomSheetMenu[_currentlyOpenMenuIndex].title == assignmentsKey) {
+      return const AssignmentsContainer(isForBottomMenuBackground: false);
+    }
     if (homeBottomSheetMenu[_currentlyOpenMenuIndex].title == attendanceKey) {
       return const AttendanceContainer();
     }
@@ -629,38 +520,22 @@ class HomeScreenState extends State<HomeScreen>
     return const SizedBox();
   }
 
-  Widget _buildBottomSheetBackgroundContent() {
-    //
-    //Based on previous selected index show backgorund content
-    if (_currentlyOpenMenuIndex != -1) {
-      return _buildMenuItemContainer();
-    } else {
-      //If it is not enable
-      if (!(context
-          .read<SchoolConfigurationCubit>()
-          .getSchoolConfiguration()
-          .isAssignmentModuleEnabled())) {
-        return const HomeContainer(
-          isForBottomMenuBackground: true,
-        );
-      }
-
-      if (_previousSelectedBottmNavIndex == 0) {
-        return const HomeContainer(
-          isForBottomMenuBackground: true,
-        );
-      }
-
-      //Previous selected index is 1
-      if (_previousSelectedBottmNavIndex == 1) {
-        return const AssignmentsContainer(
-          isForBottomMenuBackground: true,
-        );
-      }
-
-      return const SizedBox();
-    }
+  Widget _buildSheetScrim() {
+    return GestureDetector(
+      onTap: _dismissSubjectsSheet,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.75),
+      ),
+    );
   }
+
+  /// Tabs occupy indices 0..n-1; the inline menu screen lives in the slot
+  /// right after them.
+  int get _visibleContentIndex => _currentlyOpenMenuIndex != -1
+      ? _bottomNavItems.length
+      : _currentSelectedBottomNavIndex;
 
   void _onWillPop() {
     setState(() {
@@ -681,20 +556,28 @@ class HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: _currentSelectedBottomNavIndex == 0 ? canPop : canPopScreen(),
+      canPop:
+          _currentSelectedBottomNavIndex == 0 && _currentlyOpenMenuIndex == -1
+              ? canPop
+              : false,
       onPopInvokedWithResult: (didPop, _) {
-        if (_currentSelectedBottomNavIndex == 0) {
-          _onWillPop();
+        //Back leaves an inline menu screen first, then returns to Home,
+        //then arms the press-again-to-exit prompt.
+        if (_isSubjectsSheetOpen) {
+          _dismissSubjectsSheet();
           return;
         }
-        if (_isMoreMenuOpen) {
-          _closeBottomMenu();
+        if (_currentlyOpenMenuIndex != -1) {
+          setState(() {
+            _currentlyOpenMenuIndex = -1;
+          });
           return;
         }
         if (_currentSelectedBottomNavIndex != 0) {
           changeBottomNavItem(0);
           return;
         }
+        _onWillPop();
       },
       child: Scaffold(
         body: context.read<AppConfigurationCubit>().appUnderMaintenance() ||
@@ -743,42 +626,41 @@ class HomeScreenState extends State<HomeScreen>
                     return Stack(
                       children: [
                         IndexedStack(
-                          index: _currentSelectedBottomNavIndex,
-                          children: state.schoolConfiguration
-                                  .isAssignmentModuleEnabled()
-                              ? [
-                                  const HomeContainer(
-                                    isForBottomMenuBackground: false,
-                                  ),
-                                  const AssignmentsContainer(
-                                    isForBottomMenuBackground: false,
-                                  ),
-                                  _buildBottomSheetBackgroundContent(),
-                                ]
-                              : [
-                                  const HomeContainer(
-                                    isForBottomMenuBackground: false,
-                                  ),
-                                  _buildBottomSheetBackgroundContent(),
-                                ],
+                          index: _visibleContentIndex,
+                          children: [
+                            HomeContainer(
+                              isForBottomMenuBackground: false,
+                              onTapMenuItem: _onTapMoreMenuItemContainer,
+                            ),
+                            if (Utils.isModuleEnabled(
+                              context: context,
+                              moduleId: chatModuleId.toString(),
+                            ))
+                              ChatContactsScreen.routeInstance(),
+                            const SettingsContainer(),
+                            //Trailing slot: the inline screen for a tapped
+                            //module tile. Kept out of the tab list so the
+                            //bottom nav indices stay 1:1 with the tabs.
+                            _currentlyOpenMenuIndex != -1
+                                ? _buildMenuItemContainer()
+                                : const SizedBox(),
+                          ],
                         ),
                         IgnorePointer(
-                          ignoring: !_isMoreMenuOpen,
+                          ignoring: !_isSubjectsSheetOpen,
                           child: FadeTransition(
-                            opacity: _moreMenuBackgroundContainerColorAnimation,
-                            child: _buildMoreMenuBackgroundContainer(),
+                            opacity: _subjectsSheetScrimAnimation,
+                            child: _buildSheetScrim(),
                           ),
                         ),
 
-                        //More menu bottom sheet
+                        //Subjects sheet
                         Align(
                           alignment: Alignment.bottomCenter,
                           child: SlideTransition(
-                            position: _moreMenuBottomsheetAnimation,
-                            child: MoreMenuBottomsheetContainer(
-                              closeBottomMenu: _closeBottomMenu,
-                              onTapMoreMenuItemContainer:
-                                  _onTapMoreMenuItemContainer,
+                            position: _subjectsSheetAnimation,
+                            child: SubjectsBottomsheetContainer(
+                              closeBottomMenu: _dismissSubjectsSheet,
                             ),
                           ),
                         ),
@@ -813,7 +695,10 @@ class HomeScreenState extends State<HomeScreen>
                     return Center(
                       child: Column(
                         children: [
-                          HomeContainerTopProfileContainer(),
+                          SafeArea(
+                            bottom: false,
+                            child: DashboardProfileHeader(),
+                          ),
                           const SizedBox(
                             height: 15,
                           ),
@@ -849,7 +734,10 @@ class HomeScreenState extends State<HomeScreen>
 
                   return Column(
                     children: [
-                      HomeContainerTopProfileContainer(),
+                      SafeArea(
+                        bottom: false,
+                        child: DashboardProfileHeader(),
+                      ),
                       Expanded(
                           child: HomeScreenDataLoadingContainer(
                         addTopPadding: false,

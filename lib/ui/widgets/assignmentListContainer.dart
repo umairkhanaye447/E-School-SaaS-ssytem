@@ -12,6 +12,7 @@ import 'package:eschool/utils/animationConfiguration.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -222,11 +223,15 @@ class AssignmentListContainer extends StatelessWidget {
                 end: MediaQuery.of(context).size.width * (0.075),
               ),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(15),
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(AppRadius.card),
+                boxShadow: AppShadows.card,
               ),
               width: MediaQuery.of(context).size.width,
-              height: 100,
+              //Fixed 100 overflowed by a hair on devices with a larger system
+              //font, so the tile grows with the user's font-size setting.
+              height: 100 *
+                  MediaQuery.textScalerOf(context).scale(1.0).clamp(1.0, 1.35),
               child: LayoutBuilder(
                 builder: (context, boxConstraints) {
                   final assignmentSubmittedStatusKey =
@@ -300,8 +305,10 @@ class AssignmentListContainer extends StatelessWidget {
                                                       .onSurface;
 
                                               if (type == 'date') {
-                                                // Show original date
-                                                displayText = value;
+                                                // Show original date, restated
+                                                // in the app's date format.
+                                                displayText =
+                                                    Utils.formatApiDate(value);
                                               } else if (type == 'dueToday') {
                                                 // Show "Due Today" with warning color
                                                 displayText =
@@ -343,7 +350,9 @@ class AssignmentListContainer extends StatelessWidget {
                                                     .error;
                                               } else {
                                                 displayText =
-                                                    assignment.dueDateOriginal;
+                                                    Utils.formatApiDate(
+                                                  assignment.dueDateOriginal,
+                                                );
                                               }
 
                                               return Text(
@@ -411,19 +420,24 @@ class AssignmentListContainer extends StatelessWidget {
                               ),
                               assignment.instructions.isEmpty
                                   ? const SizedBox()
-                                  : Text(
-                                      assignment.instructions,
-                                      //if assignment subject is selected then maxLines should be 2 else it is 1,
-                                      maxLines:
-                                          currentSelectedSubjectId != 0 ? 2 : 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                        height: 1.3,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 12.0,
+                                  //Flexible lets the text drop a line instead
+                                  //of overflowing when vertical space is tight.
+                                  : Flexible(
+                                      child: Text(
+                                        assignment.instructions,
+                                        //if assignment subject is selected then maxLines should be 2 else it is 1,
+                                        maxLines: currentSelectedSubjectId != 0
+                                            ? 2
+                                            : 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                          height: 1.3,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 12.0,
+                                        ),
                                       ),
                                     ),
                               SizedBox(
@@ -447,7 +461,7 @@ class AssignmentListContainer extends StatelessWidget {
                                     ),
                               const Spacer(),
                               Text(
-                                assignment.createdAt,
+                                Utils.formatApiDate(assignment.createdAt),
                                 style: TextStyle(
                                   color:
                                       Theme.of(context).colorScheme.onSurface,
@@ -508,11 +522,20 @@ class AssignmentListContainer extends StatelessWidget {
           }
 
           return assignments.isEmpty
-              ? NoDataContainer(
+              ? CenteredNoDataContainer(
                   titleKey: assignmentTabTitle == assignedKey
                       ? noAssignmentsToSubmitKey
                       : notSubmittedAnyAssignmentKey,
                   animate: animateItems,
+                  //Scroll padding plus the subjects filter row rendered above
+                  //this list in both the student and parent screens.
+                  occupiedHeight: Utils.getScrollViewTopPadding(
+                        context: context,
+                        appBarHeightPercentage:
+                            Utils.appBarBiggerHeightPercentage,
+                      ) +
+                      Utils.getScrollViewBottomPadding(context) +
+                      MediaQuery.sizeOf(context).height * 0.17,
                 )
               : Column(
                   children: List.generate(assignments.length, (index) => index)

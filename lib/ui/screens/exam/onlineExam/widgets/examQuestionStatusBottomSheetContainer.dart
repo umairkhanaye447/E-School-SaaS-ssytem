@@ -1,6 +1,7 @@
 import 'package:eschool/cubits/submitOnlineExamAnswersCubit.dart';
 import 'package:eschool/data/models/question.dart';
 import 'package:eschool/ui/widgets/customCircularProgressIndicator.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -93,7 +94,7 @@ class ExamQuestionStatusBottomSheetContainer extends StatelessWidget {
         alignment: Alignment.center,
         margin: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5.0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(AppRadius.field),
           color: attempted
               ? Utils.getColorScheme(context).onSecondary
               : Utils.getColorScheme(context).error,
@@ -119,7 +120,7 @@ class ExamQuestionStatusBottomSheetContainer extends StatelessWidget {
       height: 50,
       width: MediaQuery.of(context).size.width * 0.90,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(AppRadius.field),
         color: bgColor,
       ),
       child: Row(

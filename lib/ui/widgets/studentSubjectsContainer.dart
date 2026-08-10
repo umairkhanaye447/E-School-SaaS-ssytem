@@ -1,8 +1,14 @@
 import 'package:eschool/app/routes.dart';
 import 'package:eschool/data/models/subject.dart';
+import 'package:eschool/ui/styles/appResponsive.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
+import 'package:eschool/ui/widgets/dashboard/featureTile.dart';
+import 'package:eschool/ui/widgets/dashboard/sectionHeader.dart';
 import 'package:eschool/ui/widgets/subjectImageContainer.dart';
 import 'package:eschool/utils/systemModules.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/utils/animationConfiguration.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,6 +18,11 @@ class StudentSubjectsContainer extends StatelessWidget {
   final int? childId;
   final bool showReport;
   final bool animate;
+
+  /// Horizontal inset around the grid. Hosts that already pad their own
+  /// content — such as the subjects bottom sheet — pass 0.
+  final double horizontalMargin;
+
   const StudentSubjectsContainer({
     Key? key,
     this.childId,
@@ -19,14 +30,29 @@ class StudentSubjectsContainer extends StatelessWidget {
     required this.subjectsTitleKey,
     this.showReport = false,
     this.animate = true,
+    this.horizontalMargin = AppSpacing.screenH,
   }) : super(key: key);
 
   Widget _buildSubjectContainer({
-    required BoxConstraints boxConstraints,
     required Subject subject,
     required BuildContext context,
   }) {
-    return GestureDetector(
+    return AppTileCard(
+      label: subject.getSubjectName(context: context),
+      //One line, ellipsised. Subject names vary a lot in length and letting
+      //them wrap made the tiles taller than the home menu grid.
+      maxLabelLines: 1,
+      // The subject's colour comes from the panel and its artwork is a white
+      // glyph, so the well stays saturated rather than tinted — a light tint
+      // would make the glyph invisible.
+      well: SubjectImageContainer(
+        showShadow: false,
+        animate: animate,
+        width: AppTileCard.wellSize,
+        height: AppTileCard.wellSize,
+        radius: AppRadius.iconTile,
+        subject: subject,
+      ),
       onTap: () {
         if (showReport) {
           Get.toNamed(
@@ -58,38 +84,6 @@ class StudentSubjectsContainer extends StatelessWidget {
           }
         }
       },
-      child: Container(
-        width: boxConstraints.maxWidth * (0.26),
-        margin: const EdgeInsets.only(
-          bottom: 15.0,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SubjectImageContainer(
-              showShadow: false,
-              animate: animate,
-              width: boxConstraints.maxWidth * (0.26),
-              height: boxConstraints.maxWidth * (0.26),
-              radius: 20,
-              subject: subject,
-            ),
-            5.sizedBoxHeight,
-            Text(
-              subject.getSubjectName(context: context),
-              textAlign: TextAlign.center,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: Utils.getColorScheme(context).secondary,
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
-              ),
-            )
-          ],
-        ),
-      ),
     );
   }
 
@@ -99,44 +93,39 @@ class StudentSubjectsContainer extends StatelessWidget {
         ? const SizedBox()
         : Container(
             width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.symmetric(
-              horizontal: MediaQuery.of(context).size.width *
-                  Utils.screenContentHorizontalPaddingInPercentage,
-            ),
+            margin: EdgeInsets.symmetric(horizontal: horizontalMargin),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: Text(
-                    Utils.getTranslatedLabel(subjectsTitleKey),
-                    style: TextStyle(
-                      color: Utils.getColorScheme(context).secondary,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16.0,
+                SectionHeader(
+                  title: Utils.getTranslatedLabel(subjectsTitleKey),
+                  icon: Icons.menu_book_rounded,
+                ),
+                const SizedBox(height: AppSpacing.xs),
+                GridView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: subjects.length,
+                  //Identical geometry to the home menu grid so both read as
+                  //the same component.
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: AppResponsive.gridColumns(context),
+                    crossAxisSpacing: AppTileCard.gridSpacing,
+                    mainAxisSpacing: AppTileCard.gridSpacing,
+                    childAspectRatio: AppTileCard.aspectRatio,
+                  ),
+                  itemBuilder: (context, index) => Animate(
+                    effects: gridItemAppearanceEffects(
+                      itemIndex: index,
+                      totalLoadedItems: subjects.length,
                     ),
-                    textAlign: TextAlign.start,
+                    child: _buildSubjectContainer(
+                      context: context,
+                      subject: subjects[index],
+                    ),
                   ),
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * (0.025),
-                ),
-                LayoutBuilder(
-                  builder: (context, boxConstraints) {
-                    return Wrap(
-                      spacing: boxConstraints.maxWidth * (0.1),
-                      children: List.generate(subjects.length, (index) => index)
-                          .map(
-                            (index) => _buildSubjectContainer(
-                              boxConstraints: boxConstraints,
-                              context: context,
-                              subject: subjects[index],
-                            ),
-                          )
-                          .toList(),
-                    );
-                  },
-                )
               ],
             ),
           );

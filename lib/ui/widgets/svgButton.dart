@@ -1,3 +1,4 @@
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -30,8 +31,10 @@ class SvgButton extends StatelessWidget {
         width: width ?? 25,
         child: SvgPicture.asset(
           svgIconUrl,
+          //Defaulted to the page colour back when these sat on the blue
+          //header; the header is light now, so the glyph must be dark.
           colorFilter: ColorFilter.mode(
-            buttonColor ?? Theme.of(context).scaffoldBackgroundColor,
+            buttonColor ?? AppColors.textPrimary,
             BlendMode.srcIn,
           ),
         ),

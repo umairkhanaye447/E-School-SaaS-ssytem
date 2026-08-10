@@ -4,6 +4,7 @@ import 'package:eschool/data/models/feeDiscount.dart';
 import 'package:eschool/ui/screens/childFeeDetails/widgets/feeSectionCard.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -46,7 +47,8 @@ class FeeReliefContainer extends StatelessWidget {
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: AppShadows.card,
+        borderRadius: BorderRadius.circular(AppRadius.field),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

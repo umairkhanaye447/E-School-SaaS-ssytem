@@ -1,93 +1,46 @@
 import 'package:eschool/app/routes.dart';
 import 'package:eschool/cubits/authCubit.dart';
 import 'package:eschool/cubits/studentSubjectAndSlidersCubit.dart';
+import 'package:eschool/ui/widgets/appConfirmDialog.dart';
+import 'package:eschool/ui/widgets/groupedListCard.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class LogoutButton extends StatelessWidget {
   const LogoutButton({Key? key}) : super(key: key);
 
   void showLogOutDialog(BuildContext context) {
-    Get.dialog(
-      AlertDialog(
-        backgroundColor: Colors.white,
-        content: Text(Utils.getTranslatedLabel(sureToLogoutKey)),
-        actions: [
-          CupertinoButton(
-            child: Text(Utils.getTranslatedLabel(yesKey)),
-            onPressed: () {
-              //clear the student subjects list at the time of logout
-              context.read<StudentSubjectsAndSlidersCubit>().clearSubjects();
+    AppConfirmDialog.show(
+      icon: Icons.logout_rounded,
+      title: Utils.getTranslatedLabel(logoutKey),
+      message: Utils.getTranslatedLabel(sureToLogoutKey),
+      confirmLabel: Utils.getTranslatedLabel(yesKey),
+      cancelLabel: Utils.getTranslatedLabel(noKey),
+      onConfirm: () {
+        //clear the student subjects list at the time of logout
+        context.read<StudentSubjectsAndSlidersCubit>().clearSubjects();
 
-              if (context.read<AuthCubit>().isParent()) {
-                //If parent is logging out then pop the dialog
-                Get.back();
-              }
-              context.read<AuthCubit>().signOut();
-              Get.back();
-              Get.offNamed(Routes.auth);
-            },
-          ),
-          CupertinoButton(
-            child: Text(Utils.getTranslatedLabel(noKey)),
-            onPressed: () {
-              Get.back();
-            },
-          ),
-        ],
-      ),
+        if (context.read<AuthCubit>().isParent()) {
+          //If parent is logging out then pop the dialog
+          Get.back();
+        }
+        context.read<AuthCubit>().signOut();
+        Get.back();
+        Get.offNamed(Routes.auth);
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomCenter,
-      child: InkWell(
-        onTap: () {
-          showLogOutDialog(context);
-        },
-        borderRadius: BorderRadius.circular(20.0),
-        child: Container(
-          width: MediaQuery.of(context).size.width * (0.4),
-          height: 40,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20.0),
-            color: Theme.of(context).colorScheme.secondary,
-          ),
-          child: Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 16,
-                  width: 16,
-                  child: SvgPicture.asset(
-                    Utils.getImagePath("logout_icon.svg"),
-                  ),
-                ),
-                const SizedBox(
-                  width: 10.0,
-                ),
-                Text(
-                  Utils.getTranslatedLabel(logoutKey),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 15.0,
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
+    return DangerActionCard(
+      icon: Icons.logout_rounded,
+      title: Utils.getTranslatedLabel(logoutAccountKey),
+      subtitle: Utils.getTranslatedLabel(signOutFromYourSessionKey),
+      onTap: () => showLogOutDialog(context),
     );
   }
 }

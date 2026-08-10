@@ -3,6 +3,7 @@ import 'package:eschool/data/models/student.dart';
 import 'package:eschool/ui/widgets/customUserProfileImageWidget.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 /// a student info card followed by a "Due Date" card.
@@ -19,7 +20,8 @@ class FeeInformationContainer extends StatelessWidget {
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: AppShadows.card,
+        borderRadius: BorderRadius.circular(AppRadius.field),
       ),
       child: child,
     );
@@ -147,7 +149,7 @@ class FeeInformationContainer extends StatelessWidget {
               ),
               const SizedBox(width: 12.0),
               Text(
-                childFeeDetails.dueDate ?? "-",
+                Utils.formatApiDate(childFeeDetails.dueDate ?? ""),
                 style: TextStyle(
                   fontSize: 12.0,
                   fontWeight: FontWeight.w500,

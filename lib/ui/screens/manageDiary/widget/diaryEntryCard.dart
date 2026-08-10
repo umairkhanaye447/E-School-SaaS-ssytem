@@ -1,6 +1,8 @@
 import 'package:eschool/ui/widgets/customTextContainer.dart';
 import 'package:eschool/utils/constants.dart';
 import 'package:eschool/utils/labelKeys.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
+import 'package:eschool/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class DiaryEntryCard extends StatefulWidget {
@@ -54,7 +56,7 @@ class _DiaryEntryCardState extends State<DiaryEntryCard> {
 
         // Check if title or description overflows
         final titleStyle = TextStyle(
-          fontSize: 16,
+          fontSize: 15,
           fontWeight: FontWeight.w600,
         );
         final descriptionStyle = TextStyle(
@@ -89,25 +91,16 @@ class _DiaryEntryCardState extends State<DiaryEntryCard> {
         });
 
         return Container(
-          margin: EdgeInsets.only(
-            left: appContentHorizontalPadding,
-            right: appContentHorizontalPadding,
-            bottom: 15,
+          margin: const EdgeInsets.only(
+            left: AppSpacing.screenH,
+            right: AppSpacing.screenH,
+            bottom: AppSpacing.sm,
           ),
-          padding: EdgeInsets.all(appContentHorizontalPadding),
-          decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: Theme.of(context).colorScheme.tertiary,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Theme.of(context).colorScheme.tertiary,
-                blurRadius: 10,
-                offset: Offset(0, 10),
-              ),
-            ],
+          padding: const EdgeInsets.all(AppSpacing.md),
+          decoration: const BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: AppRadius.cardAll,
+            boxShadow: AppShadows.card,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,7 +119,7 @@ class _DiaryEntryCardState extends State<DiaryEntryCard> {
                             .colorScheme
                             .primary
                             .withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(AppRadius.field),
                       ),
                       child: CustomTextContainer(
                         textKey: widget.entry['category'] ?? '',
@@ -147,7 +140,10 @@ class _DiaryEntryCardState extends State<DiaryEntryCard> {
                     children: [
                       // Timestamp
                       CustomTextContainer(
-                        textKey: widget.entry['timestamp'] ?? '',
+                        //Panel-formatted date; restate it in the app format.
+                        textKey: Utils.formatApiDate(
+                          widget.entry['timestamp'] ?? '',
+                        ),
                         style: TextStyle(
                           fontSize: 12,
                           color: Theme.of(context)

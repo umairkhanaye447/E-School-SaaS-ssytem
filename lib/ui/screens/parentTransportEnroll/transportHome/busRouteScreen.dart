@@ -11,6 +11,7 @@ import 'package:eschool/ui/widgets/errorContainer.dart';
 import 'package:eschool/ui/widgets/noDataContainer.dart';
 import 'package:eschool/utils/constants.dart';
 import 'package:eschool/utils/labelKeys.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -67,9 +68,9 @@ class _BusRouteScreenState extends State<BusRouteScreen> {
       width: double.maxFinite,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFE0F5EC),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF57CC99)),
+        color: AppAccent.green.tint,
+        borderRadius: BorderRadius.circular(AppRadius.field),
+        border: Border.all(color: AppColors.success),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,7 +125,7 @@ class _BusRouteScreenState extends State<BusRouteScreen> {
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
                             color: isCurrent
-                                ? const Color(0xFF57CC99)
+                                ? AppColors.success
                                 : Theme.of(context).colorScheme.onSurface,
                           ),
                           maxLines: 1,
@@ -138,7 +139,7 @@ class _BusRouteScreenState extends State<BusRouteScreen> {
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                           color: isCurrent
-                              ? const Color(0xFF57CC99)
+                              ? AppColors.success
                               : Theme.of(context).colorScheme.onSurface,
                         ),
                       ),
@@ -216,13 +217,7 @@ class _BusRouteScreenState extends State<BusRouteScreen> {
         padding: EdgeInsets.all(appContentHorizontalPadding),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 8,
-              offset: Offset(0, -2),
-            )
-          ],
+          boxShadow: AppShadows.cardStrong,
         ),
         child: CustomRoundedButton(
           onTap: () {
@@ -308,10 +303,10 @@ class _RouteMetaRow extends StatelessWidget {
         Expanded(
           child: CustomTextContainer(
             textKey: left,
-            style: const TextStyle(
+            style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: Color(0xFF212121),
+                color: AppColors.textPrimary,
                 height: 1.2),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -321,10 +316,10 @@ class _RouteMetaRow extends StatelessWidget {
           const SizedBox(width: 6),
           CustomTextContainer(
             textKey: right,
-            style: const TextStyle(
+            style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
-                color: Color(0xFF212121),
+                color: AppColors.textPrimary,
                 height: 1.2),
           ),
         ],
@@ -350,7 +345,7 @@ class _TimelineColumnPainter extends CustomPainter {
     final double centerX = size.width / 2;
     const double dotRadius = 6;
     final Paint linePaint = Paint()
-      ..color = const Color(0xFFEBEEF3)
+      ..color = AppColors.divider
       ..strokeWidth = lineWidth
       ..strokeCap = StrokeCap.butt;
     for (int i = 0; i < itemCount; i++) {
@@ -369,7 +364,7 @@ class _TimelineColumnPainter extends CustomPainter {
 
       final bool isCurrent = i == currentIndex;
       final Paint dotPaint = Paint()
-        ..color = isCurrent ? const Color(0xFF57CC99) : const Color(0xFFEBEEF3);
+        ..color = isCurrent ? AppColors.success : AppColors.divider;
       canvas.drawCircle(Offset(centerX, centerY), dotRadius, dotPaint);
 
       if (i != itemCount - 1) {

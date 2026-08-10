@@ -3,6 +3,7 @@ import 'package:eschool/ui/widgets/customRoundedButton.dart';
 import 'package:eschool/ui/widgets/customTextFieldContainer.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/route_manager.dart';
@@ -135,7 +136,7 @@ class _AdvanceInstallmentAmountBottomsheetState
               padding: const EdgeInsets.only(bottom: 12.0),
               child: InkWell(
                 onTap: _onClear,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppRadius.field),
                 child: Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 11.0),
@@ -146,7 +147,7 @@ class _AdvanceInstallmentAmountBottomsheetState
                           .error
                           .withValues(alpha: 0.6),
                     ),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppRadius.field),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

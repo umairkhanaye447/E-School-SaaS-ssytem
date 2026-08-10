@@ -11,6 +11,7 @@ import 'package:eschool/ui/widgets/customAppbar.dart';
 import 'package:eschool/ui/widgets/studyMaterialWithDownloadButtonContainer.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -234,7 +235,7 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
       child: Padding(
         padding: const EdgeInsetsDirectional.only(end: 25.0, bottom: 25.0),
         child: InkWell(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(AppRadius.sheet),
           onTap: () {
             if (isUndoAssignmentSubmissionButtonToBeShown) {
               undoAssignment();
@@ -281,7 +282,8 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(10.0),
+        boxShadow: AppShadows.card,
+          borderRadius: BorderRadius.circular(AppRadius.field),
         ),
         child: child,
       ),

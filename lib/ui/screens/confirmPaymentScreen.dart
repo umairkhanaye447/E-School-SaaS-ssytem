@@ -56,7 +56,7 @@ class _ConfirmPaymentScreenState extends State<ConfirmPaymentScreen> {
                 Text(
                   Utils.getTranslatedLabel(willNotifyYouKey),
                   style: TextStyle(
-                      fontSize: 13.0,
+                      fontSize: 12,
                       color: Theme.of(context)
                           .colorScheme
                           .secondary

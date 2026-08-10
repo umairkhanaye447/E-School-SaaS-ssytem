@@ -12,7 +12,7 @@ import 'package:eschool/utils/animationConfiguration.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -83,8 +83,9 @@ class _NoticeBoardContainerState extends State<NoticeBoardContainer> {
             child: Text(
               Utils.getTranslatedLabel(noticeBoardKey),
               style: TextStyle(
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: AppColors.textPrimary,
                 fontSize: Utils.screenTitleFontSize,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
@@ -167,7 +168,17 @@ class _NoticeBoardContainerState extends State<NoticeBoardContainer> {
               builder: (context, state) {
                 if (state is NoticeBoardFetchSuccess) {
                   return state.announcements.isEmpty
-                      ? const NoDataContainer(titleKey: noticeBoardEmptyKey)
+                      ? CenteredNoDataContainer(
+                          titleKey: noticeBoardEmptyKey,
+                          occupiedHeight: Utils.getScrollViewTopPadding(
+                                context: context,
+                                appBarHeightPercentage:
+                                    Utils.appBarSmallerHeightPercentage,
+                              ) +
+                              (widget.showBackButton
+                                  ? 0
+                                  : Utils.getScrollViewBottomPadding(context)),
+                        )
                       : Column(
                           children: List.generate(
                             state.announcements.length,

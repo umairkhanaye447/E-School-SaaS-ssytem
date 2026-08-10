@@ -6,6 +6,7 @@ import 'package:eschool/ui/screens/reports/widgets/reportDivider.dart';
 import 'package:eschool/ui/screens/reports/widgets/reportLegendItem.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class AssignmentReportCard extends StatelessWidget {
@@ -46,7 +47,7 @@ class AssignmentReportCard extends StatelessWidget {
                     .withValues(alpha: 0.1),
                 width: 1.5,
               ),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppRadius.field),
             ),
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -66,7 +67,7 @@ class AssignmentReportCard extends StatelessWidget {
                             color: Utils.getColorScheme(context).primary),
                         GraphSegment(
                             value: stats.pending?.toDouble() ?? 0,
-                            color: const Color(0xffF89E1B)),
+                            color: AppColors.brandAccent),
                         GraphSegment(
                             value: stats.rejected?.toDouble() ?? 0,
                             color: const Color(0XFFBB1B1B)),
@@ -90,7 +91,7 @@ class AssignmentReportCard extends StatelessWidget {
                               text:
                                   "${Utils.getTranslatedLabel(submittedKey)} : ${stats.submitted ?? 0}"),
                           ReportLegendItem(
-                              color: const Color(0xffF89E1B),
+                              color: AppColors.brandAccent,
                               text:
                                   "${Utils.getTranslatedLabel(pendingKey)} : ${stats.pending ?? 0}"),
                           ReportLegendItem(
@@ -110,7 +111,7 @@ class AssignmentReportCard extends StatelessWidget {
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: Utils.getColorScheme(context).surface,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppRadius.field),
                     ),
                     child: Row(
                       children: [

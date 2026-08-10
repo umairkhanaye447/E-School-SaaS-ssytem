@@ -1,5 +1,6 @@
 import 'package:eschool/ui/widgets/customTextContainer.dart';
 import 'package:eschool/utils/constants.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class CustomBottomsheet extends StatelessWidget {
@@ -25,7 +26,7 @@ class CustomBottomsheet extends StatelessWidget {
                   .colorScheme
                   .secondary
                   .withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(12.5)),
+              borderRadius: BorderRadius.circular(AppRadius.field)),
         ),
         Padding(
           padding: EdgeInsets.symmetric(
@@ -65,7 +66,7 @@ class CustomBottomsheet extends StatelessWidget {
         padding: EdgeInsets.symmetric(
             vertical: appContentHorizontalPadding * (1.25)),
         decoration: BoxDecoration(
-            color: Theme.of(context).scaffoldBackgroundColor,
+            color: AppColors.surface,
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(bottomsheetBorderRadius),
                 topRight: Radius.circular(bottomsheetBorderRadius))),

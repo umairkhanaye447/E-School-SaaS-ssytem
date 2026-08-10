@@ -4,11 +4,12 @@ import 'package:eschool/cubits/appLocalizationCubit.dart';
 import 'package:eschool/cubits/authCubit.dart';
 import 'package:eschool/cubits/changePasswordCubit.dart';
 import 'package:eschool/data/repositories/authRepository.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
+import 'package:eschool/ui/widgets/appScreenHeader.dart';
 import 'package:eschool/ui/widgets/changeLanguageBottomsheetContainer.dart';
 import 'package:eschool/ui/widgets/changePasswordBottomsheet.dart';
-import 'package:eschool/ui/widgets/customBackButton.dart';
+import 'package:eschool/ui/widgets/groupedListCard.dart';
 import 'package:eschool/ui/widgets/logoutButton.dart';
-import 'package:eschool/ui/widgets/screenTopBackgroundContainer.dart';
 import 'package:eschool/utils/errorMessageKeysAndCodes.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
@@ -37,254 +38,190 @@ class SettingsContainer extends StatelessWidget {
     }
   }
 
-  Widget _buildAppbar(BuildContext context) {
-    return ScreenTopBackgroundContainer(
-      padding: EdgeInsets.zero,
-      heightPercentage: Utils.appBarSmallerHeightPercentage,
-      child: Stack(
-        children: [
-          context.read<AuthCubit>().isParent()
-              ? const CustomBackButton(
-                  alignmentDirectional: AlignmentDirectional.centerStart,
-                )
-              : const SizedBox(),
-          Center(
-            child: Text(
-              Utils.getTranslatedLabel(settingsKey),
-              style: TextStyle(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                fontSize: Utils.screenTitleFontSize,
-              ),
-            ),
-          ),
-        ],
+  void _openChangePassword(BuildContext context) {
+    Utils.showBottomSheet(
+      child: BlocProvider<ChangePasswordCubit>(
+        create: (_) => ChangePasswordCubit(AuthRepository()),
+        child: const ChangePasswordBottomsheet(),
       ),
-    );
+      context: context,
+    ).then((value) {
+      if (value != null && !value['error']) {
+        Utils.showCustomSnackBar(
+          context: context,
+          errorMessage: Utils.getTranslatedLabel(
+            passwordChangedSuccessfullyKey,
+          ),
+          backgroundColor: Theme.of(context).colorScheme.onPrimary,
+        );
+      }
+    });
   }
 
-  Widget _buildSettingDetailsTile({
-    required String title,
-    required Function onTap,
-    required BuildContext context,
-    required IconData icon,
-  }) {
-    return InkWell(
-      onTap: () {
-        onTap();
-      },
-      child: Padding(
-        padding: EdgeInsetsDirectional.only(
-          bottom: 10,
-          top: 10,
-          start: MediaQuery.of(context).size.width * (0.075),
-          end: MediaQuery.of(context).size.width * (0.075),
-        ),
-        child: DecoratedBox(
-          decoration:
-              BoxDecoration(border: Border.all(color: Colors.transparent)),
-          child: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                  shape: BoxShape.circle,
-                ),
-                alignment: Alignment.center,
-                child: Icon(
-                  icon,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(
-                width: 15,
-              ),
-              Expanded(
-                child: Text(
-                  title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ),
-              Icon(
-                Icons.chevron_right,
-                color: Theme.of(context)
-                    .colorScheme
-                    .onSurface
-                    .withValues(alpha: 0.8),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+  /// Language, transactions (parent only), password and notifications.
+  Widget _buildAccountGroup(BuildContext context) {
+    final isParent = context.read<AuthCubit>().isParent();
 
-  Widget _buildSettingsContainer(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        BlocBuilder<AppLocalizationCubit, AppLocalizationState>(
-          builder: (context, state) {
-            final String languageName =
-                context.read<AppLocalizationCubit>().currentLanguageName;
-            return _buildSettingDetailsTile(
-              icon: Icons.translate,
-              title: languageName,
-              onTap: () async {
-                Utils.showBottomSheet(
-                  child: const ChangeLanguageBottomsheetContainer(),
-                  context: context,
+        GroupCaption(title: Utils.getTranslatedLabel(accountAndSecurityKey)),
+        GroupedListCard(
+          groupIndex: 0,
+          children: [
+            //Rebuilt on its own so switching language updates the row label.
+            BlocBuilder<AppLocalizationCubit, AppLocalizationState>(
+              builder: (context, state) {
+                return GroupedListRow(
+                  icon: Icons.language_rounded,
+                  accent: AppAccent.blue,
+                  title:
+                      context.read<AppLocalizationCubit>().currentLanguageName,
+                  onTap: () => Utils.showBottomSheet(
+                    child: const ChangeLanguageBottomsheetContainer(),
+                    context: context,
+                  ),
                 );
               },
-              context: context,
-            );
-          },
-        ),
-        context.read<AuthCubit>().isParent()
-            ? _buildSettingDetailsTile(
-                icon: Icons.receipt,
+            ),
+            if (isParent)
+              GroupedListRow(
+                icon: Icons.receipt_long_rounded,
+                accent: AppAccent.teal,
                 title: Utils.getTranslatedLabel(transactionsKey),
-                onTap: () {
-                  Get.toNamed(Routes.transactions);
-                },
-                context: context)
-            : const SizedBox(),
-        _buildSettingDetailsTile(
-          icon: Icons.password,
-          title: Utils.getTranslatedLabel(changePasswordKey),
-          onTap: () {
-            Utils.showBottomSheet(
-              child: BlocProvider<ChangePasswordCubit>(
-                create: (_) => ChangePasswordCubit(AuthRepository()),
-                child: const ChangePasswordBottomsheet(),
+                onTap: () => Get.toNamed(Routes.transactions),
               ),
-              context: context,
-            ).then((value) {
-              if (value != null && !value['error']) {
-                Utils.showCustomSnackBar(
-                  context: context,
-                  errorMessage: Utils.getTranslatedLabel(
-                    passwordChangedSuccessfullyKey,
-                  ),
-                  backgroundColor: Theme.of(context).colorScheme.onPrimary,
-                );
-              }
-            });
-          },
-          context: context,
+            GroupedListRow(
+              icon: Icons.vpn_key_rounded,
+              accent: AppAccent.orange,
+              title: Utils.getTranslatedLabel(changePasswordKey),
+              onTap: () => _openChangePassword(context),
+            ),
+            GroupedListRow(
+              icon: Icons.notifications_rounded,
+              accent: AppAccent.purple,
+              title: Utils.getTranslatedLabel(notificationsKey),
+              onTap: () => Get.toNamed(Routes.notifications),
+            ),
+          ],
         ),
-        _buildSettingDetailsTile(
-          icon: Icons.notifications,
-          title: Utils.getTranslatedLabel(notificationsKey),
-          onTap: () {
-            Get.toNamed(Routes.notifications);
-          },
-          context: context,
+      ],
+    );
+  }
+
+  Widget _buildAppInformationGroup(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GroupCaption(title: Utils.getTranslatedLabel(appInformationKey)),
+        GroupedListCard(
+          groupIndex: 1,
+          children: [
+            GroupedListRow(
+              icon: Icons.shield_rounded,
+              accent: AppAccent.blue,
+              title: Utils.getTranslatedLabel(privacyPolicyKey),
+              onTap: () => Get.toNamed(Routes.privacyPolicy),
+            ),
+            GroupedListRow(
+              icon: Icons.description_rounded,
+              accent: AppAccent.indigo,
+              title: Utils.getTranslatedLabel(termsAndConditionKey),
+              onTap: () => Get.toNamed(Routes.termsAndCondition),
+            ),
+            GroupedListRow(
+              icon: Icons.info_rounded,
+              accent: AppAccent.pink,
+              title: Utils.getTranslatedLabel(aboutUsKey),
+              onTap: () => Get.toNamed(Routes.aboutUs),
+            ),
+          ],
         ),
-        _buildSettingDetailsTile(
-          icon: Icons.privacy_tip,
-          title: Utils.getTranslatedLabel(privacyPolicyKey),
-          onTap: () {
-            Get.toNamed(Routes.privacyPolicy);
-          },
-          context: context,
+      ],
+    );
+  }
+
+  /// Contact plus the two store links, which stay gated on the app link being
+  /// configured in the panel.
+  Widget _buildSupportGroup(BuildContext context) {
+    final hasAppLink =
+        context.read<AppConfigurationCubit>().getAppLink().isNotEmpty;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GroupCaption(title: Utils.getTranslatedLabel(supportKey)),
+        GroupedListCard(
+          groupIndex: 2,
+          children: [
+            GroupedListRow(
+              icon: Icons.headset_mic_rounded,
+              accent: AppAccent.teal,
+              title: Utils.getTranslatedLabel(contactUsKey),
+              onTap: () => Get.toNamed(Routes.contactUs),
+            ),
+            if (hasAppLink)
+              GroupedListRow(
+                icon: Icons.star_rounded,
+                accent: AppAccent.orange,
+                title: Utils.getTranslatedLabel(rateUsKey),
+                onTap: () => _shareApp(context),
+              ),
+            if (hasAppLink)
+              GroupedListRow(
+                icon: Icons.share_rounded,
+                accent: AppAccent.green,
+                title: Utils.getTranslatedLabel(shareKey),
+                onTap: () => _shareApp(context),
+              ),
+          ],
         ),
-        _buildSettingDetailsTile(
-          icon: Icons.description,
-          title: Utils.getTranslatedLabel(termsAndConditionKey),
-          onTap: () {
-            Get.toNamed(Routes.termsAndCondition);
-          },
-          context: context,
-        ),
-        _buildSettingDetailsTile(
-          icon: Icons.info,
-          title: Utils.getTranslatedLabel(aboutUsKey),
-          onTap: () {
-            Get.toNamed(Routes.aboutUs);
-          },
-          context: context,
-        ),
-        _buildSettingDetailsTile(
-          icon: Icons.contact_support,
-          title: Utils.getTranslatedLabel(contactUsKey),
-          onTap: () {
-            Get.toNamed(Routes.contactUs);
-          },
-          context: context,
-        ),
-        if (context.read<AppConfigurationCubit>().getAppLink().isNotEmpty)
-          _buildSettingDetailsTile(
-            icon: Icons.star,
-            title: Utils.getTranslatedLabel(rateUsKey),
-            onTap: () {
-              _shareApp(context);
-            },
-            context: context,
-          ),
-        if (context.read<AppConfigurationCubit>().getAppLink().isNotEmpty)
-          _buildSettingDetailsTile(
-            icon: Icons.share,
-            title: Utils.getTranslatedLabel(shareKey),
-            onTap: () {
-              _shareApp(context);
-            },
-            context: context,
-          ),
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Align(
-          alignment: Alignment.topCenter,
-          child: SingleChildScrollView(
-            padding: EdgeInsetsDirectional.only(
-              bottom: Utils.getScrollViewBottomPadding(context),
-              top: Utils.getScrollViewTopPadding(
-                      context: context,
-                      appBarHeightPercentage:
-                          Utils.appBarSmallerHeightPercentage) -
-                  10, //10 is the top padding of first item
-            ),
+    return SingleChildScrollView(
+      padding: EdgeInsets.only(
+        top: MediaQuery.paddingOf(context).top + AppSpacing.xs,
+        bottom: Utils.getScrollViewBottomPadding(context) +
+            MediaQuery.of(context).size.height *
+                Utils.bottomNavigationHeightPercentage,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          //Students reach Settings from a bottom-nav tab, so there is nothing
+          //to pop; only the parent flow pushes this screen.
+          AppScreenHeader(
+            title: Utils.getTranslatedLabel(settingsKey),
+            showBackButton: context.read<AuthCubit>().isParent(),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenH),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildSettingsContainer(context),
-                const SizedBox(
-                  height: 25.0,
-                ),
+                _buildAccountGroup(context),
+                const SizedBox(height: AppSpacing.lg),
+                _buildAppInformationGroup(context),
+                const SizedBox(height: AppSpacing.lg),
+                _buildSupportGroup(context),
+                const SizedBox(height: AppSpacing.lg),
                 const LogoutButton(),
-                const SizedBox(
-                  height: 5.0,
-                ),
-                Text(
-                  "${Utils.getTranslatedLabel(appVersionKey)}  ${context.read<AppConfigurationCubit>().getAppVersion()}",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 11.0,
+                const SizedBox(height: AppSpacing.sm),
+                Center(
+                  child: Text(
+                    "${Utils.getTranslatedLabel(appVersionKey)}  ${context.read<AppConfigurationCubit>().getAppVersion()}",
+                    style: Theme.of(context).textTheme.labelSmall,
                   ),
-                  textAlign: TextAlign.start,
-                ),
-                //extra height to avoide dashboard's bottom navigationbar
-                SizedBox(
-                  height: MediaQuery.of(context).size.height *
-                      Utils.bottomNavigationHeightPercentage,
                 ),
               ],
             ),
           ),
-        ),
-        _buildAppbar(context),
-      ],
+        ],
+      ),
     );
   }
 }

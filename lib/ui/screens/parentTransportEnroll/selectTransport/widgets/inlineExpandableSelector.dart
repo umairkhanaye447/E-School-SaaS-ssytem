@@ -1,5 +1,6 @@
 import 'package:eschool/ui/widgets/customTextContainer.dart';
 import 'package:eschool/utils/constants.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class InlineExpandableSelector extends StatelessWidget {
@@ -44,7 +45,7 @@ class InlineExpandableSelector extends StatelessWidget {
           width: double.maxFinite,
           decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(AppRadius.field),
             border: Border.all(color: Theme.of(context).colorScheme.tertiary),
           ),
           child: Column(

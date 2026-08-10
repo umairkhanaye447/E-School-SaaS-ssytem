@@ -3,6 +3,7 @@ import 'package:eschool/cubits/examsOnlineCubit.dart';
 import 'package:eschool/cubits/resultsCubit.dart';
 import 'package:eschool/data/models/subject.dart';
 import 'package:eschool/utils/labelKeys.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:eschool/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,7 +41,7 @@ class _AssignmentsSubjectContainerState
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 40,
+      height: 38,
       child: ListView.builder(
         controller: _scrollController,
         itemBuilder: (context, index) {
@@ -93,36 +94,49 @@ class _AssignmentsSubjectContainerState
 
               widget.onTapSubject(widget.subjects[index].classSubjectId ?? 0);
             },
-            child: Container(
-              margin: const EdgeInsetsDirectional.only(end: 20.0),
-              decoration: BoxDecoration(
-                color: widget.selectedClassSubjectId ==
-                        widget.subjects[index].classSubjectId
-                    ? Theme.of(context).colorScheme.primary
-                    : Colors.transparent,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              alignment: Alignment.center,
-              child: Text(
-                widget.subjects[index].classSubjectId == 0
-                    ? Utils.getTranslatedLabel(allSubjectsKey)
-                    : widget.subjects[index].getSubjectName(context: context),
-                style: TextStyle(
-                  color: widget.selectedClassSubjectId ==
-                          widget.subjects[index].classSubjectId
-                      ? Theme.of(context).scaffoldBackgroundColor
-                      : Theme.of(context).colorScheme.onSurface,
-                ),
-              ),
+            child: Builder(
+              builder: (context) {
+                final bool isSelected = widget.selectedClassSubjectId ==
+                    widget.subjects[index].classSubjectId;
+
+                //Unselected chips read as tappable options rather than plain
+                //text: a white pill on the page tint, brand-filled when active.
+                return Container(
+                  margin: const EdgeInsetsDirectional.only(
+                      end: AppSpacing.xs),
+                  decoration: BoxDecoration(
+                    color: isSelected
+                        ? Theme.of(context).colorScheme.primary
+                        : AppColors.surface,
+                    borderRadius: BorderRadius.circular(AppRadius.chip),
+                    boxShadow: isSelected ? null : AppShadows.card,
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.md,
+                  ),
+                  alignment: Alignment.center,
+                  child: Text(
+                    widget.subjects[index].classSubjectId == 0
+                        ? Utils.getTranslatedLabel(allSubjectsKey)
+                        : widget.subjects[index]
+                            .getSubjectName(context: context),
+                    style:
+                        Theme.of(context).textTheme.labelMedium?.copyWith(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: isSelected
+                                  ? AppColors.textOnBrand
+                                  : AppColors.textSecondary,
+                            ),
+                  ),
+                );
+              },
             ),
           );
         },
         itemCount: widget.subjects.length,
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(
-          horizontal: MediaQuery.of(context).size.width * (0.1),
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.screenH),
       ),
     );
   }

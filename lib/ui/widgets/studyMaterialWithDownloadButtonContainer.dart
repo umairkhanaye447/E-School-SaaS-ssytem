@@ -2,6 +2,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:eschool/data/models/studyMaterial.dart';
 import 'package:eschool/ui/widgets/downloadFileButton.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -44,7 +45,7 @@ class StudyMaterialWithDownloadButtonContainer extends StatelessWidget {
           child: Container(
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 7.5, vertical: 7.5),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(AppRadius.field)),
             child: Row(
               children: [
                 Expanded(
@@ -54,7 +55,7 @@ class StudyMaterialWithDownloadButtonContainer extends StatelessWidget {
                         : studyMaterial.fileName,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
-                      fontSize: 13,
+                      fontSize: 12,
                       fontWeight: FontWeight.w600,
                     ),
                     maxLines: 1,

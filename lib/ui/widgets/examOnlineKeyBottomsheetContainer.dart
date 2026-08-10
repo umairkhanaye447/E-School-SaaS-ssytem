@@ -1,4 +1,5 @@
 import 'package:eschool/cubits/schoolConfigurationCubit.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -72,7 +73,7 @@ class ExamOnlineKeyBottomsheetContainerState
               child: rulesAccepted
                   ? Icon(
                       Icons.check,
-                      color: Theme.of(context).colorScheme.surface,
+                      color: AppColors.textPrimary,
                       size: 15.0,
                     )
                   : const SizedBox(),
@@ -125,7 +126,7 @@ class ExamOnlineKeyBottomsheetContainerState
         border: Border.all(
           color: Utils.getColorScheme(context).surface,
         ),
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(AppRadius.field),
         color: Utils.getColorScheme(context).surface,
       ),
       child: TextField(
@@ -203,7 +204,7 @@ class ExamOnlineKeyBottomsheetContainerState
             topLeft: Radius.circular(20.0),
             topRight: Radius.circular(20.0),
           ),
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: AppColors.surface,
         ),
         child: Padding(
           padding: MediaQuery.of(context).viewInsets,

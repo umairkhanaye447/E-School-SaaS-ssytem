@@ -1,3 +1,4 @@
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:eschool/ui/widgets/customTextContainer.dart';
 
@@ -14,7 +15,7 @@ class StatusTag extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppRadius.field),
       ),
       child: CustomTextContainer(
         textKey: text,

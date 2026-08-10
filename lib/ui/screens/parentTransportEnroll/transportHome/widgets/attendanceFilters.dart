@@ -1,3 +1,4 @@
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:eschool/ui/widgets/customTextContainer.dart';
 
@@ -21,7 +22,8 @@ class AttendanceDropdown extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 12),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(8),
+        boxShadow: AppShadows.card,
+          borderRadius: BorderRadius.circular(AppRadius.field),
           border: Border.all(color: Theme.of(context).colorScheme.tertiary),
         ),
         child: Row(

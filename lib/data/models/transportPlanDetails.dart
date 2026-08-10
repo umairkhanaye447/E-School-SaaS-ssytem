@@ -1,3 +1,4 @@
+import 'package:eschool/utils/utils.dart';
 class TransportPlanDetails {
   final int? id;
   final int? paymentId;
@@ -119,9 +120,14 @@ class TransportPlanDetails {
   }
 
   // Helper method to format validity period
+  //
+  // The panel sends these already formatted (e.g. "16 June 2026"), which
+  // bypassed the app's date format. Restate both ends so the plan card
+  // matches every other date in the app.
   String get validityPeriod {
     if (validFrom != null && validTo != null) {
-      return '$validFrom - $validTo';
+      return '${Utils.formatApiDate(validFrom!)} - '
+          '${Utils.formatApiDate(validTo!)}';
     }
     return 'Not available';
   }

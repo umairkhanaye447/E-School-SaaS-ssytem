@@ -1,4 +1,4 @@
-import 'package:eschool/ui/styles/colors.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:eschool/utils/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +22,7 @@ class CustomShimmerContainer extends StatelessWidget {
       margin: margin,
       height: height ?? Utils.shimmerLoadingContainerDefaultHeight,
       decoration: BoxDecoration(
-        color: shimmerContentColor,
+        color: AppColors.shimmerHighlight,
         borderRadius: BorderRadius.circular(borderRadius ?? 10),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:eschool/data/models/subjectWiseReport.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class ReportPerformanceBox extends StatelessWidget {
@@ -58,7 +59,7 @@ class ReportPerformanceBox extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
             color: Utils.getColorScheme(context).surface,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(AppRadius.field),
           ),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,

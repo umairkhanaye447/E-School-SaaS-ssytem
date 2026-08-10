@@ -54,6 +54,8 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
                 ? privacyPolicyTypeLoggedIn
                 : privacyPolicyTypeNotLoggedIn,
             useSchoolSettings: isLoggedIn,
+            headerIcon: Icons.shield_outlined,
+            headerTitle: Utils.getTranslatedLabel(privacyPolicyKey),
           ),
           CustomAppBar(
             title: Utils.getTranslatedLabel(privacyPolicyKey),

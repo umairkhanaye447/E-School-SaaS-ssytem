@@ -13,6 +13,7 @@ import 'package:eschool/ui/widgets/svgButton.dart';
 import 'package:eschool/utils/animationConfiguration.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -59,9 +60,10 @@ class _ExamTimeTableState extends State<ExamTimeTableScreen> {
         start: MediaQuery.of(context).size.width * (0.15),
         end: MediaQuery.of(context).size.width * (0.075),
       ),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(15),
+      decoration: const BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: AppRadius.cardAll,
+        boxShadow: AppShadows.card,
       ),
       width: MediaQuery.of(context).size.width,
       height: 100,
@@ -122,7 +124,7 @@ class _ExamTimeTableState extends State<ExamTimeTableScreen> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontSize: 10.75,
+                                fontSize: 11,
                                 color: Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
@@ -139,7 +141,7 @@ class _ExamTimeTableState extends State<ExamTimeTableScreen> {
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.onSurface,
                                 fontWeight: FontWeight.w400,
-                                fontSize: 10.5,
+                                fontSize: 11,
                               ),
                             ),
                       const Spacer(),
@@ -164,7 +166,7 @@ class _ExamTimeTableState extends State<ExamTimeTableScreen> {
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.onSurface,
                                 fontWeight: FontWeight.w400,
-                                fontSize: 10.5,
+                                fontSize: 11,
                               ),
                             )
                     ],
@@ -200,7 +202,15 @@ class _ExamTimeTableState extends State<ExamTimeTableScreen> {
         builder: (context, state) {
           if (state is ExamTimeTableFetchSuccess) {
             return state.examTimeTableList.isEmpty
-                ? const NoDataContainer(titleKey: noExamTimeTableFoundKey)
+                ? CenteredNoDataContainer(
+                    titleKey: noExamTimeTableFoundKey,
+                    occupiedHeight: Utils.getScrollViewTopPadding(
+                          context: context,
+                          appBarHeightPercentage:
+                              Utils.appBarBiggerHeightPercentage - 0.025,
+                        ) +
+                        Utils.getScrollViewBottomPadding(context),
+                  )
                 : Column(
                     children: List.generate(
                       state.examTimeTableList.length,
@@ -280,8 +290,9 @@ class _ExamTimeTableState extends State<ExamTimeTableScreen> {
                 child: Text(
                   Utils.getTranslatedLabel(examTimeTableKey),
                   style: TextStyle(
-                    color: Theme.of(context).scaffoldBackgroundColor,
+                    color: AppColors.textPrimary,
                     fontSize: Utils.screenTitleFontSize,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
@@ -297,7 +308,7 @@ class _ExamTimeTableState extends State<ExamTimeTableScreen> {
                     maxLines: 1,
                     style: TextStyle(
                       fontSize: Utils.screenSubTitleFontSize,
-                      color: Theme.of(context).scaffoldBackgroundColor,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -313,7 +324,7 @@ class _ExamTimeTableState extends State<ExamTimeTableScreen> {
                   alignment: Alignment.center,
                   height: 50,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(AppRadius.field),
                     boxShadow: [
                       BoxShadow(
                         color: Theme.of(context)
@@ -324,7 +335,7 @@ class _ExamTimeTableState extends State<ExamTimeTableScreen> {
                         blurRadius: 5,
                       )
                     ],
-                    color: Theme.of(context).scaffoldBackgroundColor,
+                    color: AppColors.surface,
                   ),
                   width: MediaQuery.of(context).size.width * (0.85),
                   child: Column(

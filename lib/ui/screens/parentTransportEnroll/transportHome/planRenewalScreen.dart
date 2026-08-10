@@ -1,5 +1,6 @@
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:eschool/app/routes.dart';
@@ -358,7 +359,8 @@ class _PlanRenewalScreenState extends State<PlanRenewalScreen> {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(12),
+        boxShadow: AppShadows.card,
+                  borderRadius: BorderRadius.circular(AppRadius.field),
                   border:
                       Border.all(color: Theme.of(context).colorScheme.tertiary),
                 ),
@@ -487,14 +489,8 @@ class _PlanRenewalScreenState extends State<PlanRenewalScreen> {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.06),
-              blurRadius: 8,
-              offset: const Offset(0, -2),
-            ),
-          ],
+          color: AppColors.surface,
+          boxShadow: AppShadows.cardStrong,
         ),
         child: Padding(
           padding: EdgeInsets.all(appContentHorizontalPadding),

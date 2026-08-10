@@ -7,6 +7,7 @@ import 'package:eschool/ui/widgets/videosContainer.dart';
 import 'package:eschool/ui/widgets/customAppbar.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -66,7 +67,7 @@ class _ChapterDetailsScreenState extends State<ChapterDetailsScreen> {
                       color: _selectedTabTitleKey == title
                           ? Theme.of(context).colorScheme.primary
                           : Colors.transparent,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppRadius.field),
                     ),
                     padding:
                         const EdgeInsets.symmetric(horizontal: 4, vertical: 6),

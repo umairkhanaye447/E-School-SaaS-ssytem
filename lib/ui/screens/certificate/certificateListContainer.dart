@@ -9,6 +9,7 @@ import 'package:eschool/utils/animationConfiguration.dart';
 import 'package:eschool/utils/htmlPrintMixin.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -90,7 +91,7 @@ class _CertificateListContainerState extends State<CertificateListContainer>
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
           color: theme.scaffoldBackgroundColor,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppRadius.field),
           border: Border.all(
             color: theme.colorScheme.secondary.withValues(alpha: 0.15),
           ),
@@ -121,7 +122,7 @@ class _CertificateListContainerState extends State<CertificateListContainer>
                   child: Text(
                     subtitle,
                     style: TextStyle(
-                      fontSize: 12.5,
+                      fontSize: 12,
                       color: theme.colorScheme.secondary.withValues(alpha: 0.6),
                     ),
                   ),

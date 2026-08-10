@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:eschool/data/models/sliderDetails.dart';
 import 'package:eschool/utils/constants.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -74,7 +75,7 @@ class _SlidersContainerState extends State<SlidersContainer> {
                                 image: CachedNetworkImageProvider(
                                     slider.image ?? ""),
                               ),
-                              borderRadius: BorderRadius.circular(25.0),
+                              borderRadius: BorderRadius.circular(AppRadius.sheet),
                             ),
                           ),
                         ),

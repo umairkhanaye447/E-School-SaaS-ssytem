@@ -1,3 +1,4 @@
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:eschool/ui/widgets/customTextContainer.dart';
 
@@ -23,7 +24,8 @@ class AttendanceStudentRow extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
+        boxShadow: AppShadows.card,
+        borderRadius: BorderRadius.circular(AppRadius.field),
         border: Border.all(color: Theme.of(context).colorScheme.tertiary),
       ),
       child: Row(
@@ -43,13 +45,13 @@ class AttendanceStudentRow extends StatelessWidget {
               children: [
                 CustomTextContainer(
                   textKey: name,
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontSize: 14, fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 2),
                 CustomTextContainer(
                   textKey: 'Roll $roll • $time',
-                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
                 ),
               ],
             ),
@@ -58,7 +60,7 @@ class AttendanceStudentRow extends StatelessWidget {
           Switch(
             value: present,
             onChanged: onChanged,
-            activeTrackColor: const Color(0xFF4CAF50),
+            activeTrackColor: AppColors.success,
           ),
         ],
       ),

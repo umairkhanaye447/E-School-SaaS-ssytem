@@ -17,6 +17,7 @@ import 'package:eschool/ui/widgets/screenTopBackgroundContainer.dart';
 import 'package:eschool/ui/widgets/svgButton.dart';
 import 'package:eschool/utils/utils.dart';
 import 'package:eschool/utils/notificationUtility.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -242,7 +243,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                   height: 48,
                                   width: 48,
                                   child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(48),
+                                    borderRadius: BorderRadius.circular(AppRadius.sheet),
                                     child: CachedNetworkImage(
                                       imageUrl: widget.image,
                                       height: 48,
@@ -265,7 +266,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                          fontSize: 17.0,
+                                          fontSize: 16,
                                           color: Theme.of(
                                             context,
                                           ).scaffoldBackgroundColor,
@@ -278,7 +279,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                           height: 1.0,
-                                          fontSize: 11.5,
+                                          fontSize: 11,
                                           color: Theme.of(
                                             context,
                                           ).scaffoldBackgroundColor,
@@ -703,7 +704,7 @@ class _ChatScreenState extends State<ChatScreen> {
       child: Container(
         constraints: BoxConstraints(maxHeight: 100),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(50),
+          borderRadius: BorderRadius.circular(AppRadius.sheet),
           color: Theme.of(context).scaffoldBackgroundColor,
         ),
         padding: EdgeInsetsDirectional.symmetric(horizontal: 10),

@@ -1,4 +1,5 @@
 import 'package:eschool/data/models/paymentGateway.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:eschool/ui/widgets/bottomsheetTopTitleAndCloseButton.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
@@ -30,22 +31,37 @@ class SelectPaymentMethodBottomsheet extends StatelessWidget {
             ),
             Column(
               children: paymentGeteways.map((paymentGateway) {
-                return ListTile(
-                  onTap: () {
-                    Get.back(result: paymentGateway);
-                  },
-                  tileColor:
-                      Theme.of(context).colorScheme.secondary.withValues(alpha: 0.05),
-                  dense: false,
-                  title: Text(
-                    "${Utils.getTranslatedLabel(payUsingKey)} ${paymentGateway.paymentMethod}",
-                    style:
-                        TextStyle(color: Theme.of(context).colorScheme.primary),
+                return Container(
+                  margin: const EdgeInsets.only(bottom: AppSpacing.sm),
+                  decoration: const BoxDecoration(
+                    color: AppColors.surfaceMuted,
+                    borderRadius: AppRadius.fieldAll,
+                  ),
+                  child: ListTile(
+                    onTap: () {
+                      Get.back(result: paymentGateway);
+                    },
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: AppRadius.fieldAll,
+                    ),
+                    dense: false,
+                    title: Text(
+                      "${Utils.getTranslatedLabel(payUsingKey)} ${paymentGateway.paymentMethod}",
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            color: AppColors.textPrimary,
+                            fontWeight: FontWeight.w500,
+                          ),
+                    ),
+                    trailing: Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: 16,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 );
               }).toList(),
             ),
-            const SizedBox(height: 25),
+            const SizedBox(height: AppSpacing.md),
           ],
         ),
       ),

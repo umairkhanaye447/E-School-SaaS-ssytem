@@ -14,6 +14,7 @@ import 'package:eschool/ui/widgets/noDataContainer.dart';
 import 'package:eschool/ui/widgets/svgButton.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -123,7 +124,7 @@ class _ChildFeesScreenState extends State<ChildFeesScreen>
         itemBuilder: (context, index) {
           final feeDetails = fees[index];
           final valueTextStyle = TextStyle(
-            fontSize: 13.0,
+            fontSize: 12,
             color: Theme.of(
               context,
             ).colorScheme.secondary.withValues(alpha: 0.9),
@@ -149,7 +150,8 @@ class _ChildFeesScreenState extends State<ChildFeesScreen>
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12.5),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surface,
-                  borderRadius: BorderRadius.circular(10),
+        boxShadow: AppShadows.card,
+                  borderRadius: BorderRadius.circular(AppRadius.field),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -181,23 +183,32 @@ class _ChildFeesScreenState extends State<ChildFeesScreen>
                       children: [
                         Expanded(
                           flex: 2,
-                          child: Row(
-                            children: [
-                              Text(
-                                "${Utils.getTranslatedLabel(statusKey)} : ",
-                                style: valueTextStyle,
+                          child: Align(
+                            alignment: AlignmentDirectional.centerStart,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppSpacing.xs,
+                                vertical: 3,
                               ),
-                              Flexible(
-                                child: Text(
-                                  Utils.getTranslatedLabel(feePaymentStatusKey),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: valueTextStyle.copyWith(
-                                    color: feePaymentStatusColor,
-                                  ),
-                                ),
+                              decoration: BoxDecoration(
+                                color: feePaymentStatusColor
+                                    .withValues(alpha: 0.12),
+                                borderRadius:
+                                    BorderRadius.circular(AppRadius.chip),
                               ),
-                            ],
+                              child: Text(
+                                Utils.getTranslatedLabel(feePaymentStatusKey),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelMedium
+                                    ?.copyWith(
+                                      color: feePaymentStatusColor,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                              ),
+                            ),
                           ),
                         ),
                         if (feePaymentStatusKey != paidKey &&
@@ -206,7 +217,7 @@ class _ChildFeesScreenState extends State<ChildFeesScreen>
                           Expanded(
                             flex: 3,
                             child: Text(
-                              "${Utils.getTranslatedLabel(dueDateKey)} : ${feeDetails.dueDate ?? ''}",
+                              "${Utils.getTranslatedLabel(dueDateKey)} : ${Utils.formatApiDate(feeDetails.dueDate ?? '')}",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: valueTextStyle,
@@ -370,7 +381,7 @@ class _SessionYearFilterSheetState extends State<_SessionYearFilterSheet> {
       ),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: AppColors.surface,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(Utils.bottomSheetTopRadius),
           topRight: Radius.circular(Utils.bottomSheetTopRadius),

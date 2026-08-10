@@ -1,4 +1,5 @@
 import 'package:eschool/utils/constants.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class ErrorMessageOverlayContainer extends StatefulWidget {
@@ -68,12 +69,12 @@ class _ErrorMessageOverlayContainerState
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8),
                 decoration: BoxDecoration(
                   color: widget.backgroundColor,
-                  borderRadius: BorderRadius.circular(10.0),
+                  borderRadius: BorderRadius.circular(AppRadius.field),
                 ),
                 child: Text(
                   widget.errorMessage,
                   style: TextStyle(
-                    fontSize: 13.5,
+                    fontSize: 12,
                     color: Theme.of(context).scaffoldBackgroundColor,
                   ),
                 ),

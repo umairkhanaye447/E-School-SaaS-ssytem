@@ -1,4 +1,5 @@
 import 'package:eschool/ui/widgets/customTextContainer.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class RouteStopRow extends StatelessWidget {
@@ -14,7 +15,7 @@ class RouteStopRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Color textColor = isCurrent
-        ? const Color(0xFF57CC99)
+        ? AppColors.success
         : Theme.of(context).colorScheme.onSurface;
     return Row(
       children: [

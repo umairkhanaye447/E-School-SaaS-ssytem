@@ -7,6 +7,7 @@ import 'package:eschool/ui/widgets/customRoundedButton.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/route_manager.dart';
@@ -61,8 +62,9 @@ class _UploadAssignmentFilesBottomsheetContainerState
     return Container(
       margin: const EdgeInsets.only(bottom: 10.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(AppRadius.card),
         color: Theme.of(context).colorScheme.surface,
+        boxShadow: AppShadows.card,
       ),
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10.0),
       child: LayoutBuilder(
@@ -133,7 +135,7 @@ class _UploadAssignmentFilesBottomsheetContainerState
   }) {
     final isSelected = selectedSubmissionType == type;
     return InkWell(
-      borderRadius: BorderRadius.circular(15),
+      borderRadius: BorderRadius.circular(AppRadius.card),
       onTap: () {
         if (context.read<UploadAssignmentCubit>().state
             is UploadAssignmentInProgress) {
@@ -152,7 +154,7 @@ class _UploadAssignmentFilesBottomsheetContainerState
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(AppRadius.card),
           border: Border.all(
             color: isSelected
                 ? Theme.of(context).colorScheme.primary
@@ -223,7 +225,7 @@ class _UploadAssignmentFilesBottomsheetContainerState
               : 0,
         ),
         InkWell(
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(AppRadius.card),
           onTap: () async {
             _addFiles();
           },
@@ -324,21 +326,21 @@ class _UploadAssignmentFilesBottomsheetContainerState
               color: Theme.of(context).colorScheme.primary,
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(AppRadius.card),
               borderSide: BorderSide(
                 color: Theme.of(context).colorScheme.primary,
                 width: 1.5,
               ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(AppRadius.card),
               borderSide: BorderSide(
                 color: Theme.of(context).colorScheme.primary,
                 width: 2,
               ),
             ),
             disabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(AppRadius.card),
               borderSide: BorderSide(
                 color: Theme.of(context)
                     .colorScheme
@@ -420,7 +422,7 @@ class _UploadAssignmentFilesBottomsheetContainerState
                             .colorScheme
                             .primary
                             .withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(AppRadius.field),
                         border: Border.all(
                           color: Theme.of(context)
                               .colorScheme
@@ -441,7 +443,7 @@ class _UploadAssignmentFilesBottomsheetContainerState
                             child: Text(
                               Utils.getTranslatedLabel(resubmissionInfoKey),
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 12,
                                 color: Theme.of(context).colorScheme.secondary,
                                 fontWeight: FontWeight.w500,
                               ),

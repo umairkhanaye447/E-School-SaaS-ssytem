@@ -1,3 +1,4 @@
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,14 +11,16 @@ class PendingTransactionWarningDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: AppColors.surface,
+      shape: const RoundedRectangleBorder(borderRadius: AppRadius.cardAll),
       content: Padding(
-        padding: const EdgeInsets.only(top: 15),
+        padding: const EdgeInsets.only(top: AppSpacing.sm),
         child: Text(
           Utils.getTranslatedLabel(pendingPaymentTransactionWarningKey),
-          style: TextStyle(
-              color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.9),
-              fontSize: 16.0,
-              fontWeight: FontWeight.w600),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: AppColors.textPrimary,
+                fontWeight: FontWeight.w600,
+              ),
         ),
       ),
       actions: [

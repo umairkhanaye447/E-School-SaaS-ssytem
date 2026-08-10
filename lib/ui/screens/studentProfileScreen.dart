@@ -6,7 +6,8 @@ import 'package:eschool/cubits/studentAllProfileDetailsCubit.dart';
 import 'package:eschool/cubits/studentSubjectAndSlidersCubit.dart';
 import 'package:eschool/data/models/student.dart';
 import 'package:eschool/data/repositories/studentRepository.dart';
-import 'package:eschool/ui/styles/colors.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
+import 'package:eschool/ui/widgets/appConfirmDialog.dart';
 import 'package:eschool/ui/widgets/customCircularProgressIndicator.dart';
 import 'package:eschool/ui/widgets/customShimmerContainer.dart';
 import 'package:eschool/ui/widgets/customUserProfileImageWidget.dart';
@@ -16,7 +17,6 @@ import 'package:eschool/ui/widgets/shimmerLoadingContainer.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/systemModules.dart';
 import 'package:eschool/utils/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -92,6 +92,10 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
     return Utils.formatEmptyValue(data);
   }
 
+  /// One profile field as its own card: tinted icon well, label above value.
+  ///
+  /// Was a bare row floating on the page, which made consecutive fields read
+  /// as one undifferentiated block of text.
   Widget _buildProfileDetailsTile({
     required String label,
     required String value,
@@ -99,75 +103,79 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
     Color? iconColor,
     VoidCallback? onTap,
   }) {
-    final Widget content = Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(12.5),
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0x1a212121),
-                offset: Offset(0, 10),
-                blurRadius: 16,
-              )
-            ],
-            color: Theme.of(context).colorScheme.primary,
-            borderRadius: BorderRadius.circular(15.0),
+    //Stable hue per field so the colour does not shuffle between builds or
+    //when an optional field is hidden.
+    final accent = AppAccent.forKey(label);
+
+    final Widget content = Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.sm,
+        vertical: AppSpacing.sm,
+      ),
+      child: Row(
+        children: [
+          Container(
+            height: 42,
+            width: 42,
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: accent.tint,
+              borderRadius: AppRadius.iconTileAll,
+            ),
+            //These glyphs were drawn white for the old blue well, so the
+            //colour is forced rather than inherited.
+            child: SvgPicture.asset(
+              iconUrl,
+              colorFilter: ColorFilter.mode(accent.icon, BlendMode.srcIn),
+            ),
           ),
-          child: SvgPicture.asset(
-            iconUrl,
-            theme: SvgTheme(
-                currentColor:
-                    iconColor ?? Theme.of(context).scaffoldBackgroundColor),
-            colorFilter: iconColor == null
-                ? null
-                : ColorFilter.mode(iconColor, BlendMode.srcIn),
-          ),
-        ),
-        SizedBox(
-          width: MediaQuery.of(context).size.width * (0.05),
-        ),
-        Flexible(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 3.0),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   label,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 12.0,
-                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelSmall,
                 ),
+                const SizedBox(height: 1),
                 Text(
                   value,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14.0,
-                  ),
-                )
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
               ],
             ),
           ),
-        ),
-      ],
+          if (onTap != null)
+            const Icon(
+              Icons.chevron_right_rounded,
+              size: 22,
+              color: AppColors.textTertiary,
+            ),
+        ],
+      ),
     );
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 14.0),
-      child: onTap != null
-          ? InkWell(
-              onTap: onTap,
-              borderRadius: BorderRadius.circular(15.0),
-              child: content,
-            )
-          : content,
+    return Container(
+      margin: const EdgeInsets.only(bottom: AppSpacing.xs),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: AppRadius.cardAll,
+        boxShadow: AppShadows.card,
+      ),
+      child: onTap == null
+          ? content
+          : Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: onTap,
+                borderRadius: AppRadius.cardAll,
+                child: content,
+              ),
+            ),
     );
   }
 
@@ -186,7 +194,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
       color: Colors.transparent,
       child: InkWell(
         onTap: () => _showIdCardDownloadDialog(userId: userId),
-        borderRadius: BorderRadius.circular(8.0),
+        borderRadius: BorderRadius.circular(AppRadius.field),
         child: Container(
           padding: const EdgeInsets.symmetric(
             horizontal: 16.0,
@@ -194,7 +202,8 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
           ),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(8.0),
+        boxShadow: AppShadows.card,
+            borderRadius: BorderRadius.circular(AppRadius.field),
             border: Border.all(
               color: Theme.of(context)
                   .colorScheme
@@ -222,7 +231,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
                   fontWeight: FontWeight.w500,
-                  fontSize: 13.0,
+                  fontSize: 12,
                 ),
               ),
             ],
@@ -233,26 +242,18 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
   }
 
   void _showLogoutDialog() {
-    Get.dialog(
-      AlertDialog(
-        backgroundColor: Colors.white,
-        content: Text(Utils.getTranslatedLabel(sureToLogoutKey)),
-        actions: [
-          CupertinoButton(
-            child: Text(Utils.getTranslatedLabel(yesKey)),
-            onPressed: () {
-              context.read<StudentSubjectsAndSlidersCubit>().clearSubjects();
-              context.read<AuthCubit>().signOut();
-              Get.back();
-              Get.offNamed(Routes.auth);
-            },
-          ),
-          CupertinoButton(
-            child: Text(Utils.getTranslatedLabel(noKey)),
-            onPressed: () => Get.back(),
-          ),
-        ],
-      ),
+    AppConfirmDialog.show(
+      icon: Icons.logout_rounded,
+      title: Utils.getTranslatedLabel(logoutKey),
+      message: Utils.getTranslatedLabel(sureToLogoutKey),
+      confirmLabel: Utils.getTranslatedLabel(yesKey),
+      cancelLabel: Utils.getTranslatedLabel(noKey),
+      onConfirm: () {
+        context.read<StudentSubjectsAndSlidersCubit>().clearSubjects();
+        context.read<AuthCubit>().signOut();
+        Get.back();
+        Get.offNamed(Routes.auth);
+      },
     );
   }
 
@@ -308,7 +309,12 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                   height: MediaQuery.of(context).size.width * (0.25),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: AppColors.surface,
+                    border: Border.all(
+                      color: AppColors.divider,
+                      width: 1.5,
+                    ),
+                    boxShadow: AppShadows.card,
                   ),
                   child: CustomUserProfileImageWidget(
                     profileUrl: studentDetails.image ?? "",
@@ -455,7 +461,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                   ),
                   _buildProfileDetailsTile(
                     label: Utils.getTranslatedLabel(dateOfBirthKey),
-                    value: Utils.formatEmptyValue(studentDetails.dob ?? ""),
+                    value: Utils.formatApiDate(studentDetails.dob ?? ""),
                     iconUrl: Utils.getImagePath("user_pro_dob_icon.svg"),
                   ),
                   _buildProfileDetailsTile(
@@ -562,7 +568,12 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                     height: MediaQuery.of(context).size.width * (0.25),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Theme.of(context).colorScheme.primary,
+                      color: AppColors.surface,
+                    border: Border.all(
+                      color: AppColors.divider,
+                      width: 1.5,
+                    ),
+                    boxShadow: AppShadows.card,
                     ),
                   ),
                 ),
@@ -577,7 +588,7 @@ class _StudentProfileScreenState extends State<StudentProfileScreen> {
                     children: [
                       ShimmerLoadingContainer(
                         child: Divider(
-                          color: shimmerContentColor,
+                          color: AppColors.shimmerHighlight,
                           height: 2,
                         ),
                       ),

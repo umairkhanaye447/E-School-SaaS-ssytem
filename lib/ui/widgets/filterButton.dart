@@ -1,4 +1,5 @@
 import 'package:eschool/ui/widgets/customTextContainer.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class FilterButton extends StatelessWidget {
@@ -23,8 +24,11 @@ class FilterButton extends StatelessWidget {
         width: width,
         height: double.maxFinite,
         decoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).colorScheme.secondary),
-            borderRadius: BorderRadius.circular(10.0)),
+          color: AppColors.surface,
+          border: Border.all(color: AppColors.divider),
+          borderRadius: BorderRadius.circular(AppRadius.field),
+          boxShadow: AppShadows.card,
+        ),
         alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 10.0),
         child: Row(

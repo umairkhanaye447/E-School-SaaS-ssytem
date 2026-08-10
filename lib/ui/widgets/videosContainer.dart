@@ -4,6 +4,7 @@ import 'package:eschool/data/models/studyMaterial.dart';
 import 'package:eschool/ui/widgets/noDataContainer.dart';
 import 'package:eschool/utils/animationConfiguration.dart';
 import 'package:eschool/utils/labelKeys.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:get/get.dart';
@@ -22,7 +23,7 @@ class VideosContainer extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(bottom: 15),
         child: InkWell(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(AppRadius.field),
           onTap: () {
             Get.toNamed(
               Routes.playVideo,
@@ -36,8 +37,8 @@ class VideosContainer extends StatelessWidget {
             padding:
                 const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: BorderRadius.circular(AppRadius.field),
+              color: AppColors.surface,
               boxShadow: [
                 BoxShadow(
                   color:
@@ -61,7 +62,7 @@ class VideosContainer extends StatelessWidget {
                           ),
                         ),
                         color: Theme.of(context).colorScheme.primary,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(AppRadius.field),
                       ),
                       height: 65,
                       width: boxConstraints.maxWidth * (0.3),
@@ -78,7 +79,7 @@ class VideosContainer extends StatelessWidget {
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.onSurface,
                               fontWeight: FontWeight.w600,
-                              fontSize: 13.0,
+                              fontSize: 12,
                             ),
                           ),
                         ],
@@ -98,7 +99,13 @@ class VideosContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: studyMaterials.isEmpty
-          ? [const NoDataContainer(titleKey: noVideosUploadedKey)]
+          ? [
+              CenteredNoDataContainer(
+                titleKey: noVideosUploadedKey,
+                //Subject header and tab bar above this tab's content.
+                occupiedHeight: MediaQuery.sizeOf(context).height * 0.45,
+              )
+            ]
           : studyMaterials
               .map(
                 (studyMaterial) => _buildVideoContainer(

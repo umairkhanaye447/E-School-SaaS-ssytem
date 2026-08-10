@@ -17,6 +17,7 @@ import 'package:eschool/ui/widgets/sortSelectionBottomsheet.dart';
 import 'package:eschool/utils/constants.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/route_manager.dart';
@@ -307,7 +308,7 @@ class _StudentDiaryScreenState extends State<StudentDiaryScreen> {
                     onPressed: _showSortBottomSheet,
                     icon: Icon(
                       Icons.filter_list,
-                      color: Theme.of(context).colorScheme.surface,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -456,11 +457,11 @@ class _StudentDiaryScreenState extends State<StudentDiaryScreen> {
                 children: [
                   // Diary Entries List
                   if (filteredEntries.isEmpty)
-                    const Padding(
-                      padding: EdgeInsets.only(top: 50),
-                      child: NoDataContainer(
-                        titleKey: "noDiaryEntriesFound",
-                      ),
+                    CenteredNoDataContainer(
+                      titleKey: "noDiaryEntriesFound",
+                      //App bar plus the fixed filter/summary block above the
+                      //scrollable list.
+                      occupiedHeight: MediaQuery.sizeOf(context).height * 0.42,
                     )
                   else
                     ...filteredEntries.map((diaryStudent) {

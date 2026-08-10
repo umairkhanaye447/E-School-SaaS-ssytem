@@ -1,3 +1,4 @@
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eschool/cubits/tripReportCubit.dart';
@@ -267,7 +268,7 @@ class _ReportIssueBottomSheetState extends State<ReportIssueBottomSheet> {
                     color: isSelected
                         ? Theme.of(context).colorScheme.primary
                         : Colors.grey[100],
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppRadius.field),
                     border: Border.all(
                       color: isSelected
                           ? Theme.of(context).colorScheme.primary
@@ -309,15 +310,15 @@ class _ReportIssueBottomSheetState extends State<ReportIssueBottomSheet> {
         filled: true,
         fillColor: Colors.grey[50],
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppRadius.field),
           borderSide: BorderSide(color: Colors.grey[300]!),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppRadius.field),
           borderSide: BorderSide(color: Colors.grey[300]!),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppRadius.field),
           borderSide: BorderSide(
             color: Theme.of(context).colorScheme.primary,
             width: 2,
@@ -347,7 +348,7 @@ class _ReportIssueBottomSheetState extends State<ReportIssueBottomSheet> {
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 16),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppRadius.field),
               ),
               elevation: 0,
               disabledBackgroundColor:

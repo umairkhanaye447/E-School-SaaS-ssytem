@@ -11,6 +11,7 @@ import 'package:eschool/ui/widgets/studentSubjectsContainer.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/systemModules.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -58,8 +59,9 @@ class ReportSubjectsContainerState extends State<ReportSubjectsContainer> {
             child: Text(
               Utils.getTranslatedLabel(subjectsKey),
               style: TextStyle(
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: AppColors.textPrimary,
                 fontSize: Utils.screenTitleFontSize,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
@@ -89,11 +91,14 @@ class ReportSubjectsContainerState extends State<ReportSubjectsContainer> {
                   childId: widget.childId,
                   showReport: true,
                 )
-              : Center(
-                  child: NoDataContainer(
-                    titleKey:
-                        noSubjectsFoundKey, // Key for "Subjects Not Found"
-                  ),
+              : CenteredNoDataContainer(
+                  titleKey: noSubjectsFoundKey,
+                  occupiedHeight: Utils.getScrollViewTopPadding(
+                        context: context,
+                        appBarHeightPercentage:
+                            Utils.appBarSmallerHeightPercentage,
+                      ) +
+                      Utils.getScrollViewBottomPadding(context),
                 ))
           : BlocBuilder<StudentSubjectsAndSlidersCubit,
               StudentSubjectsAndSlidersState>(
@@ -104,10 +109,14 @@ class ReportSubjectsContainerState extends State<ReportSubjectsContainer> {
                       .getSubjects();
 
                   if (cubitSubjects.isEmpty) {
-                    return Center(
-                      child: NoDataContainer(
-                        titleKey: noSubjectsFoundKey,
-                      ),
+                    return CenteredNoDataContainer(
+                      titleKey: noSubjectsFoundKey,
+                      occupiedHeight: Utils.getScrollViewTopPadding(
+                            context: context,
+                            appBarHeightPercentage:
+                                Utils.appBarSmallerHeightPercentage,
+                          ) +
+                          Utils.getScrollViewBottomPadding(context),
                     );
                   }
 

@@ -7,6 +7,7 @@ import 'package:eschool/ui/widgets/svgButton.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/systemModules.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -22,52 +23,6 @@ class HomeContainerTopProfileContainer extends StatelessWidget {
         builder: (context, boxConstraints) {
           return Stack(
             children: [
-              //Bordered circles
-              PositionedDirectional(
-                top: MediaQuery.of(context).size.width * (-0.15),
-                start: MediaQuery.of(context).size.width * (-0.225),
-                child: Container(
-                  padding:
-                      const EdgeInsetsDirectional.only(end: 20.0, bottom: 20.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Theme.of(context)
-                          .scaffoldBackgroundColor
-                          .withValues(alpha: 0.1),
-                    ),
-                    shape: BoxShape.circle,
-                  ),
-                  width: MediaQuery.of(context).size.width * (0.6),
-                  height: MediaQuery.of(context).size.width * (0.6),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Theme.of(context)
-                            .scaffoldBackgroundColor
-                            .withValues(alpha: 0.1),
-                      ),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-              ),
-
-              //bottom fill circle
-              PositionedDirectional(
-                bottom: MediaQuery.of(context).size.width * (-0.15),
-                end: MediaQuery.of(context).size.width * (-0.15),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context)
-                        .scaffoldBackgroundColor
-                        .withValues(alpha: 0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  width: MediaQuery.of(context).size.width * (0.4),
-                  height: MediaQuery.of(context).size.width * (0.4),
-                ),
-              ),
-
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
@@ -109,8 +64,7 @@ class HomeContainerTopProfileContainer extends StatelessWidget {
                                   style: TextStyle(
                                     fontSize: 18.0,
                                     fontWeight: FontWeight.w500,
-                                    color: Theme.of(context)
-                                        .scaffoldBackgroundColor,
+                                    color: AppColors.textPrimary,
                                   ),
                                 ),
                                 Row(
@@ -123,8 +77,7 @@ class HomeContainerTopProfileContainer extends StatelessWidget {
                                         style: TextStyle(
                                           fontSize: 12.0,
                                           fontWeight: FontWeight.w400,
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor,
+                                          color: AppColors.textPrimary,
                                         ),
                                       ),
                                     ),
@@ -134,8 +87,7 @@ class HomeContainerTopProfileContainer extends StatelessWidget {
                                     Container(
                                       width: 1.5,
                                       height: 12.0,
-                                      color: Theme.of(context)
-                                          .scaffoldBackgroundColor,
+                                      color: AppColors.textPrimary,
                                     ),
                                     const SizedBox(
                                       width: 10.0,
@@ -148,8 +100,7 @@ class HomeContainerTopProfileContainer extends StatelessWidget {
                                         style: TextStyle(
                                           fontSize: 12.0,
                                           fontWeight: FontWeight.w400,
-                                          color: Theme.of(context)
-                                              .scaffoldBackgroundColor,
+                                          color: AppColors.textPrimary,
                                         ),
                                       ),
                                     ),

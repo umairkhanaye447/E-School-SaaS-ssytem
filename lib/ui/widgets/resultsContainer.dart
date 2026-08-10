@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -205,8 +206,9 @@ class _ResultsContainerState extends State<ResultsContainer> {
                   child: Text(
                     Utils.getTranslatedLabel(resultsKey),
                     style: TextStyle(
-                      color: Theme.of(context).scaffoldBackgroundColor,
+                      color: AppColors.textPrimary,
                       fontSize: Utils.screenTitleFontSize,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
@@ -223,6 +225,7 @@ class _ResultsContainerState extends State<ResultsContainer> {
                   ),
                 ),
               ),
+              SegmentedTrack(boxConstraints: boxConstraints),
               AnimatedAlign(
                 curve: Utils.tabBackgroundContainerAnimationCurve,
                 duration: Utils.tabBackgroundContainerAnimationDuration,
@@ -384,8 +387,14 @@ class _ResultsContainerState extends State<ResultsContainer> {
                           );
                         }).toList(),
                       )
-                    : const Center(
-                        child: NoDataContainer(titleKey: noResultPublishedKey),
+                    : CenteredNoDataContainer(
+                        titleKey: noResultPublishedKey,
+                        occupiedHeight: Utils.getScrollViewTopPadding(
+                              context: context,
+                              appBarHeightPercentage:
+                                  Utils.appBarBiggerHeightPercentage,
+                            ) +
+                            Utils.getScrollViewBottomPadding(context),
                       );
               }
               if (state is ResultsFetchFailure) {
@@ -568,10 +577,14 @@ class _ResultsContainerState extends State<ResultsContainer> {
                               );
                             }).toList(),
                           )
-                        : const Center(
-                            child: NoDataContainer(
-                              titleKey: noResultPublishedKey,
-                            ),
+                        : CenteredNoDataContainer(
+                            titleKey: noResultPublishedKey,
+                            occupiedHeight: Utils.getScrollViewTopPadding(
+                                  context: context,
+                                  appBarHeightPercentage:
+                                      Utils.appBarBiggerHeightPercentage,
+                                ) +
+                                Utils.getScrollViewBottomPadding(context),
                           );
                   }
                   if (state is ResultsOnlineFetchFailure) {
@@ -790,7 +803,8 @@ class _ResultsFilterSheetState extends State<_ResultsFilterSheet> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 14.0),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
+        boxShadow: AppShadows.card,
+        borderRadius: BorderRadius.circular(AppRadius.field),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -881,7 +895,7 @@ class _ResultsFilterSheetState extends State<_ResultsFilterSheet> {
       ),
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: AppColors.surface,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(Utils.bottomSheetTopRadius),
           topRight: Radius.circular(Utils.bottomSheetTopRadius),
@@ -936,7 +950,7 @@ class _ResultsFilterSheetState extends State<_ResultsFilterSheet> {
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 padding: const EdgeInsets.symmetric(vertical: 14.0),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(AppRadius.field),
                 ),
               ),
               onPressed: _pendingSessionYear == null

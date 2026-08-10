@@ -26,7 +26,7 @@ class Subject {
     String translatedType =
         Utils.getTranslatedLabel(isPractial() ? practicalKey : theoryKey);
 
-    return "($name - $translatedType)";
+    return "$name - $translatedType";
   }
 
   bool isPractial() => "Practical" == (type ?? "");

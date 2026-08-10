@@ -16,6 +16,7 @@ import 'package:eschool/ui/widgets/shimmerLoadingContainer.dart';
 import 'package:eschool/ui/widgets/subjectImageContainer.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/route_manager.dart';
@@ -169,8 +170,8 @@ class _SelectSubjectsScreenState extends State<SelectSubjectsScreen> {
             blurRadius: 10,
           )
         ],
-        color: Theme.of(context).scaffoldBackgroundColor,
-        borderRadius: BorderRadius.circular(10),
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(AppRadius.field),
       ),
       width: MediaQuery.of(context).size.width,
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10.0),
@@ -254,7 +255,7 @@ class _SelectSubjectsScreenState extends State<SelectSubjectsScreen> {
             "${Utils.getTranslatedLabel(selectAnyKey)} ${electiveSubjectGroup.totalSelectableSubjects}",
             style: TextStyle(
               color: Theme.of(context).colorScheme.secondary,
-              fontSize: 13,
+              fontSize: 12,
             ),
           ),
           const SizedBox(

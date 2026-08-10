@@ -30,7 +30,7 @@ class Utils {
 
   static double screenContentTopPadding = 15.0;
   static double screenContentHorizontalPadding = 25.0;
-  static double screenTitleFontSize = 18.0;
+  static double screenTitleFontSize = 20.0;
   static double screenOnbordingTitleFontSize = 25.0;
   static double screenContentHorizontalPaddingInPercentage = 0.075;
 
@@ -289,10 +289,10 @@ class Utils {
     DateTime dateTime,
     BuildContext context,
   ) {
-    final monthName = Utils.getMonthName(dateTime.month);
-    final hour = dateTime.hour < 13 ? dateTime.hour : dateTime.hour - 12;
-    final amOrPm = hour > 12 ? "PM" : "AM";
-    return "${Utils.getTranslatedLabel(dueKey)}, ${dateTime.day} $monthName ${dateTime.year}, ${hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')} $amOrPm";
+    //Was hand-rolled, and the meridiem was computed after the hour had
+    //already been folded into 12-hour form, so it always read "AM".
+    return "${Utils.getTranslatedLabel(dueKey)}, "
+        "${formatDisplayDateTime(dateTime)}";
   }
 
   static Future<void> showCustomSnackBar({
@@ -462,12 +462,33 @@ class Utils {
 
   static intl.DateFormat hourMinutesDateFormat = intl.DateFormat.jm();
 
+  /// Canonical display format for every date shown in the app: "10 Nov 2026".
+  ///
+  /// Route all user-facing dates through [formatDisplayDate] /
+  /// [formatDisplayDateTime] rather than formatting inline, so the app never
+  /// mixes styles. Wire formats sent to the API (e.g. the `yyyy-MM-dd` date of
+  /// birth in AuthRepository) are deliberately NOT covered by this.
+  static const String displayDatePattern = 'd MMM yyyy';
+
+  static String formatDisplayDate(DateTime dateTime, {String? localeCode}) {
+    return intl.DateFormat(
+      displayDatePattern,
+      localeCode == null ? null : intlLocaleFor(localeCode),
+    ).format(dateTime);
+  }
+
+  /// "8 May 2025, 2:30 PM"
+  static String formatDisplayDateTime(DateTime dateTime, {String? localeCode}) {
+    return "${formatDisplayDate(dateTime, localeCode: localeCode)}, "
+        "${intl.DateFormat('h:mm a').format(dateTime)}";
+  }
+
   static String formatDateAndTime(DateTime dateTime) {
-    return intl.DateFormat("dd-MM-yyyy  kk:mm").format(dateTime);
+    return formatDisplayDateTime(dateTime);
   }
 
   static String formatDate(DateTime dateTime) {
-    return "${dateTime.day.toString().padLeft(2, '0')}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.year}";
+    return formatDisplayDate(dateTime);
   }
 
   static DateTime? parseApiDate(String dateString) {
@@ -571,8 +592,38 @@ class Utils {
     }
   }
 
+  /// Shapes the panel emits for already-formatted dates.
+  ///
+  /// Deliberately does NOT reuse [parseApiDate]: that helper drives deadline
+  /// logic and guesses field order, which silently turns "10-07-2025 03:55 PM"
+  /// into year 0016. Display parsing has to be exact, so the candidates are
+  /// listed explicitly and anything unmatched is shown verbatim.
+  static const List<String> _apiDatePatterns = <String>[
+    'dd-MM-yyyy hh:mm a',
+    'dd-MM-yyyy HH:mm',
+    'dd-MM-yyyy',
+    'yyyy-MM-dd HH:mm:ss',
+    'yyyy-MM-dd hh:mm a',
+    'yyyy-MM-dd',
+    'dd/MM/yyyy hh:mm a',
+    'dd/MM/yyyy',
+  ];
+
+  /// Restates a panel-formatted date as "8 May 2025". Returns the input
+  /// unchanged when it matches none of the known shapes, so an unexpected
+  /// format degrades to the old behaviour rather than to a wrong date.
   static String formatApiDate(String dateString) {
-    return dateString.isEmpty ? '--' : dateString;
+    final raw = dateString.trim();
+    if (raw.isEmpty) return '--';
+
+    for (final pattern in _apiDatePatterns) {
+      try {
+        return formatDisplayDate(intl.DateFormat(pattern).parseStrict(raw));
+      } catch (_) {
+        //Try the next candidate.
+      }
+    }
+    return dateString;
   }
 
   /// Locale that `intl` actually holds date symbols for.
@@ -601,7 +652,7 @@ class Utils {
     String date;
 
     final formattedDate = intl.DateFormat(
-      'dd MMM, yyyy',
+      displayDatePattern,
       intlLocaleFor(
           contxt.read<AppLocalizationCubit>().state.language.languageCode),
     ).add_jm().format(myEndDate);

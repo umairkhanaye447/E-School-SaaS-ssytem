@@ -5,6 +5,7 @@ import 'package:eschool/utils/animationConfiguration.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
 
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
@@ -33,8 +34,8 @@ class _FilesContainerState extends State<FilesContainer> {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Theme.of(context).scaffoldBackgroundColor,
+              borderRadius: BorderRadius.circular(AppRadius.field),
+              color: AppColors.surface,
               boxShadow: [
                 BoxShadow(
                   color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.1),
@@ -59,7 +60,7 @@ class _FilesContainerState extends State<FilesContainer> {
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurface,
                           fontWeight: FontWeight.w500,
-                          fontSize: 13.0,
+                          fontSize: 12,
                         ),
                       ),
                     ),
@@ -81,7 +82,13 @@ class _FilesContainerState extends State<FilesContainer> {
   Widget build(BuildContext context) {
     return Column(
       children: widget.files.isEmpty
-          ? [const NoDataContainer(titleKey: noFilesUploadedKey)]
+          ? [
+              CenteredNoDataContainer(
+                titleKey: noFilesUploadedKey,
+                //Subject header and tab bar above this tab's content.
+                occupiedHeight: MediaQuery.sizeOf(context).height * 0.45,
+              )
+            ]
           : widget.files
               .map((file) => _buildFileDetailsContainer(file))
               .toList(),

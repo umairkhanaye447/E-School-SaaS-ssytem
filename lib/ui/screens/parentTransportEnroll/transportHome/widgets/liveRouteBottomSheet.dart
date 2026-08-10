@@ -1,3 +1,4 @@
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eschool/cubits/liveRouteCubit.dart';
@@ -80,7 +81,7 @@ class _LiveRouteBottomSheetState extends State<LiveRouteBottomSheet> {
           alignment: Alignment.bottomCenter,
           child: Container(
             height: maxHeight,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
             ),
@@ -243,7 +244,7 @@ class _LiveRouteBottomSheetState extends State<LiveRouteBottomSheet> {
             onTap: () => Navigator.pop(context),
             child: Container(
               padding: const EdgeInsets.all(4),
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 color: Colors.black12,
                 shape: BoxShape.circle,
               ),
@@ -281,8 +282,8 @@ class _LiveRouteBottomSheetState extends State<LiveRouteBottomSheet> {
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xFFE3F2FD),
-        borderRadius: BorderRadius.circular(12),
+        color: AppAccent.blue.tint,
+        borderRadius: BorderRadius.circular(AppRadius.field),
       ),
       child: Row(
         children: [
@@ -305,9 +306,9 @@ class _LiveRouteBottomSheetState extends State<LiveRouteBottomSheet> {
               children: [
                 Text(
                   'Currently at ${liveTrip.lastReachedStop?.name ?? 'School'}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
-                    color: Color(0xFF424242),
+                    color: AppColors.textSecondary,
                   ),
                 ),
               ],
@@ -327,7 +328,7 @@ class _LiveRouteBottomSheetState extends State<LiveRouteBottomSheet> {
           children: [
             Text(
               'Bus No : ${liveTrip.vehicle.number}',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
                 color: Colors.black,
@@ -336,7 +337,7 @@ class _LiveRouteBottomSheetState extends State<LiveRouteBottomSheet> {
             const SizedBox(height: 4),
             Text(
               liveTrip.route.name,
-              style: const TextStyle(fontSize: 14, color: Colors.black54),
+              style: TextStyle(fontSize: 14, color: Colors.black54),
             ),
           ],
         ),
@@ -383,7 +384,7 @@ class _LiveRouteBottomSheetState extends State<LiveRouteBottomSheet> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppRadius.field),
         border: Border.all(color: Colors.grey[200]!),
       ),
       child: Column(
@@ -391,7 +392,7 @@ class _LiveRouteBottomSheetState extends State<LiveRouteBottomSheet> {
         children: [
           Text(
             Utils.getTranslatedLabel(facingAProblemKey),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
               color: Colors.black87,
@@ -401,7 +402,7 @@ class _LiveRouteBottomSheetState extends State<LiveRouteBottomSheet> {
           Text(
             Utils.getTranslatedLabel(raiseAnySchoolTransportDelaysKey),
             style: TextStyle(
-              fontSize: 13,
+              fontSize: 12,
               color: Colors.grey[600],
               height: 1.3,
             ),
@@ -421,14 +422,14 @@ class _LiveRouteBottomSheetState extends State<LiveRouteBottomSheet> {
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(AppRadius.field),
                 ),
                 elevation: 0,
               ),
               icon: const Icon(Icons.flag_outlined, size: 18),
               label: Text(
                 Utils.getTranslatedLabel(reportIssueKey),
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                 ),

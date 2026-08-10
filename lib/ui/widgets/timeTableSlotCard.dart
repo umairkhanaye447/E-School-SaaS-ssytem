@@ -1,5 +1,5 @@
 import 'package:eschool/data/models/timeTableSlot.dart';
-import 'package:eschool/ui/styles/colors.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:eschool/ui/widgets/subjectImageContainer.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
@@ -52,7 +52,7 @@ class TimeTableSlotCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: labelColor.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppRadius.field),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -91,14 +91,14 @@ class TimeTableSlotCard extends StatelessWidget {
           width: 8,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: liveStatusColor,
+            color: AppColors.danger,
           ),
         ),
         const SizedBox(width: 4),
         Text(
           Utils.getTranslatedLabel(liveKey),
           style: TextStyle(
-            color: liveStatusColor,
+            color: AppColors.danger,
             fontWeight: FontWeight.w500,
             fontSize: 12.0,
             letterSpacing: 0.5,
@@ -119,7 +119,7 @@ class TimeTableSlotCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppRadius.field),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -165,7 +165,7 @@ class TimeTableSlotCard extends StatelessWidget {
 
     if (isLive) {
       return _buildStatusLabel(context,
-          color: liveStatusColor, labelKey: liveKey);
+          color: AppColors.danger, labelKey: liveKey);
     }
     if (isUpcoming) {
       return _buildStatusLabel(
@@ -177,7 +177,7 @@ class TimeTableSlotCard extends StatelessWidget {
     if (isCompleted) {
       return _buildStatusLabel(
         context,
-        color: completedStatusColor,
+        color: AppColors.textTertiary,
         labelKey: completedKey,
       );
     }
@@ -249,27 +249,17 @@ class TimeTableSlotCard extends StatelessWidget {
         variant == TimeTableSlotCardVariant.timeTable && isLive;
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 20),
+      margin: const EdgeInsets.only(bottom: AppSpacing.sm),
       decoration: BoxDecoration(
         ///Shadow only on the Time Table screen; the home "Online Classes"
         ///cards are flat on their grey background.
         boxShadow: variant == TimeTableSlotCardVariant.timeTable
-            ? [
-                BoxShadow(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .secondary
-                      .withValues(alpha: 0.08),
-                  offset: const Offset(0, 2),
-                  blurRadius: 8,
-                )
-              ]
+            ? AppShadows.card
             : null,
-        color: backgroundColor ?? Theme.of(context).scaffoldBackgroundColor,
-        borderRadius: BorderRadius.circular(12),
+        color: backgroundColor ?? AppColors.surface,
+        borderRadius: AppRadius.cardAll,
       ),
-      width: MediaQuery.of(context).size.width * (0.85),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(AppSpacing.sm),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -280,12 +270,10 @@ class TimeTableSlotCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   "${timeTableSlot.startTime} - ${timeTableSlot.endTime}",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14.0,
-                    letterSpacing: 0.1,
-                  ),
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
                 ),
               ),
               _buildTimeRowTrailing(
@@ -314,7 +302,7 @@ class TimeTableSlotCard extends StatelessWidget {
                       height: subjectBoxSize,
                       width: subjectBoxSize,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(AppRadius.field),
                         color: Theme.of(context).colorScheme.primary,
                       ),
                       padding: const EdgeInsets.all(10),

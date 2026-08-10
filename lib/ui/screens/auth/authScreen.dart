@@ -3,6 +3,8 @@ import 'package:eschool/cubits/appConfigurationCubit.dart';
 import 'package:eschool/ui/widgets/customRoundedButton.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTheme.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -91,12 +93,9 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
           return Container(
             width: MediaQuery.of(context).size.width,
             height: height,
-            decoration: BoxDecoration(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(30.0),
-                topRight: Radius.circular(30.0),
-              ),
+            decoration: const BoxDecoration(
+              color: AppColors.pageBackground,
+              borderRadius: AppRadius.sheetTop,
             ),
             child: AnimatedSwitcher(
               switchInCurve: Curves.easeInOut,
@@ -123,14 +122,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                                         .getAppConfiguration()
                                         .title,
                                     textAlign: TextAlign.center,
-                                    maxLines: 1,
+                                    maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 25.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Utils.getColorScheme(context)
-                                          .onSurface,
-                                    ),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineMedium,
                                   ),
                                   SizedBox(
                                     height: boxConstraints.maxHeight * (0.03),
@@ -143,12 +139,9 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                                     textAlign: TextAlign.center,
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.w300,
-                                      color: Utils.getColorScheme(context)
-                                          .onSurface,
-                                    ),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium,
                                   ),
                                 ],
                               ),
@@ -177,8 +170,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                                 Get.toNamed(Routes.parentLogin);
                               },
                               widthPercentage: 0.8,
-                              backgroundColor:
-                                  Theme.of(context).scaffoldBackgroundColor,
+                              backgroundColor: AppColors.surface,
                               buttonTitle:
                                   "${Utils.getTranslatedLabel(loginAsKey)} ${Utils.getTranslatedLabel(parentKey)}",
                               titleColor: Utils.getColorScheme(context).primary,
@@ -223,12 +215,22 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         _onWillPop();
       },
       child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        body: Stack(
-          children: [
-            _buildLottieAnimation(),
-            _buildBottomMenu(),
-          ],
+        body: Container(
+          //Brand gradient rather than a flat fill, matching the dashboard
+          //hero card so the first screen sets the same tone.
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: context.brand.heroGradient,
+            ),
+          ),
+          child: Stack(
+            children: [
+              _buildLottieAnimation(),
+              _buildBottomMenu(),
+            ],
+          ),
         ),
       ),
     );

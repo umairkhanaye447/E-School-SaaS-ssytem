@@ -17,6 +17,7 @@ import 'package:eschool/ui/widgets/noDataContainer.dart';
 import 'package:eschool/utils/constants.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -89,31 +90,31 @@ class _TransportHomeScreenState extends State<TransportHomeScreen> {
             child: CustomShimmerContainer(
               height: 150,
               width: double.infinity,
-              borderRadius: 12,
-              margin: const EdgeInsets.only(bottom: 16),
+              borderRadius: AppRadius.card,
+              margin: const EdgeInsets.only(bottom: AppSpacing.md),
             ),
           ),
           ShimmerLoadingContainer(
             child: CustomShimmerContainer(
               height: 120,
               width: double.infinity,
-              borderRadius: 12,
-              margin: const EdgeInsets.only(bottom: 16),
+              borderRadius: AppRadius.card,
+              margin: const EdgeInsets.only(bottom: AppSpacing.md),
             ),
           ),
           ShimmerLoadingContainer(
             child: CustomShimmerContainer(
               height: 130,
               width: double.infinity,
-              borderRadius: 12,
-              margin: const EdgeInsets.only(bottom: 16),
+              borderRadius: AppRadius.card,
+              margin: const EdgeInsets.only(bottom: AppSpacing.md),
             ),
           ),
           ShimmerLoadingContainer(
             child: CustomShimmerContainer(
               height: 100,
               width: double.infinity,
-              borderRadius: 12,
+              borderRadius: AppRadius.card,
             ),
           ),
         ],

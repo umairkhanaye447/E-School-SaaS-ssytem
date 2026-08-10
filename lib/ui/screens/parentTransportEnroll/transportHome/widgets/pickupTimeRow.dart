@@ -1,6 +1,7 @@
 import 'package:eschool/ui/screens/parentTransportEnroll/transportHome/widgets/commonTransportWidgets.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -33,8 +34,8 @@ class PickupTimeRow extends StatelessWidget {
           child: Container(
             width: 40,
             height: 40,
-            decoration: const BoxDecoration(
-              color: Color(0xFF1F4B63),
+            decoration: BoxDecoration(
+              color: AppColors.brandPrimaryDark,
               shape: BoxShape.circle,
             ),
             child: Center(

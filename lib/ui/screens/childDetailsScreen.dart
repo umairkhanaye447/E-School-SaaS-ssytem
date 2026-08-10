@@ -8,22 +8,25 @@ import 'package:eschool/data/models/student.dart';
 import 'package:eschool/data/repositories/schoolRepository.dart';
 import 'package:eschool/data/repositories/studentRepository.dart';
 import 'package:eschool/ui/widgets/borderedProfilePictureContainer.dart';
-import 'package:eschool/ui/widgets/customBackButton.dart';
 import 'package:eschool/ui/widgets/customShimmerContainer.dart';
 import 'package:eschool/ui/widgets/errorContainer.dart';
-import 'package:eschool/ui/widgets/latestNoticesContainer.dart';
 import 'package:eschool/ui/widgets/noDataContainer.dart';
 import 'package:eschool/ui/widgets/onlineClassesContainer.dart';
 import 'package:eschool/ui/widgets/schoolGalleryContainer.dart';
-import 'package:eschool/ui/widgets/screenTopBackgroundContainer.dart';
 import 'package:eschool/ui/widgets/shimmerLoaders/announcementShimmerLoadingContainer.dart';
 import 'package:eschool/ui/widgets/shimmerLoaders/subjectsShimmerLoadingContainer.dart';
 import 'package:eschool/ui/widgets/shimmerLoadingContainer.dart';
-import 'package:eschool/ui/widgets/slidersContainer.dart';
 import 'package:eschool/ui/widgets/studentSubjectsContainer.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/systemModules.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
+import 'package:eschool/cubits/schoolDetailsCubit.dart';
+import 'package:eschool/ui/widgets/dashboard/dashboardHeroCard.dart';
+import 'package:eschool/ui/widgets/dashboard/infoChip.dart';
+import 'package:eschool/ui/widgets/dashboard/dashboardNoticeCard.dart';
+import 'package:eschool/utils/constants.dart';
+import 'package:eschool/ui/widgets/dashboard/appMotion.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -57,6 +60,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
   void initState() {
     Future.delayed(Duration.zero, () {
       fetchChildSchoolDetails();
+      _ensureSchoolDetailsLoaded();
     });
     super.initState();
   }
@@ -118,164 +122,180 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
     }
   }
 
+  /// Same welcome banner as the student dashboard, so the parent's view of a
+  /// child opens on the identical hero.
+  Widget _buildHeroCard() {
+    return BlocBuilder<SchooldetailsCubit, SchooldetailsState>(
+      builder: (context, state) {
+        final details =
+            state is SchooldetailsFetchSuccess ? state.schoolDetails : null;
+
+        final images = <String>[
+          ...?details?.schoolImages,
+        ].where((e) => e.trim().isNotEmpty).toList();
+
+        return DashboardHeroCard(
+          welcomeLabel: Utils.getTranslatedLabel(welcomeToKey),
+          title: details?.schoolName ?? "",
+          subtitle: "",
+          tagline: details?.schoolTagline ?? "",
+          actionLabel: Utils.getTranslatedLabel(exploreMoreKey),
+          imageUrls: images,
+          onTapAction: Utils.isModuleEnabled(
+            context: context,
+            moduleId: galleryManagementModuleId.toString(),
+          )
+              ? () => Get.toNamed(Routes.schoolGallery)
+              : null,
+        );
+      },
+    );
+  }
+
+  /// The hero needs school name/tagline/photos; request them when they have
+  /// not been loaded yet. Same endpoint, no new API surface.
+  void _ensureSchoolDetailsLoaded() {
+    final state = context.read<SchooldetailsCubit>().state;
+    if (state is SchooldetailsInitial || state is SchooldetailsFetchFailure) {
+      context.read<SchooldetailsCubit>().fetchSchooldetails();
+    }
+  }
+
+  /// Same notice card as the student dashboard, with the same states,
+  /// three-item cap and "View all" destination.
+  Widget _buildLatestNotices() {
+    return BlocBuilder<NoticeBoardCubit, NoticeBoardState>(
+      builder: (context, state) {
+        return StateCrossfade(
+          stateKey: state.runtimeType,
+          child: _noticesForState(state),
+        );
+      },
+    );
+  }
+
+  Widget _noticesForState(NoticeBoardState state) {
+    {
+        if (state is NoticeBoardFetchSuccess) {
+          final all = state.announcements;
+          final latest = all.length > numberOfLatestNoticesInHomeScreen
+              ? all.sublist(0, numberOfLatestNoticesInHomeScreen)
+              : all;
+
+          return DashboardNoticeCard(
+            title: Utils.getTranslatedLabel(latestNoticesKey),
+            announcements: latest,
+            onTapViewAll: () => Get.toNamed(Routes.noticeBoard),
+          );
+        }
+
+        if (state is NoticeBoardFetchInProgress ||
+            state is NoticeBoardInitial) {
+          return Column(
+            children: List.generate(
+              3,
+              (_) => const AnnouncementShimmerLoadingContainer(),
+            ),
+          );
+        }
+
+        return const SizedBox();
+    }
+  }
+
   Widget _buildAppBar() {
     return Align(
       alignment: Alignment.topCenter,
-      child: ScreenTopBackgroundContainer(
-        padding: EdgeInsets.zero,
-        heightPercentage: Utils.appBarBiggerHeightPercentage,
-        child: LayoutBuilder(
-          builder: (context, boxConstraints) {
-            return Stack(
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        decoration: const BoxDecoration(
+          color: AppColors.pageBackground,
+          border: Border(bottom: BorderSide(color: AppColors.divider)),
+        ),
+        child: SafeArea(
+          bottom: false,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.screenH,
+              AppSpacing.xs,
+              AppSpacing.screenH,
+              AppSpacing.md,
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                //Bordered circles
-                PositionedDirectional(
-                  top: MediaQuery.of(context).size.width * (-0.15),
-                  start: MediaQuery.of(context).size.width * (-0.225),
-                  child: Container(
-                    padding: const EdgeInsetsDirectional.only(
-                      end: 20.0,
-                      bottom: 20.0,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Theme.of(context)
-                            .scaffoldBackgroundColor
-                            .withValues(alpha: 0.1),
+                //Back button, inline rather than stacked, so the row reads
+                //like the student dashboard header.
+                _CircleActionButton(
+                  icon: Icons.arrow_back_rounded,
+                  onTap: () => Get.back<void>(),
+                ),
+                const SizedBox(width: AppSpacing.xs),
+                BorderedProfilePictureContainer(
+                  onTap: () {
+                    Get.toNamed(
+                      Routes.studentProfile,
+                      arguments: {
+                        'childId': widget.student.id,
+                        'userId': widget.student.userId ??
+                            widget.student.childUserDetails?.id,
+                      },
+                    );
+                  },
+                  heightAndWidth: 54,
+                  imageUrl: widget.student.childUserDetails?.image ?? "",
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        widget.student.getFullName(),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
                       ),
-                      shape: BoxShape.circle,
-                    ),
-                    width: MediaQuery.of(context).size.width * (0.6),
-                    height: MediaQuery.of(context).size.width * (0.6),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Theme.of(context)
-                              .scaffoldBackgroundColor
-                              .withValues(alpha: 0.1),
-                        ),
-                        shape: BoxShape.circle,
+                      const SizedBox(height: 5),
+                      InfoChip(
+                        icon: Icons.menu_book_rounded,
+                        label:
+                            "${Utils.getTranslatedLabel(classKey)}: ${widget.student.classSection?.fullName ?? ''}",
+                        accent: AppAccent.blue,
                       ),
-                    ),
+                    ],
                   ),
                 ),
-
-                //bottom fill circle
-                PositionedDirectional(
-                  bottom: MediaQuery.of(context).size.width * (-0.15),
-                  end: MediaQuery.of(context).size.width * (-0.15),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context)
-                          .scaffoldBackgroundColor
-                          .withValues(alpha: 0.1),
-                      shape: BoxShape.circle,
-                    ),
-                    width: MediaQuery.of(context).size.width * (0.4),
-                    height: MediaQuery.of(context).size.width * (0.4),
-                  ),
-                ),
-                CustomBackButton(
-                  topPadding: MediaQuery.of(context).padding.top +
-                      Utils.appBarContentTopPadding,
-                ),
-                Align(
-                  alignment: AlignmentDirectional.topCenter,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).padding.top +
-                          Utils.appBarContentTopPadding,
-                      left: 10,
-                      right: 10.0,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        BorderedProfilePictureContainer(
-                          onTap: () {
-                            Get.toNamed(
-                              Routes.studentProfile,
-                              arguments: {
-                                'childId': widget.student.id,
-                                'userId': widget.student.userId ??
-                                    widget.student.childUserDetails?.id,
-                              },
-                            );
-                          },
-                          heightAndWidth: boxConstraints.maxWidth * (0.16),
-                          imageUrl:
-                              widget.student.childUserDetails?.image ?? "",
-                        ),
-                        SizedBox(
-                          height: boxConstraints.maxHeight * (0.045),
-                        ),
-                        Text(
-                          widget.student.getFullName(),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 15.0,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        // SizedBox(
-                        //   height: boxConstraints.maxHeight * (0.0125),
-                        // ),
-                        Text(
-                          "${Utils.getTranslatedLabel(classKey)} - ${widget.student.classSection?.fullName}",
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 11.0,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
                 BlocBuilder<StudentSubjectsAndSlidersCubit,
                     StudentSubjectsAndSlidersState>(
                   builder: (context, state) {
                     if (state is StudentSubjectsAndSlidersFetchSuccess) {
-                      return Align(
-                        alignment: AlignmentDirectional.topEnd,
-                        child: IconButton(
-                          color: Theme.of(context).colorScheme.surface,
-                          padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).padding.top +
-                                Utils.appBarContentTopPadding,
-                          ),
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          focusColor: Colors.transparent,
-                          hoverColor: Colors.transparent,
-                          onPressed: () {
-                            Get.toNamed(
-                              Routes.parentMenu,
-                              arguments: {
-                                "student": widget.student,
-                                "subjectsForFilter": context
-                                    .read<StudentSubjectsAndSlidersCubit>()
-                                    .getSubjectsForAssignmentContainer()
-                              },
-                            );
-                          },
-                          icon: const Icon(Icons.more_vert),
-                        ),
+                      //Was tinted colorScheme.surface — white on a light
+                      //header, so the menu was invisible.
+                      return _CircleActionButton(
+                        icon: Icons.more_vert_rounded,
+                        onTap: () {
+                          Get.toNamed(
+                            Routes.parentMenu,
+                            arguments: {
+                              "student": widget.student,
+                              "subjectsForFilter": context
+                                  .read<StudentSubjectsAndSlidersCubit>()
+                                  .getSubjectsForAssignmentContainer()
+                            },
+                          );
+                        },
                       );
                     }
                     return const SizedBox();
                   },
                 ),
               ],
-            );
-          },
+            ),
+          ),
         ),
       ),
     );
@@ -321,12 +341,7 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
 
   Widget _buildSubjectsAndInformationsContainer() {
     return SingleChildScrollView(
-      padding: EdgeInsets.only(
-        top: Utils.getScrollViewTopPadding(
-          context: context,
-          appBarHeightPercentage: Utils.appBarBiggerHeightPercentage,
-        ),
-      ),
+      padding: EdgeInsets.zero,
       child: BlocBuilder<StudentSubjectsAndSlidersCubit,
           StudentSubjectsAndSlidersState>(
         builder: (context, state) {
@@ -352,7 +367,8 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
             // Render the data if available
             return Column(
               children: [
-                if (hasSliderData) SlidersContainer(sliders: state.sliders),
+                _buildHeroCard(),
+                const SizedBox(height: AppSpacing.lg),
                 if (hasSubjectData)
                   StudentSubjectsContainer(
                     subjects: subjects,
@@ -369,18 +385,16 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                     childId: widget.student.id,
                   ),
                 ],
-                if (hasNoticesData)
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.025,
-                  ),
-                if (hasNoticesData)
-                  LatestNoticiesContainer(
-                    childId: widget.student.id,
-                  ),
-                if (hasGalleryData)
+                if (hasNoticesData) ...[
+                  const SizedBox(height: AppSpacing.lg),
+                  _buildLatestNotices(),
+                ],
+                if (hasGalleryData) ...[
+                  const SizedBox(height: AppSpacing.lg),
                   SchoolGalleryContainer(
                     student: widget.student,
                   ),
+                ],
               ],
             );
           }
@@ -403,9 +417,12 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
+      body: Column(
         children: [
-          BlocConsumer<SchoolConfigurationCubit, SchoolConfigurationState>(
+          _buildAppBar(),
+          Expanded(
+            child: BlocConsumer<SchoolConfigurationCubit,
+                SchoolConfigurationState>(
               listener: schoolConfigurationCubitListener,
               builder: (context, state) {
                 if (state is SchoolConfigurationFetchSuccess) {
@@ -423,9 +440,34 @@ class _ChildDetailsScreenState extends State<ChildDetailsScreen> {
                 }
 
                 return _buildDataLoadingContainer();
-              }),
-          _buildAppBar(),
+              },
+            ),
+          ),
         ],
+      ),
+    );
+  }
+}
+
+class _CircleActionButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+
+  const _CircleActionButton({required this.icon, required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 42,
+        width: 42,
+        decoration: const BoxDecoration(
+          color: AppColors.surface,
+          shape: BoxShape.circle,
+          boxShadow: AppShadows.card,
+        ),
+        child: Icon(icon, size: 20, color: AppColors.textPrimary),
       ),
     );
   }

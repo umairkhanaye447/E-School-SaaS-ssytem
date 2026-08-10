@@ -6,6 +6,7 @@ import 'package:eschool/utils/constants.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
 import 'package:eschool/data/models/transportDashboard.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class TransportRequestDetailsScreen extends StatelessWidget {
@@ -45,7 +46,8 @@ class TransportRequestDetailsScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(12),
+        boxShadow: AppShadows.card,
+                      borderRadius: BorderRadius.circular(AppRadius.field),
                       border: Border.all(
                           color: Theme.of(context).colorScheme.tertiary),
                     ),
@@ -115,13 +117,13 @@ class TransportRequestDetailsScreen extends StatelessWidget {
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
+                            borderRadius: BorderRadius.circular(AppRadius.field)),
                         side: BorderSide(
                             color: Theme.of(context).colorScheme.tertiary),
                       ),
                       child: CustomTextContainer(
                         textKey: newRequestKey,
-                        style: const TextStyle(
+                        style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w600),
                       ),
                     ),
@@ -159,12 +161,12 @@ class TransportRequestDetailsScreen extends StatelessWidget {
       children: [
         CustomTextContainer(
           textKey: label,
-          style: const TextStyle(fontSize: 12, color: Color(0xFF6D6E6F)),
+          style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
         ),
         const SizedBox(height: 2),
         CustomTextContainer(
           textKey: value,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
         ),
       ],
     );
@@ -176,12 +178,12 @@ class TransportRequestDetailsScreen extends StatelessWidget {
       children: [
         CustomTextContainer(
           textKey: label,
-          style: const TextStyle(fontSize: 12, color: Color(0xFF6D6E6F)),
+          style: TextStyle(fontSize: 12, color: AppColors.textSecondary),
         ),
         const SizedBox(height: 2),
         CustomTextContainer(
           textKey: value,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),
         ),
       ],
     );

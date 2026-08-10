@@ -6,6 +6,7 @@ import 'package:eschool/ui/widgets/passwordHideShowButton.dart';
 import 'package:eschool/utils/constants.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -48,7 +49,7 @@ class _ChangePasswordBottomsheetState extends State<ChangePasswordBottomsheet> {
         vertical: MediaQuery.of(context).size.height * (0.04),
       ),
       decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: AppColors.surface,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(Utils.bottomSheetTopRadius),
           topRight: Radius.circular(Utils.bottomSheetTopRadius),

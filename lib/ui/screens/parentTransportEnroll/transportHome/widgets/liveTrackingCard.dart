@@ -5,6 +5,7 @@ import 'package:eschool/ui/screens/parentTransportEnroll/transportHome/widgets/l
 import 'package:eschool/data/repositories/authRepository.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class LiveTrackingCard extends StatelessWidget {
@@ -77,23 +78,23 @@ class LiveTrackingCard extends StatelessWidget {
       case 'on_time':
       case 'ontime':
       case 'on time':
-        backgroundColor = const Color(0xFFDFF6E2);
-        textColor = const Color(0xFF37C748);
+        backgroundColor = AppAccent.green.tint;
+        textColor = AppColors.success;
         displayText = Utils.getTranslatedLabel(onTimeKey);
         break;
       case 'delayed':
-        backgroundColor = const Color(0xFFFFF2E8);
-        textColor = const Color(0xFFFF8C00);
+        backgroundColor = AppAccent.orange.tint;
+        textColor = AppColors.warning;
         displayText = Utils.getTranslatedLabel(delayedKey);
         break;
       case 'reached':
-        backgroundColor = const Color(0xFFE8F5E8);
-        textColor = const Color(0xFF2E7D32);
+        backgroundColor = AppAccent.green.tint;
+        textColor = AppColors.success;
         displayText = Utils.getTranslatedLabel(reachedKey);
         break;
       default:
-        backgroundColor = const Color(0xFFE0EDF6);
-        textColor = const Color(0xFF29638A);
+        backgroundColor = AppAccent.blue.tint;
+        textColor = AppColors.brandPrimary;
         displayText = status;
         break;
     }

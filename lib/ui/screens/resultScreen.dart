@@ -6,13 +6,14 @@ import 'package:eschool/data/models/student.dart';
 import 'package:eschool/data/models/subjectMark.dart';
 import 'package:eschool/data/repositories/resultRepository.dart';
 import 'package:eschool/data/repositories/studentRepository.dart';
-import 'package:eschool/ui/styles/colors.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:eschool/ui/widgets/customCircularProgressIndicator.dart';
 import 'package:eschool/ui/widgets/errorContainer.dart';
 import 'package:eschool/ui/widgets/screenTopBackgroundContainer.dart';
 import 'package:eschool/ui/widgets/svgButton.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/widgets/dashboard/appMotion.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -155,8 +156,9 @@ class _ResultScreenState extends State<ResultScreen> {
                 child: Text(
                   Utils.getTranslatedLabel(resultKey),
                   style: TextStyle(
-                    color: Theme.of(context).scaffoldBackgroundColor,
+                    color: AppColors.textPrimary,
                     fontSize: Utils.screenTitleFontSize,
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
@@ -172,7 +174,7 @@ class _ResultScreenState extends State<ResultScreen> {
                     maxLines: 1,
                     style: TextStyle(
                       fontSize: Utils.screenSubTitleFontSize,
-                      color: Theme.of(context).scaffoldBackgroundColor,
+                      color: AppColors.textPrimary,
                     ),
                   ),
                 ),
@@ -186,7 +188,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   alignment: Alignment.center,
                   height: 50,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(AppRadius.field),
                     boxShadow: [
                       BoxShadow(
                         color: Theme.of(context)
@@ -197,7 +199,7 @@ class _ResultScreenState extends State<ResultScreen> {
                         blurRadius: 5,
                       )
                     ],
-                    color: Theme.of(context).scaffoldBackgroundColor,
+                    color: AppColors.surface,
                   ),
                   width: MediaQuery.of(context).size.width * (0.85),
                   child: Column(
@@ -237,7 +239,7 @@ class _ResultScreenState extends State<ResultScreen> {
         textAlign: TextAlign.center,
         style: TextStyle(
           color: Theme.of(context).colorScheme.onSurface,
-          fontSize: 13.5,
+          fontSize: 12,
         ),
       ),
     );
@@ -256,13 +258,10 @@ class _ResultScreenState extends State<ResultScreen> {
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
         textAlign: TextAlign.center,
-        style: TextStyle(
-          color: isSubject
-              ? Theme.of(buildContext).colorScheme.onPrimary
-              : Theme.of(buildContext).colorScheme.secondary,
-          fontWeight: FontWeight.w400,
-          fontSize: 13.0,
-        ),
+        style: Theme.of(buildContext).textTheme.bodySmall?.copyWith(
+              color: AppColors.textPrimary,
+              fontWeight: isSubject ? FontWeight.w600 : FontWeight.w400,
+            ),
       ),
     );
   }
@@ -314,7 +313,7 @@ class _ResultScreenState extends State<ResultScreen> {
     return Container(
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(AppRadius.field),
         boxShadow: [
           BoxShadow(
             color: Theme.of(context)
@@ -325,7 +324,7 @@ class _ResultScreenState extends State<ResultScreen> {
             blurRadius: 5,
           ),
         ],
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: AppColors.surface,
       ),
       width: MediaQuery.of(context).size.width * (0.85),
       child: LayoutBuilder(
@@ -359,7 +358,7 @@ class _ResultScreenState extends State<ResultScreen> {
       alignment: Alignment.center,
       height: 50,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(AppRadius.field),
         boxShadow: [
           BoxShadow(
             color: Theme.of(context)
@@ -370,7 +369,7 @@ class _ResultScreenState extends State<ResultScreen> {
             blurRadius: 5,
           )
         ],
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: AppColors.surface,
       ),
       width: MediaQuery.of(context).size.width * (0.85),
       child: LayoutBuilder(
@@ -411,7 +410,7 @@ class _ResultScreenState extends State<ResultScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
       height: 60,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(AppRadius.field),
         boxShadow: [
           BoxShadow(
             color: Theme.of(context)
@@ -422,7 +421,7 @@ class _ResultScreenState extends State<ResultScreen> {
             blurRadius: 5,
           )
         ],
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: AppColors.surface,
       ),
       width: MediaQuery.of(context).size.width * (0.85),
       child: Text(
@@ -439,6 +438,7 @@ class _ResultScreenState extends State<ResultScreen> {
     required BuildContext context,
     required String title,
     required String value,
+    double? countTo,
   }) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -449,20 +449,27 @@ class _ResultScreenState extends State<ResultScreen> {
             color:
                 Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.75),
             fontWeight: FontWeight.w400,
-            fontSize: 13.0,
+            fontSize: 12,
           ),
           textAlign: TextAlign.start,
         ),
         const SizedBox(
           height: 5.0,
         ),
-        Text(
-          value,
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.secondary,
-            fontWeight: FontWeight.w500,
-            fontSize: 15.0,
-          ),
+        Builder(
+          builder: (context) {
+            final style = Theme.of(context).textTheme.titleSmall;
+            //Numeric values count up so the eye lands on them; letter grades
+            //have nothing to count, so they render directly.
+            return countTo == null
+                ? Text(value, style: style)
+                : AnimatedCountText(
+                    value: countTo,
+                    decimals: 2,
+                    suffix: '%',
+                    style: style,
+                  );
+          },
         )
       ],
     );
@@ -477,8 +484,9 @@ class _ResultScreenState extends State<ResultScreen> {
           height: 80,
           padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 15.0),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(AppRadius.field),
             color: Theme.of(context).colorScheme.surface,
+        boxShadow: AppShadows.card,
           ),
           width: MediaQuery.of(context).size.width * (0.85),
           child: Row(
@@ -495,6 +503,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   context: context,
                   title: Utils.getTranslatedLabel(percentageKey),
                   value: "${result.percentage.toStringAsFixed(2)}%",
+                  countTo: result.percentage,
                 ),
               ),
             ],
@@ -503,31 +512,29 @@ class _ResultScreenState extends State<ResultScreen> {
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: const EdgeInsets.only(top: 50),
+            padding: const EdgeInsets.only(top: AppSpacing.sm),
             child: Container(
-              height: 60,
-              width: 60,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: result.isPassed ? greenColor : redColor,
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.surface,
-                  width: 8,
-                  strokeAlign: BorderSide.strokeAlignOutside,
-                ),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md,
+                vertical: AppSpacing.xs,
               ),
-              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: result.isPassed
+                    ? AppAccent.green.tint
+                    : AppAccent.red.tint,
+                borderRadius: BorderRadius.circular(AppRadius.chip),
+              ),
               child: Text(
                 Utils.getTranslatedLabel(
                   result.isPassed ? passedKey : failedKey,
                 ),
                 maxLines: 1,
-                overflow: TextOverflow.clip,
-                style: const TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
-                ),
+                style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: result.isPassed
+                          ? AppColors.success
+                          : AppColors.danger,
+                      fontWeight: FontWeight.w700,
+                    ),
               ),
             ),
           ),

@@ -1,3 +1,5 @@
+import 'package:eschool/ui/styles/appTokens.dart';
+import 'package:eschool/ui/widgets/dashboard/appListCard.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -67,30 +69,8 @@ class ListItemForOnlineExamAndOnlineResult extends StatelessWidget {
     }
   }
 
-  Widget _buildDetailsBackgroundContainer({
-    required Widget child,
-    required BuildContext context,
-  }) {
-    return Center(
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 30),
-        width: MediaQuery.of(context).size.width * (0.90),
-        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
-        decoration: BoxDecoration(
-          color: Utils.getColorScheme(context).surface,
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: child,
-      ),
-    );
-  }
-
   TextStyle _getLabelsTextStyle({required BuildContext context}) {
-    return TextStyle(
-      color: Utils.getColorScheme(context).onSurface,
-      fontSize: 12,
-      fontWeight: FontWeight.w400,
-    );
+    return Theme.of(context).textTheme.labelSmall!;
   }
 
   /// Formats the submitted date for the result view.
@@ -136,8 +116,8 @@ class ListItemForOnlineExamAndOnlineResult extends StatelessWidget {
       children: [
         Icon(
           Icons.access_time_rounded,
-          color: Utils.getColorScheme(context).onSurface,
-          size: 15,
+          color: AppColors.textTertiary,
+          size: 14,
         ),
         2.sizedBoxWidth,
         Text(
@@ -172,19 +152,20 @@ class ListItemForOnlineExamAndOnlineResult extends StatelessWidget {
         ? const SizedBox()
         : Text(
             subjName,
-            style:
-                _getLabelsTextStyle(context: context).copyWith(fontSize: 15.0),
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w600,
+                ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           );
   }
 
   TextStyle _getExamNameAndMarksTextStyle({required BuildContext context}) {
-    return TextStyle(
-      color: Utils.getColorScheme(context).secondary,
-      fontSize: 14,
-      fontWeight: FontWeight.w600,
-    );
+    return Theme.of(context).textTheme.labelLarge!.copyWith(
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+        );
   }
 
   Widget _buildExamNameAndMarksContainer({
@@ -203,56 +184,58 @@ class ListItemForOnlineExamAndOnlineResult extends StatelessWidget {
             maxLines: 1,
           ),
         ),
-        (marks != '')
-            ? Text(
-                "${Utils.getTranslatedLabel(marksKey)} : $marks / $totalMarks",
-                style: _getExamNameAndMarksTextStyle(context: context),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              )
-            : Text(
-                "${Utils.getTranslatedLabel(totalMarksKey)} : $totalMarks",
-                style: _getExamNameAndMarksTextStyle(context: context),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
+        const SizedBox(width: AppSpacing.xs),
+        AppStatChip(
+          label: marks != ''
+              ? "$marks / $totalMarks"
+              : "${Utils.getTranslatedLabel(totalMarksKey)} $totalMarks",
+          accent: marks != '' ? AppAccent.green : AppAccent.blue,
+        ),
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return AppListCard(
       onTap: onItemTap,
-      child: _buildDetailsBackgroundContainer(
-        context: context,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildSubjectName(
-              context: context,
-              subjName: subjectName,
-              isSubjectSelected: isSubjectSelected,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppIconWell(
+            icon: isForResult
+                ? Icons.fact_check_rounded
+                : Icons.laptop_chromebook_rounded,
+            accent: isForResult ? AppAccent.green : AppAccent.indigo,
+          ),
+          const SizedBox(width: AppSpacing.sm),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildExamNameAndMarksContainer(
+                  context: context,
+                  examName: examName,
+                  marks: marks,
+                  totalMarks: totalMarks,
+                ),
+                const SizedBox(height: 3),
+                _buildSubjectName(
+                  context: context,
+                  subjName: subjectName,
+                  isSubjectSelected: isSubjectSelected,
+                ),
+                const SizedBox(height: 3),
+                _buildDateContainer(
+                  context: context,
+                  examDate: examStartingDate,
+                  examEndDate: examEndingDate ?? "",
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 5,
-            ),
-            _buildDateContainer(
-                context: context,
-                examDate: examStartingDate,
-                examEndDate: examEndingDate ?? ""),
-            const SizedBox(
-              height: 5.0,
-            ),
-            _buildExamNameAndMarksContainer(
-              context: context,
-              examName: examName,
-              marks: marks,
-              totalMarks: totalMarks,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

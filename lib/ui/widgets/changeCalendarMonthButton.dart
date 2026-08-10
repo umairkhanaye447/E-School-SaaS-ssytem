@@ -1,3 +1,4 @@
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class ChangeCalendarMonthButton extends StatelessWidget {
@@ -30,7 +31,7 @@ class ChangeCalendarMonthButton extends StatelessWidget {
               .colorScheme
               .primary
               .withValues(alpha: isDisable ? 0.75 : 1.0),
-          borderRadius: BorderRadius.circular(7.5),
+          borderRadius: BorderRadius.circular(AppRadius.field),
         ),
         child: Icon(
           isNextButton ? Icons.chevron_right : Icons.chevron_left,

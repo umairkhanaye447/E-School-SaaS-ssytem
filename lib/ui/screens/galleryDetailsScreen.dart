@@ -6,6 +6,7 @@ import 'package:eschool/ui/widgets/customAppbar.dart';
 import 'package:eschool/ui/widgets/noDataContainer.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -34,6 +35,17 @@ class GalleryDetailsScreen extends StatefulWidget {
 }
 
 class _GalleryDetailsScreenState extends State<GalleryDetailsScreen> {
+  /// Matches the Offline/Online segmented control: primary on the white thumb,
+  /// muted on the track.
+  TextStyle? _tabTextStyle(BuildContext context, {required bool isSelected}) {
+    return Theme.of(context).textTheme.titleSmall?.copyWith(
+          color: isSelected
+              ? Theme.of(context).colorScheme.primary
+              : AppColors.textSecondary,
+          fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+        );
+  }
+
   String selectedTabTitleKey = photosKey;
 
   Duration tabChangeAnimationDuration = const Duration(milliseconds: 400);
@@ -60,9 +72,10 @@ class _GalleryDetailsScreenState extends State<GalleryDetailsScreen> {
                 width: boxConstraints.maxWidth * (0.5),
                 height: boxConstraints.maxHeight,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                        Utils.bottomSheetTopRadius * (0.5)),
-                    color: Theme.of(context).scaffoldBackgroundColor),
+                  borderRadius: BorderRadius.circular(AppRadius.field),
+                  color: AppColors.surface,
+                  boxShadow: AppShadows.card,
+                ),
                 alignment: Alignment.center,
               ),
             ),
@@ -82,8 +95,10 @@ class _GalleryDetailsScreenState extends State<GalleryDetailsScreen> {
                   alignment: Alignment.center,
                   child: Text(
                     Utils.getTranslatedLabel(photosKey),
-                    style:
-                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
+                    style: _tabTextStyle(
+                      context,
+                      isSelected: selectedTabTitleKey == photosKey,
+                    ),
                   ),
                 ),
               ),
@@ -104,8 +119,10 @@ class _GalleryDetailsScreenState extends State<GalleryDetailsScreen> {
                       border: Border.all(color: Colors.transparent)),
                   child: Text(
                     Utils.getTranslatedLabel(videosKey),
-                    style:
-                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600),
+                    style: _tabTextStyle(
+                      context,
+                      isSelected: selectedTabTitleKey == videosKey,
+                    ),
                   ),
                 ),
               ),
@@ -118,7 +135,11 @@ class _GalleryDetailsScreenState extends State<GalleryDetailsScreen> {
 
   Widget _buildPhotosContainer() {
     if (widget.gallery.getImages().isEmpty) {
-      return NoDataContainer(titleKey: noPhotosUploadedKey);
+      return CenteredNoDataContainer(
+        titleKey: noPhotosUploadedKey,
+        //App bar, gallery title/description and tab switcher above.
+        occupiedHeight: MediaQuery.sizeOf(context).height * 0.45,
+      );
     }
     return LayoutBuilder(builder: (context, boxConstraints) {
       return Wrap(
@@ -154,7 +175,11 @@ class _GalleryDetailsScreenState extends State<GalleryDetailsScreen> {
 
   Widget _buildVideosContainer() {
     if (widget.gallery.getVideos().isEmpty) {
-      return NoDataContainer(titleKey: noVideosUploadedKey);
+      return CenteredNoDataContainer(
+        titleKey: noVideosUploadedKey,
+        //App bar, gallery title/description and tab switcher above.
+        occupiedHeight: MediaQuery.sizeOf(context).height * 0.45,
+      );
     }
     return Column(
       children: widget.gallery

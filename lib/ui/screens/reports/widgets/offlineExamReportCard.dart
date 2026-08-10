@@ -5,6 +5,7 @@ import 'package:eschool/ui/screens/reports/widgets/reportDivider.dart';
 import 'package:eschool/ui/screens/reports/widgets/reportPerformanceBox.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class OfflineExamReportCard extends StatelessWidget {
@@ -42,7 +43,7 @@ class OfflineExamReportCard extends StatelessWidget {
                     .withValues(alpha: 0.1),
                 width: 1.5,
               ),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppRadius.field),
             ),
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -62,7 +63,7 @@ class OfflineExamReportCard extends StatelessWidget {
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: Utils.getColorScheme(context).surface,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppRadius.field),
                   ),
                   child: Row(
                     children: [

@@ -2,4 +2,5 @@
 <resources>
     <!-- Notification accent color (change this to match your app's primary color) -->
     <color name="notification_color">#6200EE</color>
+	<color name="ic_launcher_background">#FFFFFF</color>
 </resources>

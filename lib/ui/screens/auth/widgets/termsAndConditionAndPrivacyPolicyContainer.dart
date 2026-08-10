@@ -20,7 +20,7 @@ class TermsAndConditionAndPrivacyPolicyContainer extends StatelessWidget {
                 termsAndConditionAgreementKey,
               ),
               style: TextStyle(
-                fontSize: 13,
+                fontSize: 12,
                 color: Theme.of(context)
                     .colorScheme
                     .secondary
@@ -46,7 +46,7 @@ class TermsAndConditionAndPrivacyPolicyContainer extends StatelessWidget {
                   color: Theme.of(context).colorScheme.primary,
                   decoration: TextDecoration.underline,
                   fontWeight: FontWeight.bold,
-                  fontSize: 13,
+                  fontSize: 12,
                 ),
               ),
             ),
@@ -73,7 +73,7 @@ class TermsAndConditionAndPrivacyPolicyContainer extends StatelessWidget {
                   color: Theme.of(context).colorScheme.primary,
                   decoration: TextDecoration.underline,
                   fontWeight: FontWeight.bold,
-                  fontSize: 13,
+                  fontSize: 12,
                 ),
               ),
             ),

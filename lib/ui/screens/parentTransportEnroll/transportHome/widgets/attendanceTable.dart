@@ -1,3 +1,4 @@
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:eschool/ui/widgets/customTextContainer.dart';
 import 'package:eschool/ui/screens/parentTransportEnroll/transportHome/widgets/attendanceStatusPill.dart';
@@ -12,7 +13,8 @@ class AttendanceTable extends StatelessWidget {
       width: double.maxFinite,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
+        boxShadow: AppShadows.card,
+        borderRadius: BorderRadius.circular(AppRadius.field),
         border: Border.all(color: Theme.of(context).colorScheme.tertiary),
       ),
       child: Column(
@@ -22,7 +24,7 @@ class AttendanceTable extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
             decoration: BoxDecoration(
-              color: const Color(0xFFE9EDF3),
+              color: AppColors.divider,
               borderRadius:
                   const BorderRadius.vertical(top: Radius.circular(12)),
             ),
@@ -65,14 +67,14 @@ class AttendanceTable extends StatelessWidget {
                   SizedBox(
                     width: 24,
                     child: CustomTextContainer(
-                        textKey: '$idx', style: const TextStyle(fontSize: 14)),
+                        textKey: '$idx', style: TextStyle(fontSize: 14)),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
                     flex: 2,
                     child: CustomTextContainer(
                       textKey: row.dateText,
-                      style: const TextStyle(
+                      style: TextStyle(
                           fontSize: 14, fontWeight: FontWeight.w600),
                     ),
                   ),

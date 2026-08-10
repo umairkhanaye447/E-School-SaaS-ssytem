@@ -1,6 +1,6 @@
 import 'package:eschool/app/routes.dart';
 import 'package:eschool/cubits/onlineClassesCubit.dart';
-import 'package:eschool/ui/styles/colors.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:eschool/ui/widgets/timeTableSlotCard.dart';
 import 'package:eschool/utils/animationConfiguration.dart';
 import 'package:eschool/utils/constants.dart';
@@ -77,7 +77,7 @@ class OnlineClassesContainer extends StatelessWidget {
                       Utils.getTranslatedLabel(viewAllKey),
                       style: TextStyle(
                         color: Utils.getColorScheme(context).onSurface,
-                        fontSize: 13.0,
+                        fontSize: 12,
                       ),
                       textAlign: TextAlign.start,
                     ),
@@ -99,7 +99,7 @@ class OnlineClassesContainer extends StatelessWidget {
                   child: TimeTableSlotCard(
                     timeTableSlot: onlineClasses[index],
                     selectedDate: state.date,
-                    backgroundColor: onlineClassCardColor,
+                    backgroundColor: AppColors.surfaceMuted,
                     variant: TimeTableSlotCardVariant.onlineClasses,
                   ),
                 ),

@@ -5,6 +5,7 @@ import 'package:eschool/ui/screens/playVideo/widgets/playPauseButton.dart';
 import 'package:eschool/ui/widgets/customCircularProgressIndicator.dart';
 import 'package:eschool/ui/widgets/svgButton.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -300,7 +301,7 @@ class _PlayVideoScreenState extends State<PlayVideoScreen>
     return Padding(
       padding: const EdgeInsets.only(bottom: 15),
       child: InkWell(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(AppRadius.field),
         onTap: () async {
           if (studyMaterial.id == currentlyPlayingStudyMaterialVideo.id) {
             return;
@@ -329,8 +330,8 @@ class _PlayVideoScreenState extends State<PlayVideoScreen>
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Theme.of(context).scaffoldBackgroundColor,
+            borderRadius: BorderRadius.circular(AppRadius.field),
+            color: AppColors.surface,
             boxShadow: [
               BoxShadow(
                 color: Theme.of(context)
@@ -357,7 +358,7 @@ class _PlayVideoScreenState extends State<PlayVideoScreen>
                             ),
                           ),
                           color: Theme.of(context).colorScheme.primary,
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(AppRadius.field),
                         ),
                         height: 65,
                         width: boxConstraints.maxWidth * (0.3),
@@ -367,9 +368,9 @@ class _PlayVideoScreenState extends State<PlayVideoScreen>
                               height: 65,
                               width: boxConstraints.maxWidth * (0.3),
                               decoration: BoxDecoration(
-                                color: const Color(0xff212121)
+                                color: AppColors.textPrimary
                                     .withValues(alpha: 0.5),
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(AppRadius.field),
                               ),
                               child: Lottie.asset(
                                 "assets/animations/music_playing.json",
@@ -391,7 +392,7 @@ class _PlayVideoScreenState extends State<PlayVideoScreen>
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.onSurface,
                             fontWeight: FontWeight.w600,
-                            fontSize: 13.0,
+                            fontSize: 12,
                           ),
                         ),
                       ],

@@ -16,6 +16,7 @@ import 'package:eschool/ui/widgets/screenTopBackgroundContainer.dart';
 import 'package:eschool/utils/errorMessageKeysAndCodes.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:eschool/data/models/subject.dart';
@@ -151,8 +152,9 @@ class SubjectWiseDetailedReportState extends State<SubjectWiseDetailedReport> {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: AppColors.textPrimary,
                 fontSize: Utils.screenTitleFontSize,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),

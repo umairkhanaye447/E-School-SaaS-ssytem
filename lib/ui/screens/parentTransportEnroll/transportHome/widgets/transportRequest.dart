@@ -2,6 +2,7 @@ import 'package:eschool/ui/screens/parentTransportEnroll/transportHome/widgets/c
 import 'package:eschool/ui/widgets/customTextContainer.dart';
 import 'package:eschool/data/models/transportDashboard.dart' as models;
 import 'package:eschool/utils/labelKeys.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:eschool/app/routes.dart';
@@ -18,21 +19,21 @@ class TransportRequest extends StatelessWidget {
       case 'accepted':
         return {
           'text': acceptedKey,
-          'backgroundColor': const Color(0xFFE7F6ED),
-          'textColor': const Color(0xFF2E7D32),
+          'backgroundColor': AppAccent.green.tint,
+          'textColor': AppColors.success,
         };
       case 'rejected':
         return {
           'text': rejectedKey,
-          'backgroundColor': const Color(0xFFF9D2D2),
-          'textColor': const Color(0xFFB71C1C),
+          'backgroundColor': AppAccent.red.tint,
+          'textColor': AppColors.danger,
         };
       case 'pending':
       default:
         return {
           'text': pendingKey,
-          'backgroundColor': const Color(0xFFFEEED7),
-          'textColor': const Color(0xFF9E6C2C),
+          'backgroundColor': AppAccent.orange.tint,
+          'textColor': AppColors.warning,
         };
     }
   }
@@ -79,7 +80,8 @@ class TransportRequest extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(12),
+        boxShadow: AppShadows.card,
+              borderRadius: BorderRadius.circular(AppRadius.field),
               border: Border.all(
                 color: Theme.of(context)
                     .colorScheme

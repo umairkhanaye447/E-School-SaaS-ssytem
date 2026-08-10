@@ -1,7 +1,7 @@
 import 'package:eschool/ui/widgets/customTextContainer.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:eschool/data/models/liveRoute.dart';
-import 'package:eschool/ui/styles/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 // Live timeline stop status enum
@@ -24,14 +24,8 @@ class LiveTimeline extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.surface,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 2),
-              ),
-            ],
+            borderRadius: BorderRadius.circular(AppRadius.card),
+            boxShadow: AppShadows.cardStrong,
           ),
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -64,7 +58,7 @@ class LiveTimeline extends StatelessWidget {
                       ? Container(
                           width: 3,
                           height: 20,
-                          color: tripTimelineGreenColor,
+                          color: AppColors.success,
                         )
                       : _buildDottedLine(Colors.grey.shade400, 20),
 
@@ -79,7 +73,7 @@ class LiveTimeline extends StatelessWidget {
                       child: _shouldShowSolidLine(index, index + 1)
                           ? Container(
                               width: 3,
-                              color: tripTimelineGreenColor,
+                              color: AppColors.success,
                             )
                           : _buildDottedLine(Colors.grey.shade400, 40),
                     ),
@@ -113,7 +107,7 @@ class LiveTimeline extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                             color: _getStopStatus(index) ==
                                     LiveStopStatus.current
-                                ? tripTimelineGreenColor // Current stop also green
+                                ? AppColors.success // Current stop also green
                                 : Colors.black87,
                           ),
                         ),
@@ -126,7 +120,7 @@ class LiveTimeline extends StatelessWidget {
                               textKey:
                                   "${stop.passengers.length} Passenger${stop.passengers.length > 1 ? 's' : ''}",
                               style: TextStyle(
-                                fontSize: 13,
+                                fontSize: 12,
                                 color: Colors.grey.shade600,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -156,7 +150,7 @@ class LiveTimeline extends StatelessWidget {
         width: 24,
         height: 24,
         decoration: BoxDecoration(
-          color: tripTimelineGreenColor,
+          color: AppColors.success,
           shape: BoxShape.circle,
         ),
         child: Center(
@@ -177,7 +171,7 @@ class LiveTimeline extends StatelessWidget {
         width: 12,
         height: 12,
         decoration: BoxDecoration(
-          color: tripTimelineGreenColor,
+          color: AppColors.success,
           shape: BoxShape.circle,
         ),
         child: _isSchoolCampus(stop.name)
@@ -309,7 +303,7 @@ class LiveTimeline extends StatelessWidget {
     }
 
     // Default color for same time or unparseable times
-    return tripTimelineGreenColor;
+    return AppColors.success;
   }
 
   DateTime? _parseTime(String timeString) {

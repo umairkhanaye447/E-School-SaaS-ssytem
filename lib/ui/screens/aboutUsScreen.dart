@@ -40,6 +40,8 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
           AppSettingsBlocBuilder(
             appSettingsType: aboutUsType,
             useSchoolSettings: true,
+            headerIcon: Icons.info_outline_rounded,
+            headerTitle: Utils.getTranslatedLabel(aboutUsKey),
           ),
           CustomAppBar(title: Utils.getTranslatedLabel(aboutUsKey))
         ],

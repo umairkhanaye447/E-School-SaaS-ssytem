@@ -1,6 +1,7 @@
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -130,7 +131,7 @@ class _SelectAttachmentBottomSheetState
         width: width,
         height: 80,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(AppRadius.field),
           color: colorScheme.primary.withValues(alpha: 0.15),
         ),
         alignment: Alignment.center,

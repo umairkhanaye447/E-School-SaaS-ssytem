@@ -73,7 +73,11 @@ class _AnnouncementContainerState extends State<AnnouncementContainer> {
       builder: (context, state) {
         if (state is SubjectAnnouncementFetchSuccess) {
           return state.announcements.isEmpty
-              ? const NoDataContainer(titleKey: noAnnouncementKey)
+              ? CenteredNoDataContainer(
+                  titleKey: noAnnouncementKey,
+                  //Subject header and tab bar above this tab's content.
+                  occupiedHeight: MediaQuery.sizeOf(context).height * 0.45,
+                )
               : Column(
                   children: List.generate(
                     state.announcements.length,

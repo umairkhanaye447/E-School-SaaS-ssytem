@@ -11,6 +11,8 @@ import 'package:eschool/ui/widgets/shimmerLoadingContainer.dart';
 import 'package:eschool/utils/animationConfiguration.dart';
 import 'package:eschool/utils/constants.dart';
 import 'package:eschool/utils/labelKeys.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
+import 'package:eschool/ui/widgets/dashboard/appListCard.dart';
 import 'package:eschool/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -64,58 +66,49 @@ class _HolidaysContainerState extends State<HolidaysContainer> {
           key: isApplicationItemAnimationOn ? UniqueKey() : null,
           effects: listItemAppearanceEffects(
               itemIndex: index, totalLoadedItems: holidays.length),
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 15),
-            padding:
-                const EdgeInsets.symmetric(horizontal: 15.0, vertical: 7.5),
-            width: MediaQuery.of(context).size.width * (0.85),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: LayoutBuilder(
-              builder: (context, boxConstraints) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            holidays[index].title,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14.0,
-                            ),
-                          ),
-                        ),
+          child: AppListCard(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const AppIconWell(
+                  icon: Icons.beach_access_rounded,
+                  accent: AppAccent.orange,
+                ),
+                const SizedBox(width: AppSpacing.sm),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        holidays[index].title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style:
+                            Theme.of(context).textTheme.labelLarge?.copyWith(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                      ),
+                      if (holidays[index].description.isNotEmpty) ...[
+                        const SizedBox(height: 2),
                         Text(
-                          Utils.formatDate(holidays[index].date),
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
-                            fontSize: 12.0,
-                          ),
+                          holidays[index].description,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(height: 1.3),
                         ),
                       ],
-                    ),
-                    SizedBox(
-                      height: holidays[index].description.isEmpty ? 0 : 2.5,
-                    ),
-                    holidays[index].description.isEmpty
-                        ? const SizedBox()
-                        : Text(
-                            holidays[index].description,
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSurface,
-                              fontSize: 11.5,
-                            ),
-                          )
-                  ],
-                );
-              },
+                    ],
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.xs),
+                AppStatChip(
+                  label: Utils.formatDate(holidays[index].date),
+                  accent: AppAccent.blue,
+                ),
+              ],
             ),
           ),
         ),
@@ -127,7 +120,7 @@ class _HolidaysContainerState extends State<HolidaysContainer> {
     return Container(
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: AppColors.surface,
         boxShadow: [
           BoxShadow(
             color: Theme.of(context)
@@ -138,7 +131,7 @@ class _HolidaysContainerState extends State<HolidaysContainer> {
             blurRadius: 10,
           )
         ],
-        borderRadius: BorderRadius.circular(15.0),
+        borderRadius: BorderRadius.circular(AppRadius.card),
       ),
       margin: const EdgeInsets.only(top: 20),
       child: TableCalendar(
@@ -291,8 +284,9 @@ class _HolidaysContainerState extends State<HolidaysContainer> {
             child: Text(
               Utils.getTranslatedLabel(holidaysKey),
               style: TextStyle(
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: AppColors.textPrimary,
                 fontSize: Utils.screenTitleFontSize,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
@@ -302,7 +296,7 @@ class _HolidaysContainerState extends State<HolidaysContainer> {
             child: Container(
               height: 50,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(AppRadius.field),
                 boxShadow: [
                   BoxShadow(
                     color: Theme.of(context)
@@ -313,7 +307,7 @@ class _HolidaysContainerState extends State<HolidaysContainer> {
                     blurRadius: 5,
                   )
                 ],
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: AppColors.surface,
               ),
               width: MediaQuery.of(context).size.width * (0.85),
               child: Stack(

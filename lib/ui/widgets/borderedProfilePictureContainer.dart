@@ -1,5 +1,6 @@
 import 'package:eschool/ui/widgets/customUserProfileImageWidget.dart';
 
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class BorderedProfilePictureContainer extends StatelessWidget {
@@ -23,16 +24,18 @@ class BorderedProfilePictureContainer extends StatelessWidget {
         onTap?.call();
       },
       child: Container(
-        padding: const EdgeInsets.all(4.0),
+        padding: const EdgeInsets.all(3.0),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          border: Border.all(
-            color: Theme.of(context).scaffoldBackgroundColor,
-          ),
+          color: AppColors.surface,
+          border: Border.all(color: AppColors.divider, width: 1.5),
+          boxShadow: AppShadows.card,
         ),
         width: heightAndWidth,
         height: heightAndWidth,
-        child: CustomUserProfileImageWidget(profileUrl: imageUrl),
+        child: ClipOval(
+          child: CustomUserProfileImageWidget(profileUrl: imageUrl),
+        ),
       ),
     );
   }

@@ -1,15 +1,18 @@
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:eschool/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 class BottomNavItem {
   final String title;
-  final String activeImageUrl;
-  final String disableImageUrl;
+
+  /// Filled glyph for the selected state, outline for the rest — the same
+  /// pairing the reference design uses.
+  final IconData activeIcon;
+  final IconData icon;
 
   BottomNavItem({
-    required this.activeImageUrl,
-    required this.disableImageUrl,
+    required this.activeIcon,
+    required this.icon,
     required this.title,
   });
 }
@@ -40,6 +43,9 @@ class BottomNavItemContainer extends StatefulWidget {
 class _BottomNavItemContainerState extends State<BottomNavItemContainer> {
   @override
   Widget build(BuildContext context) {
+    final bool isSelected = widget.index == widget.currentIndex;
+    final Color selectedColor = Theme.of(context).colorScheme.primary;
+
     return InkWell(
       onTap: () async {
         widget.onTap(widget.index);
@@ -60,10 +66,19 @@ class _BottomNavItemContainerState extends State<BottomNavItemContainer> {
                   curve: Curves.easeInOut,
                 ),
               ),
-              child: SvgPicture.asset(
-                widget.index == widget.currentIndex
-                    ? widget.bottomNavItem.activeImageUrl
-                    : widget.bottomNavItem.disableImageUrl,
+              //Small overshoot pop when a tab becomes active — enough to feel
+              //springy without moving neighbouring items.
+              child: AnimatedScale(
+                scale: isSelected ? 1.12 : 1.0,
+                duration: const Duration(milliseconds: 260),
+                curve: Curves.easeOutBack,
+                child: Icon(
+                  isSelected
+                      ? widget.bottomNavItem.activeIcon
+                      : widget.bottomNavItem.icon,
+                  size: 25,
+                  color: isSelected ? selectedColor : AppColors.textTertiary,
+                ),
               ),
             ),
             SizedBox(
@@ -83,15 +98,37 @@ class _BottomNavItemContainerState extends State<BottomNavItemContainer> {
                     curve: Curves.easeInOut,
                   ),
                 ),
-                child: Text(
-                  Utils.getTranslatedLabel(
-                    widget.bottomNavItem.title,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 11.5,
-                  ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      Utils.getTranslatedLabel(
+                        widget.bottomNavItem.title,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style:
+                          Theme.of(context).textTheme.labelMedium?.copyWith(
+                                color: isSelected
+                                    ? selectedColor
+                                    : AppColors.textTertiary,
+                                fontWeight: isSelected
+                                    ? FontWeight.w600
+                                    : FontWeight.w500,
+                              ),
+                    ),
+                    const SizedBox(height: 3),
+                    //Underline marker beneath the active item.
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      height: 3,
+                      width: isSelected ? 18 : 0,
+                      decoration: BoxDecoration(
+                        color: selectedColor,
+                        borderRadius: BorderRadius.circular(AppRadius.chip),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

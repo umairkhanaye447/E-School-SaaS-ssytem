@@ -1,5 +1,6 @@
 import 'package:eschool/cubits/schoolConfigurationCubit.dart';
 import 'package:eschool/data/models/advanceFee.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:eschool/ui/widgets/bottomsheetTopTitleAndCloseButton.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
@@ -46,28 +47,30 @@ class AdvanceInstallmentPaidAmountBottomsheet extends StatelessWidget {
               children: [
                 Text(
                   Utils.getTranslatedLabel(totalAmountKey),
-                  style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: AppColors.textPrimary,
+                        fontWeight: FontWeight.w700,
+                      ),
                 ),
                 const Spacer(),
                 Text(
                   "${currencySymbol}${totalAdvancePaidAmount.toStringAsFixed(2)}",
-                  style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
                 ),
               ],
             ),
             const Divider(),
             Text(
               Utils.getTranslatedLabel(advanceAmountBreakdownKey),
-              style: TextStyle(
-                fontSize: 15.0,
-                fontWeight: FontWeight.w500,
-                color: Theme.of(context).colorScheme.secondary,
-              ),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.textSecondary,
+                  ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: AppSpacing.xs),
             ...advanceFees
                 .map((advanceFee) => Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,20 +80,24 @@ class AdvanceInstallmentPaidAmountBottomsheet extends StatelessWidget {
                             Expanded(
                               child: Text(
                                 "${Utils.getTranslatedLabel(paidOnKey)} ${Utils.formatDate(DateTime.parse(advanceFee.createdAt!))}",
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  color:
-                                      Theme.of(context).colorScheme.secondary,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(
+                                      color: AppColors.textSecondary,
+                                    ),
                               ),
                             ),
                             Text(
                               "${currencySymbol}${advanceFee.amount?.toStringAsFixed(2) ?? '0.00'}",
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
                             ),
                           ],
                         ),
@@ -98,46 +105,38 @@ class AdvanceInstallmentPaidAmountBottomsheet extends StatelessWidget {
                           padding: const EdgeInsets.only(top: 4.0),
                           child: Text(
                             "${Utils.getTranslatedLabel(paymentIdKey)} : ${advanceFee.id}",
-                            style: TextStyle(
-                              fontSize: 12.0,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondary
-                                  .withValues(alpha: 0.7),
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(
+                                  color: AppColors.textTertiary,
+                                ),
                           ),
                         ),
-                        const SizedBox(height: 15),
-                        const Divider(),
+                        const SizedBox(height: AppSpacing.sm),
+                        const Divider(color: AppColors.divider),
                       ],
                     ))
                 .toList(),
             if (advanceFees.isEmpty)
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.lg),
                 child: Center(
                   child: Text(
                     Utils.getTranslatedLabel(noAdvancePaymentRecordsFoundKey),
-                    style: TextStyle(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .secondary
-                          .withValues(alpha: 0.7),
-                    ),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.textTertiary,
+                        ),
                   ),
                 ),
               ),
-            SizedBox(height: 10),
+            const SizedBox(height: AppSpacing.xs),
             Text(
               Utils.getTranslatedLabel(noteAdvanceAmountsKey),
-              style: TextStyle(
-                fontSize: 12.0,
-                fontStyle: FontStyle.italic,
-                color: Theme.of(context)
-                    .colorScheme
-                    .secondary
-                    .withValues(alpha: 0.7),
-              ),
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    fontStyle: FontStyle.italic,
+                    color: AppColors.textTertiary,
+                  ),
             ),
           ],
         ),

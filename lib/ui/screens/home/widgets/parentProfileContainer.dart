@@ -1,5 +1,5 @@
 import 'package:eschool/cubits/studentGuardianDetailsCubit.dart';
-import 'package:eschool/ui/styles/colors.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:eschool/ui/widgets/customShimmerContainer.dart';
 import 'package:eschool/ui/widgets/errorContainer.dart';
 import 'package:eschool/ui/widgets/guardianDetailsContainer.dart';
@@ -64,7 +64,7 @@ class _GuardianProfileContainerState extends State<GuardianProfileContainer> {
   Widget _buildGuardianDetailsShimmerLoading() {
     return Container(
       width: MediaQuery.of(context).size.width * (0.8),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(15.0)),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(AppRadius.card)),
       child: LayoutBuilder(
         builder: (context, boxConstraints) {
           return Stack(
@@ -82,7 +82,7 @@ class _GuardianProfileContainerState extends State<GuardianProfileContainer> {
                     child: Container(
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: shimmerContentColor,
+                        color: AppColors.shimmerHighlight,
                       ),
                     ),
                   ),
@@ -94,7 +94,7 @@ class _GuardianProfileContainerState extends State<GuardianProfileContainer> {
                 children: [
                   ShimmerLoadingContainer(
                     child: Divider(
-                      color: shimmerContentColor,
+                      color: AppColors.shimmerHighlight,
                       height: 2,
                     ),
                   ),
@@ -121,8 +121,9 @@ class _GuardianProfileContainerState extends State<GuardianProfileContainer> {
             child: Text(
               Utils.getTranslatedLabel(guardianDetailsKey),
               style: TextStyle(
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: AppColors.textPrimary,
                 fontSize: Utils.screenTitleFontSize,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
@@ -144,7 +145,8 @@ class _GuardianProfileContainerState extends State<GuardianProfileContainer> {
                   padding: EdgeInsets.only(
                     bottom: Utils.getScrollViewBottomPadding(context),
                     top: MediaQuery.of(context).size.height *
-                        (Utils.appBarSmallerHeightPercentage + 0.075),
+                            Utils.appBarSmallerHeightPercentage +
+                        AppSpacing.md,
                   ),
                   child: Column(
                     children: [
@@ -173,7 +175,8 @@ class _GuardianProfileContainerState extends State<GuardianProfileContainer> {
                 padding: EdgeInsets.only(
                   bottom: Utils.getScrollViewBottomPadding(context),
                   top: MediaQuery.of(context).size.height *
-                      (Utils.appBarSmallerHeightPercentage + 0.075),
+                          Utils.appBarSmallerHeightPercentage +
+                      AppSpacing.md,
                 ),
                 child: Center(
                   child: _buildGuardianDetailsShimmerLoading(),

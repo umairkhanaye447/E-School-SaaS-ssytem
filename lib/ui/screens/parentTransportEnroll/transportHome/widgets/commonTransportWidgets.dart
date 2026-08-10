@@ -5,6 +5,7 @@ import 'package:eschool/utils/utils.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/ui/screens/chat/chatScreen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:eschool/app/routes.dart';
@@ -32,7 +33,8 @@ class EnrollCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(12),
+        boxShadow: AppShadows.card,
+          borderRadius: BorderRadius.circular(AppRadius.field),
           border: Border.all(color: Theme.of(context).colorScheme.tertiary),
         ),
         child: Column(
@@ -109,13 +111,13 @@ class LabelValue extends StatelessWidget {
           if (addTopSpacing) const SizedBox(height: 2),
           CustomTextContainer(
             textKey: label,
-            style: const TextStyle(color: Color(0xFF6D6E6F), fontSize: 12),
+            style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
           ),
           if (addBottomSpacing) const SizedBox(height: 2),
           CustomTextContainer(
             textKey: value,
             style: TextStyle(
-              color: const Color(0xFF1A1C1D),
+              color: AppColors.textPrimary,
               fontSize: 14,
               fontWeight: FontWeight.w500,
               height: smallValueStyle ? 1.0 : null,
@@ -138,7 +140,7 @@ class IconPill extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: pillColor ?? Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(AppRadius.card),
       ),
       child: Icon(icon, size: 16, color: Theme.of(context).colorScheme.primary),
     );
@@ -172,7 +174,7 @@ class PersonRow extends StatelessWidget {
                 Theme.of(context).colorScheme.tertiary.withValues(alpha: 0.2),
             child: avatar != null && avatar!.isNotEmpty
                 ? ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(AppRadius.card),
                     child: CachedNetworkImage(
                       imageUrl: avatar!,
                       width: 32,
@@ -209,8 +211,8 @@ class PersonRow extends StatelessWidget {
               children: [
                 CustomTextContainer(
                     textKey: label,
-                    style: const TextStyle(
-                        color: Color(0xFF6D6E6F), fontSize: 12)),
+                    style: TextStyle(
+                        color: AppColors.textSecondary, fontSize: 12)),
                 CustomTextContainer(
                   textKey: name,
                   style: TextStyle(
@@ -231,8 +233,8 @@ class PersonRow extends StatelessWidget {
             child: IconPill(
               icon: Icons.phone,
               pillColor: phone != null && phone!.isNotEmpty
-                  ? const Color(0xFFF7F9FF)
-                  : const Color(0xFFF0F0F0),
+                  ? AppColors.surfaceMuted
+                  : AppColors.divider,
             ),
           ),
           const SizedBox(width: 8),
@@ -254,8 +256,8 @@ class PersonRow extends StatelessWidget {
             child: IconPill(
               icon: Icons.message,
               pillColor: userId != null
-                  ? const Color(0xFFF7F9FF)
-                  : const Color(0xFFF0F0F0),
+                  ? AppColors.surfaceMuted
+                  : AppColors.divider,
             ),
           ),
         ],
@@ -285,13 +287,13 @@ class LiveTrackingContent extends StatelessWidget {
               // Current Location
               CustomTextContainer(
                 textKey: currentLocationKey,
-                style: const TextStyle(color: Color(0xFF6D6E6F), fontSize: 12),
+                style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
               ),
               const SizedBox(height: 2),
               CustomTextContainer(
                 textKey: liveSummary?.currentLocation ?? 'N/A',
-                style: const TextStyle(
-                  color: Color(0xFF1A1C1D),
+                style: TextStyle(
+                  color: AppColors.textPrimary,
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                 ),
@@ -318,16 +320,16 @@ class _DottedTimeline extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: const [
-        _TimelineCircle(color: Color(0xFF61C29F), diameter: 14),
+        _TimelineCircle(color: AppColors.success, diameter: 14),
         SizedBox(height: 2),
         _DottedLineVertical(
             height: 72,
-            color: Color(0xFF61C29F),
+            color: AppColors.success,
             thickness: 2,
             dashLength: 5,
             gap: 5),
         SizedBox(height: 2),
-        _DiamondMarker(size: 12, color: Color(0xFF61C29F)),
+        _DiamondMarker(size: 12, color: AppColors.success),
       ],
     );
   }
@@ -465,7 +467,7 @@ class AttendanceCard extends StatelessWidget {
               },
               child: IconPill(
                   icon: Icons.event,
-                  pillColor: const Color(0xFF29638A).withValues(alpha: 0.15)),
+                  pillColor: AppColors.brandPrimary.withValues(alpha: 0.15)),
             ),
           ],
         ),
@@ -479,27 +481,27 @@ class AttendanceCard extends StatelessWidget {
       case 'P':
         return (
           title: presentKey,
-          background: const Color(0xFFDFF6E2),
-          foreground: const Color(0xFF37C748),
+          background: AppAccent.green.tint,
+          foreground: AppColors.success,
         );
       case 'A':
         return (
           title: absentKey,
-          background: const Color(0xFFFFE8E8),
-          foreground: const Color(0xFFE53935),
+          background: AppAccent.red.tint,
+          foreground: AppColors.danger,
         );
       case 'L':
         return (
           title: lateKey,
-          background: const Color(0xFFFFF2E8),
-          foreground: const Color(0xFFFF8C00),
+          background: AppAccent.orange.tint,
+          foreground: AppColors.warning,
         );
       case 'W':
       default:
         return (
           title: waitingKey,
-          background: const Color(0xFFE0EDF6),
-          foreground: const Color(0xFF29638A),
+          background: AppAccent.blue.tint,
+          foreground: AppColors.brandPrimary,
         );
     }
   }
@@ -533,7 +535,8 @@ class RequestCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(12),
+        boxShadow: AppShadows.card,
+          borderRadius: BorderRadius.circular(AppRadius.field),
           border: Border.all(color: Theme.of(context).colorScheme.tertiary),
         ),
         child: Column(
@@ -560,7 +563,7 @@ class RequestCard extends StatelessWidget {
                   ),
                   child: CustomTextContainer(
                     textKey: statusText,
-                    style: const TextStyle(fontSize: 14),
+                    style: TextStyle(fontSize: 14),
                   ),
                 ),
               ],
@@ -656,7 +659,7 @@ class DottedDownloadButton extends StatelessWidget {
                     : Icon(
                         Icons.download_rounded,
                         size: 16,
-                        color: Theme.of(context).colorScheme.surface,
+                        color: AppColors.textPrimary,
                       ),
               ),
             ],

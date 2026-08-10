@@ -13,6 +13,7 @@ import 'package:eschool/ui/widgets/screenTopBackgroundContainer.dart';
 import 'package:eschool/ui/widgets/tabBarBackgroundContainer.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -189,12 +190,14 @@ class _AssignmentsContainerState extends State<AssignmentsContainer> {
                   child: Text(
                     Utils.getTranslatedLabel(assignmentsKey),
                     style: TextStyle(
-                      color: Theme.of(context).scaffoldBackgroundColor,
+                      color: AppColors.textPrimary,
                       fontSize: Utils.screenTitleFontSize,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
               ),
+              SegmentedTrack(boxConstraints: boxConstraints),
               BlocBuilder<AssignmentsTabSelectionCubit,
                   AssignmentsTabSelectionState>(
                 bloc: context.read<AssignmentsTabSelectionCubit>(),

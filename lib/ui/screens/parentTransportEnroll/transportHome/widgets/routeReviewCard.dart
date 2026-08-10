@@ -1,4 +1,5 @@
 import 'package:eschool/ui/widgets/customTextContainer.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class RouteReviewCard extends StatelessWidget {
@@ -69,7 +70,7 @@ class RouteReviewCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Theme.of(context).scaffoldBackgroundColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppRadius.field),
         border: Border.all(color: Theme.of(context).colorScheme.tertiary),
       ),
       child: Column(

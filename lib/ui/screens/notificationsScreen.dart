@@ -7,6 +7,7 @@ import 'package:eschool/ui/widgets/errorContainer.dart';
 import 'package:eschool/ui/widgets/noDataContainer.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -153,7 +154,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                               horizontal: 20.0, vertical: 15.0),
                           decoration: BoxDecoration(
                             color: Theme.of(context).colorScheme.surface,
-                            borderRadius: BorderRadius.circular(10.0),
+        boxShadow: AppShadows.card,
+                            borderRadius: BorderRadius.circular(AppRadius.field),
                           ),
                           width: MediaQuery.of(context).size.width * (0.85),
                           child: LayoutBuilder(
@@ -194,21 +196,22 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                 .colorScheme
                                                 .secondary,
                                             fontWeight: FontWeight.w400,
-                                            fontSize: 11.5,
+                                            fontSize: 11,
                                           ),
                                         ),
                                         SizedBox(
                                           height: 8,
                                         ),
                                         Text(
-                                          notification.createdAt,
+                                          Utils.formatApiDate(
+                                              notification.createdAt),
                                           style: TextStyle(
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .onSurface
                                                 .withValues(alpha: 0.75),
                                             fontWeight: FontWeight.w400,
-                                            fontSize: 10,
+                                            fontSize: 11,
                                           ),
                                           textAlign: TextAlign.start,
                                         )

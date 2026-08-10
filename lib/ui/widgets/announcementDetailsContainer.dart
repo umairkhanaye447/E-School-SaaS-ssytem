@@ -2,6 +2,7 @@ import 'package:eschool/data/models/announcement.dart';
 import 'package:eschool/ui/widgets/studyMaterialWithDownloadButtonContainer.dart';
 import 'package:eschool/utils/constants.dart';
 import 'package:eschool/utils/labelKeys.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:eschool/utils/utils.dart';
 import 'package:flutter/material.dart';
 
@@ -45,23 +46,20 @@ class _AnnouncementDetailsContainerState
             }
           : null,
       child: Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.circular(10.0),
-          // Add subtle visual feedback when tappable
-          border: _shouldShowReadMore
-              ? Border.all(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withValues(alpha: 0.1),
-                  width: 1,
-                )
-              : null,
+        margin: const EdgeInsets.only(
+          left: AppSpacing.screenH,
+          right: AppSpacing.screenH,
+          bottom: AppSpacing.sm,
         ),
-        width: MediaQuery.of(context).size.width * (0.85),
+        padding: const EdgeInsets.all(AppSpacing.md),
+        //Without this the card shrinks to its content, so a short notice
+        //renders narrower than one carrying an attachment.
+        width: double.infinity,
+        decoration: const BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: AppRadius.cardAll,
+          boxShadow: AppShadows.card,
+        ),
         child: LayoutBuilder(
           builder: (context, boxConstraints) {
             return Column(
@@ -69,11 +67,10 @@ class _AnnouncementDetailsContainerState
               children: [
                 Text(
                   widget.announcement.title,
-                  style: TextStyle(
-                    height: 1.2,
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontSize: 15.0,
-                  ),
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                      ),
                 ),
                 SizedBox(
                   height: widget.announcement.description.isEmpty ? 0 : 5,
@@ -88,12 +85,10 @@ class _AnnouncementDetailsContainerState
                             curve: Curves.easeInOut,
                             child: Text(
                               _displayText,
-                              style: TextStyle(
-                                height: 1.2,
-                                color: Theme.of(context).colorScheme.secondary,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 11.5,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(height: 1.3),
                             ),
                           ),
                           if (_shouldShowReadMore) ...[
@@ -102,11 +97,14 @@ class _AnnouncementDetailsContainerState
                               _isExpanded
                                   ? Utils.getTranslatedLabel(readLessKey)
                                   : Utils.getTranslatedLabel(readMoreKey),
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 11.5,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelSmall
+                                  ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                             ),
                           ],
                         ],
@@ -126,15 +124,8 @@ class _AnnouncementDetailsContainerState
                   height: widget.announcement.files.isNotEmpty ? 0 : 5,
                 ),
                 Text(
-                  widget.announcement.createdAt,
-                  style: TextStyle(
-                    color: Theme.of(context)
-                        .colorScheme
-                        .onSurface
-                        .withValues(alpha: 0.75),
-                    fontWeight: FontWeight.w400,
-                    fontSize: 10,
-                  ),
+                  Utils.formatApiDate(widget.announcement.createdAt),
+                  style: Theme.of(context).textTheme.labelSmall,
                   textAlign: TextAlign.start,
                 )
               ],

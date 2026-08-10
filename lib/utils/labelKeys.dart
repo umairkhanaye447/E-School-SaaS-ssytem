@@ -784,3 +784,17 @@ const String feeBreakdownKey = "feeBreakdown";
 const String dueChargeIsKey = "dueChargeIs";
 const String ofDecidedInstallmentAmountKey = "ofDecidedInstallmentAmount";
 const String dueChargesKey = "dueCharges";
+
+///[Home hero banner]
+const String welcomeToKey = "welcomeTo";
+const String exploreMoreKey = "exploreMore";
+
+///[Settings groups]
+const String accountAndSecurityKey = "accountAndSecurity";
+const String appInformationKey = "appInformation";
+const String supportKey = "support";
+const String logoutAccountKey = "logoutAccount";
+const String signOutFromYourSessionKey = "signOutFromYourSession";
+
+///[Short menu-tile label; the full screen title stays [noticeBoardKey]]
+const String noticeKey = "notice";

@@ -1,3 +1,4 @@
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class ShareButton extends StatelessWidget {
@@ -6,7 +7,7 @@ class ShareButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(15),
+      borderRadius: BorderRadius.circular(AppRadius.card),
       onTap: () {},
       child: Container(
         alignment: Alignment.center,

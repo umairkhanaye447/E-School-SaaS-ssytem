@@ -16,6 +16,7 @@ import 'package:eschool/ui/widgets/videosContainer.dart';
 
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -103,8 +104,9 @@ class _TopicDetailsScreenState extends State<TopicDetailsScreen> {
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Theme.of(context).scaffoldBackgroundColor,
+                      color: AppColors.textPrimary,
                       fontSize: Utils.screenTitleFontSize,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
@@ -125,13 +127,13 @@ class _TopicDetailsScreenState extends State<TopicDetailsScreen> {
                   padding: const EdgeInsets.all(5),
                   decoration: BoxDecoration(
                     border: Border.all(
-                        color: Theme.of(context).scaffoldBackgroundColor),
-                    borderRadius: BorderRadius.circular(15.0),
+                        color: AppColors.textPrimary),
+                    borderRadius: BorderRadius.circular(AppRadius.card),
                   ),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      borderRadius: BorderRadius.circular(10.0),
+                      color: AppColors.textPrimary,
+                      borderRadius: BorderRadius.circular(AppRadius.field),
                     ),
                   ),
                 ),
@@ -152,7 +154,7 @@ class _TopicDetailsScreenState extends State<TopicDetailsScreen> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.transparent),
-                      borderRadius: BorderRadius.circular(15.0),
+                      borderRadius: BorderRadius.circular(AppRadius.card),
                     ),
                     child: AnimatedDefaultTextStyle(
                       curve: Curves.easeInOut,
@@ -162,7 +164,7 @@ class _TopicDetailsScreenState extends State<TopicDetailsScreen> {
                         fontWeight: FontWeight.w600,
                         color: _selectedTabTitleKey == filesKey
                             ? Theme.of(context).colorScheme.onSurface
-                            : Theme.of(context).scaffoldBackgroundColor,
+                            : AppColors.textPrimary,
                       ),
                       child: Text(
                         Utils.getTranslatedLabel(filesKey),
@@ -190,7 +192,7 @@ class _TopicDetailsScreenState extends State<TopicDetailsScreen> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.transparent),
-                      borderRadius: BorderRadius.circular(15.0),
+                      borderRadius: BorderRadius.circular(AppRadius.card),
                     ),
                     child: AnimatedDefaultTextStyle(
                       curve: Curves.easeInOut,
@@ -200,7 +202,7 @@ class _TopicDetailsScreenState extends State<TopicDetailsScreen> {
                         fontWeight: FontWeight.w600,
                         color: _selectedTabTitleKey == videosKey
                             ? Theme.of(context).colorScheme.onSurface
-                            : Theme.of(context).scaffoldBackgroundColor,
+                            : AppColors.textPrimary,
                       ),
                       child: Text(
                         Utils.getTranslatedLabel(videosKey),
@@ -228,7 +230,7 @@ class _TopicDetailsScreenState extends State<TopicDetailsScreen> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.transparent),
-                      borderRadius: BorderRadius.circular(15.0),
+                      borderRadius: BorderRadius.circular(AppRadius.card),
                     ),
                     child: AnimatedDefaultTextStyle(
                       curve: Curves.easeInOut,
@@ -238,7 +240,7 @@ class _TopicDetailsScreenState extends State<TopicDetailsScreen> {
                         fontWeight: FontWeight.w600,
                         color: _selectedTabTitleKey == otherLinkKey
                             ? Theme.of(context).colorScheme.onSurface
-                            : Theme.of(context).scaffoldBackgroundColor,
+                            : AppColors.textPrimary,
                       ),
                       child: Text(
                         Utils.getTranslatedLabel(otherLinkKey),

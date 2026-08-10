@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:eschool/data/models/studyMaterial.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:path_provider/path_provider.dart';
@@ -102,7 +103,7 @@ class _DownloadFileButtonState extends State<DownloadFileButton> {
     }
 
     return InkWell(
-      borderRadius: BorderRadius.circular(15),
+      borderRadius: BorderRadius.circular(AppRadius.card),
       onTap: () async {
         await Utils.openDownloadBottomsheet(
           context: context,

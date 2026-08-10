@@ -12,6 +12,7 @@ import 'package:eschool/utils/constants.dart';
 import 'package:eschool/utils/htmlPrintMixin.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -192,23 +193,23 @@ class _PlanHistoryCard extends StatelessWidget {
     switch (status?.toLowerCase()) {
       case 'active':
         return (
-          background: const Color(0xFFDFF6E2),
-          foreground: const Color(0xFF37C748),
+          background: AppAccent.green.tint,
+          foreground: AppColors.success,
         );
       case 'inactive':
         return (
-          background: const Color(0xFFFFF2E8),
-          foreground: const Color(0xFFFF8C00),
+          background: AppAccent.orange.tint,
+          foreground: AppColors.warning,
         );
       case 'expired':
         return (
-          background: const Color(0xFFFFE8E8),
-          foreground: const Color(0xFFE53935),
+          background: AppAccent.red.tint,
+          foreground: AppColors.danger,
         );
       default:
         return (
-          background: const Color(0xFFE0EDF6),
-          foreground: const Color(0xFF29638A),
+          background: AppAccent.blue.tint,
+          foreground: AppColors.brandPrimary,
         );
     }
   }
@@ -227,8 +228,8 @@ class _PlanHistoryCard extends StatelessWidget {
     final String? displayStatus = isPending ? pendingKey : plan.planStatus;
     final statusColor = isPending
         ? (
-            background: const Color(0xFFFFF2E8),
-            foreground: const Color(0xFFFF8C00),
+            background: AppAccent.orange.tint,
+            foreground: AppColors.warning,
           )
         : _getStatusColor(plan.planStatus);
     final statusLabel = displayStatus != null
@@ -276,15 +277,16 @@ class _PlanHistoryCard extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(12),
+        boxShadow: AppShadows.card,
+                borderRadius: BorderRadius.circular(AppRadius.field),
               ),
               child: Row(
                 children: [
                   Container(
                     width: 36,
                     height: 36,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFFFE8E8),
+                    decoration: BoxDecoration(
+                      color: AppAccent.red.tint,
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
@@ -300,16 +302,16 @@ class _PlanHistoryCard extends StatelessWidget {
                       children: [
                         Text(
                           Utils.getTranslatedLabel(planExpiringTitleKey),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
-                            color: Color(0xFFE53935),
+                            color: AppColors.danger,
                           ),
                         ),
                         const SizedBox(height: 2),
                         Text(
                           '${Utils.getTranslatedLabel(yourPlanWillExpireInKey)} ${plan.expiresInDays} ${Utils.getTranslatedLabel(daysKey)}.',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 11,
                             color: Colors.black87,
                           ),
@@ -326,7 +328,7 @@ class _PlanHistoryCard extends StatelessWidget {
                     ),
                     child: Icon(
                       Icons.arrow_forward_ios,
-                      color: Theme.of(context).colorScheme.surface,
+                      color: AppColors.textPrimary,
                       size: 20,
                     ),
                   ),

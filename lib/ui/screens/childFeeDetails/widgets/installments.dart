@@ -5,6 +5,7 @@ import 'package:eschool/ui/screens/childFeeDetails/widgets/advanceInstallmentPai
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -96,7 +97,7 @@ class Installments extends StatelessWidget {
             margin: EdgeInsets.only(bottom: isLastVisible ? 0 : 12),
             decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(AppRadius.field),
                 border: Border.all(
                   color: isThisPaidInstallment
                       ? Theme.of(context)
@@ -161,7 +162,7 @@ class Installments extends StatelessWidget {
                                     style: getPaidOnTextStyle(context: context),
                                   )
                                 : Text(
-                                    "${Utils.getTranslatedLabel(dueDateKey)} : ${installment.formatDueDate ?? installment.dueDate ?? '-'}",
+                                    "${Utils.getTranslatedLabel(dueDateKey)} : ${Utils.formatApiDate(installment.formatDueDate ?? installment.dueDate ?? '')}",
                                     style: TextStyle(
                                         fontSize: 12.0,
                                         color:

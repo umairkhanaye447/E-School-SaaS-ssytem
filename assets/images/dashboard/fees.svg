@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+  <!-- Receipt with a currency mark. Green reads as "paid/settled", matching
+       the success hue used for fee status elsewhere. -->
+  <path d="M11 7a2 2 0 0 1 2-2h22a2 2 0 0 1 2 2v34l-4.5-3-4.5 3-4.5-3-4.5 3-4.5-3L11 41V7z"
+        fill="#fff" stroke="#22C55E" stroke-width="2.5" stroke-linejoin="round"/>
+  <rect x="16" y="13" width="16" height="2.8" rx="1.4" fill="#BBF7D0"/>
+  <rect x="16" y="19.5" width="11" height="2.8" rx="1.4" fill="#BBF7D0"/>
+  <path d="M27.5 26.5h-6a2.75 2.75 0 0 0 0 5.5h3a2.75 2.75 0 0 1 0 5.5h-6"
+        stroke="#16A34A" stroke-width="2.4" stroke-linecap="round"/>
+  <path d="M24.5 24v16" stroke="#16A34A" stroke-width="2.4" stroke-linecap="round"/>
+</svg>

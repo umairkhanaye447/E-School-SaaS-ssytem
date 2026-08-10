@@ -1,4 +1,4 @@
-import 'package:eschool/ui/styles/colors.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class TriangleContainer extends StatelessWidget {
@@ -8,7 +8,7 @@ class TriangleContainer extends StatelessWidget {
   const TriangleContainer({
     super.key,
     this.isFlipped = false,
-    this.color = primaryColor,
+    this.color = AppColors.brandPrimary,
     this.size = const Size(20, 20),
   });
 
@@ -79,8 +79,8 @@ class LinkPreviw extends StatelessWidget {
             child: Container(
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: pageBackgroundColor),
+                  borderRadius: BorderRadius.circular(AppRadius.field),
+                  color: AppColors.pageBackground),
               padding: const EdgeInsets.all(8),
               margin: const EdgeInsets.only(bottom: 5),
               child: Column(

@@ -13,6 +13,8 @@ import 'package:eschool/utils/constants.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/unauthenticatedAccessManager.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTheme.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -157,7 +159,10 @@ class _StudentLoginScreenState extends State<StudentLoginScreen>
           },
           child: Text(
             "${Utils.getTranslatedLabel(resetPasswordKey)}?",
-            style: TextStyle(color: Theme.of(context).colorScheme.primary),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w600,
+                ),
           ),
         ),
       ),
@@ -227,56 +232,49 @@ class _StudentLoginScreenState extends State<StudentLoginScreen>
                   children: [
                     Text(
                       Utils.getTranslatedLabel(letsSignInKey),
-                      style: TextStyle(
-                        fontSize: 34.0,
-                        fontWeight: FontWeight.bold,
-                        color: Utils.getColorScheme(context).secondary,
-                      ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .displaySmall
+                          ?.copyWith(fontWeight: FontWeight.w700),
                     ),
                     const SizedBox(
                       height: 10.0,
                     ),
                     Text(
                       "${Utils.getTranslatedLabel(welcomeBackKey)}, \n${Utils.getTranslatedLabel(youHaveBeenMissedKey)}",
-                      style: TextStyle(
-                        fontSize: 24.0,
-                        height: 1.5,
-                        color: Utils.getColorScheme(context).secondary,
-                      ),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleLarge
+                          ?.copyWith(
+                            height: 1.5,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.textSecondary,
+                          ),
                     ),
 
                     /// School code field
-                    const SizedBox(height: 30.0),
+                    const SizedBox(height: AppSpacing.xl),
                     CustomTextFieldContainer(
                       hideText: false,
                       hintTextKey: Utils.getTranslatedLabel("schoolCode"),
                       bottomPadding: 0,
+                      prefixIcon: Icons.school_outlined,
                       textEditingController: _schoolCodeController,
                     ),
 
                     /// GR number field
-                    const SizedBox(height: 30.0),
+                    const SizedBox(height: AppSpacing.lg),
                     CustomTextFieldContainer(
                       hideText: false,
                       hintTextKey: grNumberKey,
                       bottomPadding: 0,
+                      prefixIcon: Icons.person_outline_rounded,
                       textEditingController: _grNumberTextEditingController,
-                      suffixWidget: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: SvgPicture.asset(
-                          Utils.getImagePath("user_icon.svg"),
-                          colorFilter: ColorFilter.mode(
-                            Utils.getColorScheme(context).secondary,
-                            BlendMode.srcIn,
-                          ),
-                        ),
-                      ),
                     ),
-                    const SizedBox(
-                      height: 30.0,
-                    ),
+                    const SizedBox(height: AppSpacing.lg),
                     CustomTextFieldContainer(
                       textEditingController: _passwordTextEditingController,
+                      prefixIcon: Icons.lock_outline_rounded,
                       suffixWidget: PasswordHideShowButton(
                         hidePassword: _hidePassword,
                         onTap: () {
@@ -336,28 +334,50 @@ class _StudentLoginScreenState extends State<StudentLoginScreen>
                           }
                         },
                         builder: (context, state) {
-                          return CustomRoundedButton(
-                            onTap: () {
-                              if (state is SignInInProgress) {
-                                return;
-                              }
-                              FocusScope.of(context).unfocus();
+                          //Brand-gradient CTA with a soft blue glow so the
+                          //Sign In action is unmistakably the primary step.
+                          return DecoratedBox(
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                                colors: context.brand.heroGradient,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .primary
+                                      .withValues(alpha: 0.32),
+                                  blurRadius: 18,
+                                  offset: const Offset(0, 8),
+                                  spreadRadius: -6,
+                                ),
+                              ],
+                            ),
+                            child: CustomRoundedButton(
+                              onTap: () {
+                                if (state is SignInInProgress) {
+                                  return;
+                                }
+                                FocusScope.of(context).unfocus();
 
-                              _signInStudent();
-                            },
-                            widthPercentage: 0.8,
-                            backgroundColor:
-                                Utils.getColorScheme(context).primary,
-                            buttonTitle: Utils.getTranslatedLabel(signInKey),
-                            titleColor:
-                                Theme.of(context).scaffoldBackgroundColor,
-                            showBorder: false,
-                            child: state is SignInInProgress
-                                ? const CustomCircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    widthAndHeight: 20,
-                                  )
-                                : null,
+                                _signInStudent();
+                              },
+                              widthPercentage: 0.8,
+                              backgroundColor: Colors.transparent,
+                              buttonTitle: Utils.getTranslatedLabel(signInKey),
+                              titleColor:
+                                  Theme.of(context).scaffoldBackgroundColor,
+                              showBorder: false,
+                              child: state is SignInInProgress
+                                  ? const CustomCircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      widthAndHeight: 20,
+                                    )
+                                  : null,
+                            ),
                           );
                         },
                       ),
@@ -377,10 +397,10 @@ class _StudentLoginScreenState extends State<StudentLoginScreen>
                             },
                             child: RichText(
                               text: TextSpan(
+                                style: Theme.of(context).textTheme.bodyLarge,
                                 children: [
                                   TextSpan(
                                     style: TextStyle(
-                                      fontSize: 16.0,
                                       color:
                                           Utils.getColorScheme(context).primary,
                                     ),
@@ -391,8 +411,7 @@ class _StudentLoginScreenState extends State<StudentLoginScreen>
                                   const TextSpan(text: " "),
                                   TextSpan(
                                     style: TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w600,
                                       color: Utils.getColorScheme(context)
                                           .secondary,
                                     ),

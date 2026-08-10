@@ -9,6 +9,7 @@ import 'package:eschool/ui/widgets/screenTopBackgroundContainer.dart';
 import 'package:eschool/ui/widgets/shimmerLoadingContainer.dart';
 
 import 'package:eschool/utils/labelKeys.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:eschool/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -69,45 +70,45 @@ class _AttendanceContainerState extends State<AttendanceContainer> {
     required String value,
     required Color backgroundColor,
   }) {
+    //White card with the count carried by a tinted well, matching the rest of
+    //the app rather than a saturated full-bleed tile.
     return Container(
-      height: boxConstraints.maxWidth * (0.425),
+      height: boxConstraints.maxWidth * (0.40),
       width: boxConstraints.maxWidth * (0.425),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: backgroundColor,
-        boxShadow: [
-          BoxShadow(
-            color: backgroundColor.withValues(alpha: 0.25),
-            offset: const Offset(5, 5),
-            blurRadius: 10,
-          )
-        ],
+      padding: const EdgeInsets.all(AppSpacing.sm),
+      decoration: const BoxDecoration(
+        borderRadius: AppRadius.cardAll,
+        color: AppColors.surface,
+        boxShadow: AppShadows.card,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Container(
+            height: 46,
+            width: 46,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: backgroundColor.withValues(alpha: 0.14),
+              borderRadius: AppRadius.iconTileAll,
+            ),
+            child: Text(
+              value,
+              style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: backgroundColor,
+                    fontWeight: FontWeight.w700,
+                  ),
+            ),
+          ),
+          const SizedBox(height: AppSpacing.xs),
           Text(
             title,
-            style: TextStyle(
-              color: Theme.of(context).scaffoldBackgroundColor,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          SizedBox(
-            height: boxConstraints.maxWidth * (0.45) * (0.125),
-          ),
-          CircleAvatar(
-            radius: 25,
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            child: Center(
-              child: Text(
-                value,
-                style: TextStyle(
-                  color: backgroundColor,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                  color: AppColors.textSecondary,
                   fontWeight: FontWeight.w600,
                 ),
-              ),
-            ),
           ),
         ],
       ),
@@ -128,8 +129,9 @@ class _AttendanceContainerState extends State<AttendanceContainer> {
             child: Text(
               Utils.getTranslatedLabel(attendanceKey),
               style: TextStyle(
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: AppColors.textPrimary,
                 fontSize: Utils.screenTitleFontSize,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ),
@@ -139,7 +141,7 @@ class _AttendanceContainerState extends State<AttendanceContainer> {
             child: Container(
               height: 50,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(AppRadius.field),
                 boxShadow: [
                   BoxShadow(
                     color: Theme.of(context)
@@ -150,7 +152,7 @@ class _AttendanceContainerState extends State<AttendanceContainer> {
                     blurRadius: 5,
                   )
                 ],
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: AppColors.surface,
               ),
               width: MediaQuery.of(context).size.width * (0.85),
               child: Stack(
@@ -219,7 +221,7 @@ class _AttendanceContainerState extends State<AttendanceContainer> {
       return Container(
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: AppColors.surface,
           boxShadow: [
             BoxShadow(
               color: Theme.of(context)
@@ -230,7 +232,7 @@ class _AttendanceContainerState extends State<AttendanceContainer> {
               blurRadius: 10,
             )
           ],
-          borderRadius: BorderRadius.circular(15.0),
+          borderRadius: BorderRadius.circular(AppRadius.card),
         ),
         margin: const EdgeInsets.only(top: 20),
         child: TableCalendar(

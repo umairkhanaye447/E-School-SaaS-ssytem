@@ -9,12 +9,14 @@ import 'package:eschool/data/models/question.dart';
 import 'package:eschool/data/repositories/onlineExamRepository.dart';
 import 'package:eschool/data/repositories/pendingExamSubmissionRepository.dart';
 import 'package:eschool/ui/screens/home/homeScreen.dart';
+import 'package:eschool/ui/widgets/appConfirmDialog.dart';
 import 'package:eschool/ui/widgets/customRoundedButton.dart';
 import 'package:eschool/ui/widgets/screenProtectorWrapper.dart';
 import 'package:eschool/utils/errorMessageKeysAndCodes.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -44,7 +46,8 @@ class ExamOnlineScreen extends StatefulWidget {
     final arguments = Get.arguments as Map<String, dynamic>;
     return ScreenProtectorWrapper(
       child: BlocProvider(
-        create: (context) => SubmitOnlineExamAnswersCubit(OnlineExamRepository()),
+        create: (context) =>
+            SubmitOnlineExamAnswersCubit(OnlineExamRepository()),
         child: ExamOnlineScreen(
           exam: arguments['exam'],
         ),
@@ -188,49 +191,29 @@ class ExamOnlineScreenState extends State<ExamOnlineScreen>
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return AlertDialog(
-          content: Text(
-            Utils.getTranslatedLabel(quitExamKey),
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: Text(
-                Utils.getTranslatedLabel(noKey),
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-              ),
-              onPressed: () {
-                setState(() {
-                  isExitDialogOpen = false;
-                });
-                Navigator.of(context).pop(); // Close dialog only
-              },
-            ),
-            TextButton(
-              child: Text(
-                Utils.getTranslatedLabel(yesKey),
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.error,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              onPressed: () {
-                setState(() {
-                  isExitDialogOpen = false;
-                  isExamCompleted =
-                      true; // Mark exam as completed to allow navigation
-                  isExitTriggeredSubmission =
-                      true; // Track that this was an exit-triggered submission
-                });
-                Navigator.of(context).pop(); // Close dialog
-                submitExamAnswers(); // Submit exam - BlocListener will handle navigation
-              },
-            ),
-          ],
+        return AppConfirmDialog(
+          icon: Icons.exit_to_app_rounded,
+          title: Utils.getTranslatedLabel(onlineExamKey),
+          message: Utils.getTranslatedLabel(quitExamKey),
+          confirmLabel: Utils.getTranslatedLabel(yesKey),
+          cancelLabel: Utils.getTranslatedLabel(noKey),
+          onCancel: () {
+            setState(() {
+              isExitDialogOpen = false;
+            });
+            Navigator.of(context).pop(); // Close dialog only
+          },
+          onConfirm: () {
+            setState(() {
+              isExitDialogOpen = false;
+              isExamCompleted =
+                  true; // Mark exam as completed to allow navigation
+              isExitTriggeredSubmission =
+                  true; // Track that this was an exit-triggered submission
+            });
+            Navigator.of(context).pop(); // Close dialog
+            submitExamAnswers(); // Submit exam - BlocListener will handle navigation
+          },
         );
       },
     );
@@ -250,8 +233,9 @@ class ExamOnlineScreenState extends State<ExamOnlineScreen>
               child: Text(
                 widget.exam.subject?.getSubjectName(context: context) ?? "",
                 style: TextStyle(
-                  color: Theme.of(context).scaffoldBackgroundColor,
+                  color: AppColors.textPrimary,
                   fontSize: Utils.screenTitleFontSize,
+                  fontWeight: FontWeight.w700,
                 ),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,

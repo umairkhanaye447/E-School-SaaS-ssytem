@@ -7,6 +7,7 @@ import 'package:eschool/ui/screens/reports/widgets/reportLegendItem.dart';
 import 'package:eschool/ui/screens/reports/widgets/reportPerformanceBox.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class OnlineExamReportCard extends StatelessWidget {
@@ -45,7 +46,7 @@ class OnlineExamReportCard extends StatelessWidget {
                     .withValues(alpha: 0.1),
                 width: 1.5,
               ),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppRadius.field),
             ),
             padding: const EdgeInsets.all(16),
             child: Column(

@@ -1,6 +1,7 @@
 import 'package:eschool/ui/widgets/customTextContainer.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class DiaryStatsContainer extends StatelessWidget {
@@ -23,7 +24,7 @@ class DiaryStatsContainer extends StatelessWidget {
             height: 85,
             decoration: BoxDecoration(
               color: Colors.green.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppRadius.field),
               border: Border.all(
                 color: Theme.of(context).colorScheme.tertiary,
               ),
@@ -92,7 +93,7 @@ class DiaryStatsContainer extends StatelessWidget {
             height: 85,
             decoration: BoxDecoration(
               color: Colors.red.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(AppRadius.field),
               border: Border.all(
                 color: Theme.of(context).colorScheme.tertiary,
               ),

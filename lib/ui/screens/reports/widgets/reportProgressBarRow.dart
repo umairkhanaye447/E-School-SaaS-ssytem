@@ -1,3 +1,4 @@
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class ReportProgressBarRow extends StatelessWidget {
@@ -37,7 +38,7 @@ class ReportProgressBarRow extends StatelessWidget {
                 width: double.infinity,
                 decoration: BoxDecoration(
                   color: color.withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(AppRadius.field),
                 ),
               ),
               LayoutBuilder(
@@ -50,7 +51,7 @@ class ReportProgressBarRow extends StatelessWidget {
                             : (percentage / 100).clamp(0.0, 1.0)),
                     decoration: BoxDecoration(
                       color: color,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppRadius.field),
                     ),
                   );
                 },

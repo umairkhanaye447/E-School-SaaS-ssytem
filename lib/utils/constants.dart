@@ -2,9 +2,12 @@ import 'package:eschool/utils/labelKeys.dart';
 
 //database urls
 //Please add your admin panel url here and make sure you do not add '/' at the end of the url
+// const String baseUrl = "https://eschool-saas.wrteam.me";
 
-const String baseUrl = "https://eschool-saas.wrteam.me";
+const String baseUrl = "https://vslearn.com";
 
+/// Prefixed onto every endpoint in [Api], so changing [baseUrl] above is the
+/// only edit needed to repoint the whole app.
 const String databaseUrl = "$baseUrl/api/";
 
 // Reverb WebSocket configuration
@@ -39,16 +42,22 @@ const int maxAnnouncementDescriptionLength = 100;
 const String notificationChannelKey = "basic_channel";
 
 // //to enable and disable default credentials in login page
-const bool showDefaultCredentials = true;
+//Off for the live build: users type their own credentials. Flip to true only
+//against a demo panel whose accounts match the values below.
+const bool showDefaultCredentials = false;
 
-//default credentials of student
-const String defaultStudentGRNumber = "2022-2312509";
-const String defaultStudentPassword = "22112006";
-//default credentials of parent
-const String defaultParentEmail = "AmberMWayt@gustr.com";
-const String defaultParentPassword = "8200727077";
-// Default school code
-const String defaultSchoolCode = "SCH202412";
+//Demo credentials, kept for local testing against a demo panel. These are
+//WRTeam demo accounts and do NOT exist on the live vslearn backend.
+// const String defaultStudentGRNumber = "2022-2312509";
+// const String defaultStudentPassword = "22112006";
+// const String defaultParentEmail = "AmberMWayt@gustr.com";
+// const String defaultParentPassword = "8200727077";
+// const String defaultSchoolCode = "SCH202412";
+const String defaultStudentGRNumber = "";
+const String defaultStudentPassword = "";
+const String defaultParentEmail = "";
+const String defaultParentPassword = "";
+const String defaultSchoolCode = "";
 
 /// When [true], screenshots and screen recording are blocked on
 /// sensitive screens (Online Exam, Payment WebView).

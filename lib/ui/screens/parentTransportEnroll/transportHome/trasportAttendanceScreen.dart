@@ -1,3 +1,4 @@
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -125,18 +126,9 @@ class _TransportAttendanceScreenState extends State<TransportAttendanceScreen>
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       height: 50,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context)
-                .colorScheme
-                .secondary
-                .withValues(alpha: 0.075),
-            offset: const Offset(2.5, 2.5),
-            blurRadius: 5,
-          )
-        ],
-        color: Theme.of(context).scaffoldBackgroundColor,
+        borderRadius: BorderRadius.circular(AppRadius.field),
+        boxShadow: AppShadows.cardStrong,
+        color: AppColors.surface,
       ),
       child: Stack(
         children: [
@@ -211,15 +203,9 @@ class _TransportAttendanceScreenState extends State<TransportAttendanceScreen>
       height: boxConstraints.maxWidth * (0.425),
       width: boxConstraints.maxWidth * (0.425),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(AppRadius.field),
         color: backgroundColor,
-        boxShadow: [
-          BoxShadow(
-            color: backgroundColor.withValues(alpha: 0.25),
-            offset: const Offset(5, 5),
-            blurRadius: 10,
-          )
-        ],
+        boxShadow: AppShadows.cardStrong,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -269,12 +255,14 @@ class _TransportAttendanceScreenState extends State<TransportAttendanceScreen>
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Theme.of(context).scaffoldBackgroundColor,
+                      color: AppColors.textPrimary,
                       fontSize: Utils.screenTitleFontSize,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
               ),
+              SegmentedTrack(boxConstraints: boxConstraints),
               AnimatedAlign(
                 curve: Utils.tabBackgroundContainerAnimationCurve,
                 duration: Utils.tabBackgroundContainerAnimationDuration,
@@ -328,18 +316,9 @@ class _TransportAttendanceScreenState extends State<TransportAttendanceScreen>
       return Container(
         padding: const EdgeInsets.all(5),
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context)
-                  .colorScheme
-                  .secondary
-                  .withValues(alpha: 0.075),
-              offset: const Offset(5.0, 5),
-              blurRadius: 10,
-            )
-          ],
-          borderRadius: BorderRadius.circular(15.0),
+          color: AppColors.surface,
+          boxShadow: AppShadows.cardStrong,
+          borderRadius: BorderRadius.circular(AppRadius.card),
         ),
         margin: const EdgeInsets.only(top: 20),
         child: TableCalendar(

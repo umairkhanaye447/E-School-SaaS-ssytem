@@ -7,6 +7,7 @@ import 'package:eschool/ui/widgets/noDataContainer.dart';
 import 'package:eschool/utils/constants.dart';
 import 'package:eschool/utils/labelKeys.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -86,7 +87,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                             .colorScheme
                             .secondary
                             .withValues(alpha: 0.05),
-                        borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(AppRadius.field)),
                     margin: EdgeInsets.only(
                       bottom: 15,
                     ),
@@ -149,7 +150,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                               style: TextStyle(
                                   color: Theme.of(context).colorScheme.primary,
                                   fontWeight: FontWeight.w500,
-                                  fontSize: 13.0),
+                                  fontSize: 12),
                             ),
                             const Spacer(),
                             Text(
@@ -168,7 +169,7 @@ class _TransactionsScreenState extends State<TransactionsScreen> {
                               ? "-"
                               : "${transaction.orderId}",
                           style: TextStyle(
-                              fontSize: 13.0,
+                              fontSize: 12,
                               color: Theme.of(context)
                                   .colorScheme
                                   .secondary

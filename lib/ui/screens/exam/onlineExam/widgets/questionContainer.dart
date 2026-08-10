@@ -1,4 +1,5 @@
 import 'package:eschool/data/models/question.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_tex/flutter_tex.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -71,7 +72,7 @@ class QuestionContainer extends StatelessWidget {
             : Container(
                 width: MediaQuery.of(context).size.width * (0.8),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(25.0),
+                  borderRadius: BorderRadius.circular(AppRadius.sheet),
                 ),
                 height: MediaQuery.of(context).size.height * (0.225),
                 child: CachedNetworkImage(
@@ -88,7 +89,7 @@ class QuestionContainer extends StatelessWidget {
                           image: imageProvider,
                           fit: BoxFit.cover,
                         ),
-                        borderRadius: BorderRadius.circular(25.0),
+                        borderRadius: BorderRadius.circular(AppRadius.sheet),
                       ),
                     );
                   },

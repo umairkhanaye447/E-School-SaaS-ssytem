@@ -14,6 +14,7 @@ import 'package:eschool/ui/widgets/errorContainer.dart';
 import 'package:eschool/ui/widgets/screenTopBackgroundContainer.dart';
 import 'package:eschool/ui/widgets/tabBarBackgroundContainer.dart';
 import 'package:eschool/utils/labelKeys.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:eschool/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -112,8 +113,9 @@ class _ChatContactsScreenState extends State<ChatContactsScreen> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      color: Theme.of(context).scaffoldBackgroundColor,
+                      color: AppColors.textPrimary,
                       fontSize: Utils.screenTitleFontSize,
+                      fontWeight: FontWeight.w700,
                     ),
                   ),
                 ),
@@ -263,19 +265,29 @@ class _ChatContactsScreenState extends State<ChatContactsScreen> {
               return const SizedBox.shrink();
             }
 
-            return FloatingActionButton(
+            //The bottom nav floats above the scaffold, so a default-positioned
+            //FAB lands underneath it and only its top edge is tappable. Lift
+            //it clear of the nav's height plus its own bottom margin.
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).size.height *
+                        Utils.bottomNavigationHeightPercentage +
+                    Utils.bottomNavigationBottomMargin,
+              ),
+              child: FloatingActionButton(
               backgroundColor: Theme.of(context).colorScheme.primary,
               foregroundColor: Theme.of(context).scaffoldBackgroundColor,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(999),
+                borderRadius: BorderRadius.circular(AppRadius.sheet),
               ),
               onPressed: () async {
                 Get.toNamed(Routes.newChatContacts)?.then((_) {
                   _fetchUserChatHistory();
                 });
               },
-              child: SvgPicture.asset(
-                Utils.getImagePath("add_chat.svg"),
+                child: SvgPicture.asset(
+                  Utils.getImagePath("add_chat.svg"),
+                ),
               ),
             );
           }
@@ -387,11 +399,13 @@ class _ChatContactsScreenState extends State<ChatContactsScreen> {
           );
         },
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
+          padding: const EdgeInsets.all(AppSpacing.sm),
+          margin: const EdgeInsets.only(bottom: AppSpacing.xs),
           width: MediaQuery.sizeOf(context).width,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.0),
-            color: colorScheme.surface,
+          decoration: const BoxDecoration(
+            borderRadius: AppRadius.cardAll,
+            color: AppColors.surface,
+            boxShadow: AppShadows.card,
           ),
           child: Row(
             children: [
@@ -399,15 +413,15 @@ class _ChatContactsScreenState extends State<ChatContactsScreen> {
               Container(
                 width: 45,
                 height: 45,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: colorScheme.tertiary,
+                decoration: const BoxDecoration(
+                  borderRadius: AppRadius.iconTileAll,
+                  color: AppColors.surfaceMuted,
                 ),
                 padding: EdgeInsets.zero,
                 margin: EdgeInsets.zero,
                 alignment: Alignment.center,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: AppRadius.iconTileAll,
                   child: CachedNetworkImage(
                     imageUrl: contact.user.image,
                     fit: BoxFit.cover,
@@ -433,7 +447,13 @@ class _ChatContactsScreenState extends State<ChatContactsScreen> {
                               contact.user.fullName,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: 16.0),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelLarge
+                                  ?.copyWith(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                             ),
                           ),
                           const SizedBox(width: 5.0),
@@ -461,7 +481,7 @@ class _ChatContactsScreenState extends State<ChatContactsScreen> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                fontSize: 11.5,
+                                fontSize: 11,
                                 color: colorScheme.secondary
                                     .withValues(alpha: 0.75),
                               ),
@@ -477,8 +497,8 @@ class _ChatContactsScreenState extends State<ChatContactsScreen> {
                                 vertical: 2.0,
                               ),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(7.5),
-                                color: colorScheme.onPrimary,
+                                borderRadius: BorderRadius.circular(AppRadius.chip),
+                                color: colorScheme.primary,
                               ),
                               child: Text(
                                 contact.unreadCount.toString(),

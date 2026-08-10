@@ -89,7 +89,7 @@
   "pleaseEnterEmail": "Please enter email",
   "pleaseEnterPassword": "Please enter password",
   "pleaseEnterGRNumber": "Please enter gr number",
-  "mySubjects": "My Subjects",
+  "mySubjects": "Subjects",
   "selectAny": "Select Any",
   "canNotSelectMoreSubject": "Can not select more subject",
   "pleaseSelectAllElectiveSubjects": "Please select all elective subjects",
@@ -636,5 +636,13 @@
   "dueChargeIs": "Due charge is",
   "ofDecidedInstallmentAmount": "of decided installment amount",
   "dueCharges": "Due Charges",
-  "relief": "Relief"
+  "relief": "Relief",
+  "welcomeTo": "Welcome to",
+  "exploreMore": "Explore More",
+  "accountAndSecurity": "Account & Security",
+  "appInformation": "App Information",
+  "support": "Support",
+  "logoutAccount": "Logout Account",
+  "signOutFromYourSession": "Sign out from your session",
+  "notice": "Notice"
 }

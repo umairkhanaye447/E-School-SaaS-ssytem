@@ -1,5 +1,6 @@
 import 'package:eschool/utils/constants.dart';
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class ExamFiltersContainer extends StatefulWidget {
@@ -51,7 +52,7 @@ class _ExamFiltersContainerState extends State<ExamFiltersContainer> {
                 color: widget.selectedExamFilterIndex == index
                     ? Theme.of(context).colorScheme.primary
                     : Colors.transparent,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(AppRadius.field),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 15),
               alignment: Alignment.center,

@@ -55,6 +55,8 @@ class _TermsAndConditionScreenState extends State<TermsAndConditionScreen> {
                 ? termsAndConditionTypeLoggedIn
                 : termsAndConditionTypeNotLoggedIn,
             useSchoolSettings: isLoggedIn,
+            headerIcon: Icons.gavel_rounded,
+            headerTitle: Utils.getTranslatedLabel(termsAndConditionKey),
           ),
           CustomAppBar(
             title: Utils.getTranslatedLabel(termsAndConditionKey),

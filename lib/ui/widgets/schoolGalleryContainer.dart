@@ -4,11 +4,26 @@ import 'package:eschool/cubits/schoolConfigurationCubit.dart';
 import 'package:eschool/cubits/schoolGalleryCubit.dart';
 import 'package:eschool/data/models/student.dart';
 import 'package:eschool/utils/labelKeys.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
+import 'package:eschool/ui/widgets/dashboard/sectionHeader.dart';
 import 'package:eschool/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+
+String _countsLabel(dynamic gallery) {
+  final parts = <String>[];
+  if (gallery.getImages().isNotEmpty) {
+    parts.add(
+        "${gallery.getImages().length} ${Utils.getTranslatedLabel(gallery.getImages().length == 1 ? photoKey : photosKey)}");
+  }
+  if (gallery.getVideos().isNotEmpty) {
+    parts.add(
+        "${gallery.getVideos().length} ${Utils.getTranslatedLabel(gallery.getVideos().length == 1 ? videoKey : videosKey)}");
+  }
+  return parts.join(" | ");
+}
 
 class SchoolGalleryContainer extends StatelessWidget {
   final Student student;
@@ -26,41 +41,20 @@ class SchoolGalleryContainer extends StatelessWidget {
           return Column(
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: Utils.screenContentHorizontalPadding),
-                child: Row(
-                  children: [
-                    Text(
-                      Utils.getTranslatedLabel(galleryKey),
-                      style: TextStyle(
-                        color: Utils.getColorScheme(context).secondary,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16.0,
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
-                    const Spacer(),
-                    InkWell(
-                      onTap: () {
-                        Get.toNamed(Routes.schoolGallery, arguments: student);
-                      },
-                      child: Text(
-                        Utils.getTranslatedLabel(viewAllKey),
-                        style: TextStyle(
-                          color: Utils.getColorScheme(context).onSurface,
-                          fontSize: 13.0,
-                        ),
-                        textAlign: TextAlign.start,
-                      ),
-                    ),
-                  ],
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.screenH),
+                child: SectionHeader(
+                  title: Utils.getTranslatedLabel(galleryKey),
+                  icon: Icons.photo_library_rounded,
+                  iconColor: AppAccent.purple.icon,
+                  onTapAction: () {
+                    Get.toNamed(Routes.schoolGallery, arguments: student);
+                  },
                 ),
               ),
-              const SizedBox(
-                height: 20,
-              ),
-              Container(
-                height: 220,
+              const SizedBox(height: AppSpacing.sm),
+              SizedBox(
+                height: 196,
                 child: ListView.builder(
                     padding: EdgeInsets.symmetric(
                         horizontal: Utils.screenContentHorizontalPadding),
@@ -68,35 +62,36 @@ class SchoolGalleryContainer extends StatelessWidget {
                     itemCount: schoolGallery.length,
                     itemBuilder: (context, index) {
                       final gallery = schoolGallery[index];
-                      final photosAndVideosCountTextStyle = TextStyle(
-                          fontSize: 12.0,
-                          color: Theme.of(context)
-                              .colorScheme
-                              .secondary
-                              .withValues(alpha: 0.65));
                       return Padding(
-                        padding: EdgeInsetsDirectional.only(end: 20),
-                        child: Container(
-                          width: 145,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  Get.toNamed(Routes.galleryDetails,
-                                      arguments: {
-                                        "gallery": gallery,
-                                        "sessionYear": context
-                                            .read<SchoolConfigurationCubit>()
-                                            .getSchoolConfiguration()
-                                            .sessionYear
-                                      });
-                                },
-                                child: Container(
-                                  width: 145,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        Utils.bottomSheetTopRadius),
+                        padding: const EdgeInsetsDirectional.only(
+                            end: AppSpacing.sm),
+                        child: GestureDetector(
+                          onTap: () {
+                            Get.toNamed(Routes.galleryDetails, arguments: {
+                              "gallery": gallery,
+                              "sessionYear": context
+                                  .read<SchoolConfigurationCubit>()
+                                  .getSchoolConfiguration()
+                                  .sessionYear
+                            });
+                          },
+                          child: Container(
+                            width: 150,
+                            padding: const EdgeInsets.all(AppSpacing.xs),
+                            decoration: const BoxDecoration(
+                              color: AppColors.surface,
+                              borderRadius: AppRadius.cardAll,
+                              boxShadow: AppShadows.card,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                      AppRadius.iconTile),
+                                  child: SizedBox(
+                                    width: double.infinity,
+                                    height: 118,
                                     child: gallery.isThumbnailSvg()
                                         ? SvgPicture.network(
                                             gallery.thumbnail ?? "")
@@ -105,49 +100,30 @@ class SchoolGalleryContainer extends StatelessWidget {
                                             fit: BoxFit.cover,
                                           ),
                                   ),
-                                  height: 145,
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 12,
-                              ),
-                              Text(
-                                (gallery.title ?? ""),
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  height: 1.0,
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.w600,
+                                const SizedBox(height: AppSpacing.xs),
+                                Text(
+                                  (gallery.title ?? ""),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge
+                                      ?.copyWith(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Row(
-                                children: [
-                                  gallery.getImages().isNotEmpty
-                                      ? Text(
-                                          "${gallery.getImages().length} ${Utils.getTranslatedLabel(gallery.getImages().length == 1 ? photoKey : photosKey)}",
-                                          style: photosAndVideosCountTextStyle,
-                                        )
-                                      : const SizedBox(),
-                                  gallery.getVideos().isNotEmpty &&
-                                          gallery.getImages().isNotEmpty
-                                      ? Text(
-                                          " | ",
-                                          style: photosAndVideosCountTextStyle,
-                                        )
-                                      : const SizedBox(),
-                                  gallery.getVideos().isNotEmpty
-                                      ? Text(
-                                          "${gallery.getVideos().length} ${Utils.getTranslatedLabel(gallery.getVideos().length == 1 ? videoKey : videosKey)}",
-                                          style: photosAndVideosCountTextStyle,
-                                        )
-                                      : const SizedBox(),
-                                ],
-                              )
-                            ],
+                                const SizedBox(height: 2),
+                                Text(
+                                  _countsLabel(gallery),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style:
+                                      Theme.of(context).textTheme.labelSmall,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );

@@ -1,4 +1,5 @@
 import 'package:eschool/utils/utils.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 class CustomTabBarContainer extends StatelessWidget {
@@ -39,11 +40,11 @@ class CustomTabBarContainer extends StatelessWidget {
             curve: Curves.easeInOut,
             duration: const Duration(milliseconds: 300),
             style: TextStyle(
-              fontSize: 15.0,
-              fontWeight: FontWeight.w600,
+              fontSize: 14.0,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
               color: isSelected
-                  ? Theme.of(context).colorScheme.onSurface
-                  : Theme.of(context).scaffoldBackgroundColor,
+                  ? Theme.of(context).colorScheme.primary
+                  : AppColors.textSecondary,
             ),
             child: Text(
               Utils.getTranslatedLabel(titleKey),

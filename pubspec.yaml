@@ -103,6 +103,12 @@ flutter_launcher_icons:
   ios: true
   image_path: "assets/images/appLogo.png"
   remove_alpha_ios: true
+  # Adaptive icon (Android 8+). Without these the launcher masks the supplied
+  # PNG as-is, so artwork that carries its own frame/padding ends up drawn
+  # small inside the system's circle. The foreground must be a transparent
+  # PNG; Android supplies the shape and the background colour below.
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/images/appLogoForeground.png"
 
 
 # For information on the generic Dart part of this file, see the
@@ -117,6 +123,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/images/dashboard/
     - google_fonts/
     - assets/languages/
     - assets/animations/

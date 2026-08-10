@@ -1,6 +1,7 @@
 import 'package:eschool/ui/widgets/customTextContainer.dart';
 import 'package:eschool/utils/constants.dart';
 import 'package:eschool/utils/labelKeys.dart';
+import 'package:eschool/ui/styles/appTokens.dart';
 import 'package:flutter/material.dart';
 
 
@@ -40,6 +41,7 @@ class _SortSelectionBottomsheetState extends State<SortSelectionBottomsheet> {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
+        boxShadow: AppShadows.card,
         borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(25),
           topRight: Radius.circular(25),

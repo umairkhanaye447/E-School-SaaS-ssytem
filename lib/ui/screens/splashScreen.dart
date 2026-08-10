@@ -9,7 +9,6 @@ import 'package:eschool/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/route_manager.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -98,9 +97,13 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(25.0),
-                child: SvgPicture.asset(
-                  Utils.getImagePath("appLogo.svg"),
+                padding: const EdgeInsets.all(48.0),
+                //The VsLearn mark. Uses the transparent foreground asset (the
+                //same art as the launcher icon) so it sits on the page colour
+                //rather than carrying its own white plate.
+                child: Image.asset(
+                  Utils.getImagePath("appLogoForeground.png"),
+                  fit: BoxFit.contain,
                 ),
               ),
             ),

@@ -203,7 +203,17 @@ class _ExamOfflineListContainerState extends State<ExamOfflineListContainer> {
                   return Align(
                     alignment: Alignment.topCenter,
                     child: state.examList.isEmpty
-                        ? const NoDataContainer(titleKey: noExamsFoundKey)
+                        ? CenteredNoDataContainer(
+                            titleKey: noExamsFoundKey,
+                            //Scroll padding plus the filter row above.
+                            occupiedHeight: Utils.getScrollViewTopPadding(
+                                  context: context,
+                                  appBarHeightPercentage:
+                                      Utils.appBarBiggerHeightPercentage,
+                                ) +
+                                Utils.getScrollViewBottomPadding(context) +
+                                MediaQuery.sizeOf(context).height * 0.08,
+                          )
                         : Column(
                             children: [
                               SizedBox(
